@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный учебник для 10 класса по теме «История развития искусственного интеллекта»">
+  <title>История развития искусственного интеллекта — интерактивный учебник</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-2: #eef4ff;
+      --text: #172033;
+      --muted: #5e6b82;
+      --line: #dce4f1;
+      --primary: #2457d6;
+      --primary-2: #6c43d5;
+      --accent: #00a88f;
+      --warm: #f59e0b;
+      --danger: #d94a68;
+      --shadow: 0 18px 50px rgba(38, 63, 110, .10);
+      --radius: 22px;
+      --base-size: 17px;
+      --content: 860px;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0f1422;
+      --surface: #171f31;
+      --surface-2: #202a40;
+      --text: #edf3ff;
+      --muted: #aebbd1;
+      --line: #303c54;
+      --primary: #7ea4ff;
+      --primary-2: #b79aff;
+      --accent: #53d9c2;
+      --warm: #ffc35a;
+      --danger: #ff7791;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 5% 4%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 28rem),
+        radial-gradient(circle at 95% 18%, color-mix(in srgb, var(--primary-2) 10%, transparent), transparent 25rem),
+        var(--bg);
+      color: var(--text);
+      font: var(--base-size)/1.72 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    a { color: var(--primary); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--warm) 75%, white); outline-offset: 3px; }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .reading-progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 999;
+      height: 4px;
+      background: transparent;
+    }
+    .reading-progress > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--primary), var(--primary-2));
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 11px clamp(16px, 4vw, 48px);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.02em; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 28%, transparent);
+    }
+    .tools { display: flex; align-items: center; gap: 7px; }
+    .tool-btn {
+      display: inline-grid;
+      place-items: center;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .tool-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      width: min(1200px, calc(100% - 32px));
+      margin: 28px auto 34px;
+      padding: clamp(30px, 6vw, 74px);
+      border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--line));
+      border-radius: 32px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--surface)), color-mix(in srgb, var(--primary-2) 10%, var(--surface)) 70%),
+        var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; gap: 38px; }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      padding: 7px 12px;
+      border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--line));
+      border-radius: 999px;
+      color: var(--primary);
+      background: color-mix(in srgb, var(--surface) 75%, transparent);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { line-height: 1.18; letter-spacing: -.035em; }
+    h1 { max-width: 780px; margin: 0 0 18px; font-size: clamp(2.25rem, 5.5vw, 4.65rem); }
+    .hero p { max-width: 700px; margin: 0 0 22px; color: var(--muted); font-size: 1.08rem; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 9px; }
+    .tag { padding: 7px 11px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: .84rem; font-weight: 700; }
+    .hero-art { min-height: 300px; display: grid; place-items: center; }
+    .hero-art svg { width: min(100%, 380px); filter: drop-shadow(0 22px 35px rgba(36, 87, 214, .17)); }
+    .pulse { transform-origin: center; animation: pulse 3.1s ease-in-out infinite; }
+    .pulse:nth-child(2n) { animation-delay: -.9s; }
+    @keyframes pulse { 0%,100% { opacity:.55; transform:scale(.94); } 50% { opacity:1; transform:scale(1.06); } }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, var(--content));
+      justify-content: center;
+      gap: 34px;
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    .side-nav { position: sticky; top: 76px; align-self: start; max-height: calc(100vh - 95px); overflow: auto; padding: 17px; border: 1px solid var(--line); border-radius: 18px; background: color-mix(in srgb, var(--surface) 92%, transparent); box-shadow: var(--shadow); }
+    .side-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 0 11px; color: var(--muted); font-size: .77rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .complete-count { color: var(--accent); }
+    .side-nav a { display: grid; grid-template-columns: 9px 1fr; align-items: center; gap: 10px; padding: 8px 7px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: .83rem; line-height: 1.35; }
+    .side-nav a:hover, .side-nav a.active { color: var(--primary); background: var(--surface-2); }
+    .nav-dot { width: 7px; height: 7px; border: 1.5px solid currentColor; border-radius: 50%; }
+    .side-nav a.done .nav-dot { border-color: var(--accent); background: var(--accent); }
+
+    main { min-width: 0; }
+    .goals, .section-card, .glossary, .tasks, .test-cta {
+      margin-bottom: 26px;
+      padding: clamp(24px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .goals h2, .section-card h2, .glossary h2, .tasks h2 { margin: 0 0 12px; font-size: clamp(1.55rem, 3vw, 2.35rem); }
+    .lead { margin-top: 0; color: var(--muted); font-size: 1.02rem; }
+    .eyebrow { margin-bottom: 7px; color: var(--primary); font-size: .76rem; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; }
+
+    .goal-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 20px; }
+    .goal { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; padding: 16px; border-radius: 16px; background: var(--surface-2); }
+    .goal-num { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; font-weight: 900; }
+    .goal p { margin: 0; }
+
+    .definition { padding: 18px 20px; border-left: 5px solid var(--primary); border-radius: 0 15px 15px 0; background: var(--surface-2); }
+    .definition strong { color: var(--primary); }
+    .callout { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; margin: 22px 0; padding: 18px; border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line)); border-radius: 16px; background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+    .callout-icon { display:grid; place-items:center; width:44px; height:44px; border-radius:14px; background:color-mix(in srgb, var(--accent) 16%, var(--surface)); color:var(--accent); font-size:1.25rem; }
+    .callout p { margin: 0; }
+    .callout.warning { border-color: color-mix(in srgb, var(--warm) 45%, var(--line)); background: color-mix(in srgb, var(--warm) 8%, var(--surface)); }
+    .callout.warning .callout-icon { color: var(--warm); background: color-mix(in srgb, var(--warm) 15%, var(--surface)); }
+
+    .factor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0; }
+    .factor-grid details { position: relative; overflow: hidden; min-height: 150px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-2); }
+    .factor-grid details[open] { border-color: var(--primary); }
+    .factor-grid summary { list-style: none; cursor: pointer; font-weight: 850; }
+    .factor-grid summary::-webkit-details-marker { display: none; }
+    .factor-icon { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 12px; border-radius: 15px; color: white; font-size: 1.3rem; background: linear-gradient(135deg, var(--primary), var(--primary-2)); }
+    .factor-grid p { margin: 9px 0 0; color: var(--muted); font-size: .91rem; }
+    .plus-formula { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; padding:18px; border-radius:17px; background:linear-gradient(135deg, color-mix(in srgb,var(--primary) 10%,var(--surface)), color-mix(in srgb,var(--accent) 10%,var(--surface))); font-weight:900; }
+    .plus-formula .operator { color: var(--primary); font-size: 1.4rem; }
+
+    .timeline-wrap { margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-2); }
+    .timeline { display:flex; gap:8px; overflow-x:auto; padding: 5px 3px 13px; scrollbar-width: thin; }
+    .timeline button { flex:0 0 auto; padding:9px 12px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); cursor:pointer; font-weight:800; }
+    .timeline button:hover, .timeline button.active { border-color:var(--primary); background:var(--primary); color:white; }
+    .timeline-panel { min-height: 118px; padding:18px; border-radius:16px; background:var(--surface); }
+    .timeline-panel .year { color:var(--primary); font-weight:900; }
+    .timeline-panel h3 { margin:4px 0 7px; }
+    .timeline-panel p { margin:0; color:var(--muted); }
+
+    .compare { display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:stretch; margin:22px 0; }
+    .compare-card { padding:18px; border:1px solid var(--line); border-radius:17px; background:var(--surface-2); }
+    .compare-card h3 { margin:0 0 8px; font-size:1.08rem; }
+    .compare-card p { margin:0; color:var(--muted); }
+    .compare-vs { display:grid; place-items:center; color:var(--primary); font-weight:950; }
+
+    .event-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0; }
+    .event { padding:17px; border:1px solid var(--line); border-radius:17px; background:var(--surface-2); }
+    .event .year { color:var(--primary); font-weight:900; }
+    .event h3 { margin:4px 0 7px; font-size:1.05rem; }
+    .event p { margin:0; color:var(--muted); font-size:.91rem; }
+
+    .winter-visual { margin:22px 0; padding:18px; border-radius:18px; background:linear-gradient(180deg, color-mix(in srgb,var(--primary) 10%,var(--surface)), var(--surface-2)); border:1px solid var(--line); }
+    .winter-visual svg { display:block; width:100%; height:auto; }
+    .winter-labels { display:flex; justify-content:space-between; gap:8px; margin-top:8px; color:var(--muted); font-size:.78rem; font-weight:700; }
+
+    .system-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:9px; align-items:center; margin:22px 0; }
+    .flow-node { min-height:112px; display:grid; place-items:center; align-content:center; text-align:center; padding:15px; border:1px solid var(--line); border-radius:17px; background:var(--surface-2); }
+    .flow-node strong { color:var(--primary); }
+    .arrow { color:var(--primary); font-weight:950; font-size:1.4rem; }
+
+    ul.checks { list-style:none; padding:0; }
+    ul.checks li { position:relative; padding-left:31px; margin:9px 0; }
+    ul.checks li::before { content:"✓"; position:absolute; left:0; top:1px; display:grid; place-items:center; width:21px; height:21px; border-radius:7px; background:color-mix(in srgb,var(--accent) 16%,var(--surface)); color:var(--accent); font-weight:950; }
+    .application-cloud { display:flex; flex-wrap:wrap; gap:9px; margin:18px 0; }
+    .application-cloud span { padding:8px 11px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line); font-size:.89rem; font-weight:700; }
+
+    .table-scroll { overflow-x:auto; margin:20px 0; border:1px solid var(--line); border-radius:17px; }
+    table { width:100%; border-collapse:collapse; min-width:780px; font-size:.84rem; line-height:1.45; }
+    th, td { padding:13px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { position:sticky; top:0; background:var(--surface-2); color:var(--primary); font-weight:900; }
+    tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:color-mix(in srgb,var(--primary) 5%,transparent); }
+
+    .quality-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:18px 0; }
+    .quality-item { display:flex; gap:10px; align-items:center; padding:12px 14px; border-radius:14px; background:var(--surface-2); }
+    .quality-item span:first-child { color:var(--accent); font-weight:950; }
+
+    .summary-steps { counter-reset:steps; display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0; list-style:none; }
+    .summary-steps li { counter-increment:steps; display:grid; grid-template-columns:40px 1fr; gap:10px; align-items:center; padding:13px; border:1px solid var(--line); border-radius:14px; background:var(--surface-2); }
+    .summary-steps li::before { content:counter(steps); display:grid; place-items:center; width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:white; font-weight:900; }
+
+    .section-footer { display:flex; justify-content:flex-end; margin-top:25px; padding-top:18px; border-top:1px solid var(--line); }
+    .study-btn { border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line)); border-radius:12px; padding:9px 14px; background:color-mix(in srgb,var(--accent) 8%,var(--surface)); color:var(--accent); cursor:pointer; font-weight:850; }
+    .study-btn.done { background:var(--accent); color:#062e28; border-color:var(--accent); }
+
+    .glossary-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:18px; }
+    .glossary details { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:var(--surface-2); }
+    .glossary summary { cursor:pointer; color:var(--primary); font-weight:850; }
+    .glossary p { margin:9px 0 0; color:var(--muted); font-size:.91rem; }
+
+    .task-list { display:grid; gap:12px; margin-top:18px; }
+    .task { display:grid; grid-template-columns:105px 1fr; gap:15px; padding:17px; border:1px solid var(--line); border-radius:16px; background:var(--surface-2); }
+    .task-level { align-self:start; padding:5px 8px; border-radius:8px; background:var(--primary); color:white; text-align:center; font-size:.75rem; font-weight:900; letter-spacing:.03em; }
+    .task p { margin:0; }
+
+    .test-cta { position:relative; overflow:hidden; text-align:center; border-color:color-mix(in srgb,var(--primary) 35%,var(--line)); background:linear-gradient(135deg, color-mix(in srgb,var(--primary) 12%,var(--surface)), color-mix(in srgb,var(--primary-2) 14%,var(--surface))); }
+    .test-cta::before { content:""; position:absolute; width:260px; height:260px; right:-110px; top:-120px; border-radius:50%; background:color-mix(in srgb,var(--primary-2) 17%,transparent); }
+    .test-cta h2 { position:relative; margin:0 0 10px; font-size:clamp(1.7rem,3.5vw,2.7rem); }
+    .test-cta p { position:relative; max-width:620px; margin:0 auto 20px; color:var(--muted); }
+    .test-button { position:relative; display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:52px; padding:12px 22px; border-radius:14px; color:white; background:linear-gradient(135deg,var(--primary),var(--primary-2)); text-decoration:none; font-weight:900; box-shadow:0 14px 30px color-mix(in srgb,var(--primary) 24%,transparent); }
+    .test-button:hover { transform:translateY(-2px); box-shadow:0 18px 36px color-mix(in srgb,var(--primary) 30%,transparent); }
+
+    footer { width:min(1200px,calc(100% - 32px)); margin:20px auto 0; padding:26px 0 38px; color:var(--muted); text-align:center; font-size:.86rem; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns:1fr; }
+      .side-nav { position:relative; top:auto; max-height:none; display:flex; overflow-x:auto; gap:5px; padding:10px; }
+      .side-title { display:none; }
+      .side-nav a { flex:0 0 auto; grid-template-columns:1fr; }
+      .side-nav .nav-dot { display:none; }
+      .hero-grid { grid-template-columns:1fr; }
+      .hero-art { display:none; }
+    }
+    @media (max-width: 700px) {
+      .brand span:last-child { display:none; }
+      .toolbar { padding-inline:12px; }
+      .hero { width:min(100% - 20px,1200px); padding:26px 22px; border-radius:24px; }
+      .layout { width:min(100% - 20px,1200px); gap:18px; }
+      .goals, .section-card, .glossary, .tasks, .test-cta { padding:22px 18px; border-radius:19px; }
+      .goal-grid, .factor-grid, .event-grid, .quality-grid, .summary-steps, .glossary-grid { grid-template-columns:1fr; }
+      .compare { grid-template-columns:1fr; }
+      .compare-vs { min-height:28px; }
+      .system-flow { grid-template-columns:1fr; }
+      .arrow { transform:rotate(90deg); }
+      .task { grid-template-columns:1fr; }
+      .task-level { width:max-content; }
+      .tool-btn.print { display:none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation:none !important; transition:none !important; }
+    }
+    @media print {
+      :root { --bg:#fff; --surface:#fff; --surface-2:#f4f6f9; --text:#111; --muted:#444; --line:#ccd2db; }
+      body { background:white; font-size:11pt; }
+      .toolbar, .side-nav, .reading-progress, .section-footer, .test-button { display:none !important; }
+      .hero, .layout, footer { width:100%; margin:0; }
+      .hero, .goals, .section-card, .glossary, .tasks, .test-cta { box-shadow:none; break-inside:avoid; }
+      .layout { display:block; }
+      .section-card { break-before:page; }
+      a { color:inherit; text-decoration:none; }
+      details > * { display:block !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Перейти к материалу</a>
+  <div class="reading-progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="toolbar" aria-label="Панель управления">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">AI</span><span>Интерактивный учебник</span></div>
+    <div class="tools">
+      <button class="tool-btn" id="fontDown" type="button" title="Уменьшить текст" aria-label="Уменьшить размер текста">A−</button>
+      <button class="tool-btn" id="fontUp" type="button" title="Увеличить текст" aria-label="Увеличить размер текста">A+</button>
+      <button class="tool-btn" id="themeToggle" type="button" title="Сменить тему" aria-label="Переключить светлую и тёмную тему">☾</button>
+      <button class="tool-btn print" type="button" onclick="window.print()" title="Печать" aria-label="Распечатать материал">⎙</button>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="pageTitle">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">10 класс · Информатика</div>
+        <h1 id="pageTitle">История развития искусственного интеллекта</h1>
+        <p>От математической модели искусственного нейрона до трансформеров и генеративных систем. Проследите, как алгоритмы, вычислительные технологии и данные вместе изменяли возможности ИИ.</p>
+        <div class="hero-tags" aria-label="Ключевые направления">
+          <span class="tag">Хронология</span>
+          <span class="tag">Технологии</span>
+          <span class="tag">Данные</span>
+          <span class="tag">Причины и следствия</span>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 420 350" role="img">
+          <defs>
+            <linearGradient id="brainFill" x1="0" x2="1">
+              <stop stop-color="#2457d6"/><stop offset="1" stop-color="#6c43d5"/>
+            </linearGradient>
+          </defs>
+          <path d="M207 52c-38-31-95-6-97 40-40 3-58 50-31 79-30 25-13 77 29 79 7 43 56 61 91 34 18 24 57 22 72-6 43 5 69-43 45-77 30-29 13-79-30-82-3-45-59-66-93-39Z" fill="url(#brainFill)" opacity=".12"/>
+          <g stroke="url(#brainFill)" stroke-width="3" opacity=".72" fill="none">
+            <path d="M91 113 151 84l51 43 67-39 61 45M69 185l75-25 58 41 68-28 79 43M104 258l51-42 63 44 67-44"/>
+            <path d="M151 84l-7 76 11 56M202 127v74l16 59M269 88l1 85 15 43M91 113l-22 72 35 73M330 133l19 83-64 0"/>
+          </g>
+          <g fill="url(#brainFill)" stroke="#fff" stroke-width="4">
+            <circle class="pulse" cx="91" cy="113" r="12"/><circle class="pulse" cx="151" cy="84" r="11"/>
+            <circle class="pulse" cx="202" cy="127" r="14"/><circle class="pulse" cx="269" cy="88" r="12"/>
+            <circle class="pulse" cx="330" cy="133" r="11"/><circle class="pulse" cx="69" cy="185" r="12"/>
+            <circle class="pulse" cx="144" cy="160" r="13"/><circle class="pulse" cx="202" cy="201" r="15"/>
+            <circle class="pulse" cx="270" cy="173" r="13"/><circle class="pulse" cx="349" cy="216" r="12"/>
+            <circle class="pulse" cx="104" cy="258" r="12"/><circle class="pulse" cx="155" cy="216" r="11"/>
+            <circle class="pulse" cx="218" cy="260" r="14"/><circle class="pulse" cx="285" cy="216" r="12"/>
+          </g>
+          <text x="210" y="330" text-anchor="middle" fill="currentColor" opacity=".55" font-size="16" font-weight="800">АЛГОРИТМЫ · ВЫЧИСЛЕНИЯ · ДАННЫЕ</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <nav class="side-nav" aria-label="Оглавление">
+      <div class="side-title"><span>Оглавление</span><span class="complete-count" id="completeCount">0/12</span></div>
+      <a href="#s1" data-section="s1"><span class="nav-dot"></span><span>1. Что такое ИИ</span></a>
+      <a href="#s2" data-section="s2"><span class="nav-dot"></span><span>2. Теоретические основы</span></a>
+      <a href="#s3" data-section="s3"><span class="nav-dot"></span><span>3. ИИ как наука</span></a>
+      <a href="#s4" data-section="s4"><span class="nav-dot"></span><span>4. Ранний энтузиазм</span></a>
+      <a href="#s5" data-section="s5"><span class="nav-dot"></span><span>5. Первая зима ИИ</span></a>
+      <a href="#s6" data-section="s6"><span class="nav-dot"></span><span>6. Экспертные системы</span></a>
+      <a href="#s7" data-section="s7"><span class="nav-dot"></span><span>7. Машинное обучение</span></a>
+      <a href="#s8" data-section="s8"><span class="nav-dot"></span><span>8. Большие данные</span></a>
+      <a href="#s9" data-section="s9"><span class="nav-dot"></span><span>9. Трансформеры</span></a>
+      <a href="#s10" data-section="s10"><span class="nav-dot"></span><span>10. Изменение возможностей</span></a>
+      <a href="#s11" data-section="s11"><span class="nav-dot"></span><span>11. Качество данных</span></a>
+      <a href="#s12" data-section="s12"><span class="nav-dot"></span><span>12. Выводы</span></a>
+      <a href="#test"><span class="nav-dot"></span><span>Итоговый тест</span></a>
+    </nav>
+
+    <main id="content">
+      <section class="goals" aria-labelledby="goalsTitle">
+        <div class="eyebrow">Что вы узнаете</div>
+        <h2 id="goalsTitle">После изучения темы вы сможете</h2>
+        <div class="goal-grid">
+          <div class="goal"><span class="goal-num">1</span><p>объяснить особенности основных этапов развития искусственного интеллекта;</p></div>
+          <div class="goal"><span class="goal-num">2</span><p>составить цифровую хронологию ключевых событий;</p></div>
+          <div class="goal"><span class="goal-num">3</span><p>установить связь между развитием технологий, ростом объёмов данных и возможностями ИИ;</p></div>
+          <div class="goal"><span class="goal-num">4</span><p>оценить влияние технологий и данных на развитие искусственного интеллекта.</p></div>
+        </div>
+      </section>
+
+      <section class="section-card tracked" id="s1" data-title="Что такое искусственный интеллект">
+        <div class="eyebrow">Раздел 1</div>
+        <h2>Что такое искусственный интеллект</h2>
+        <p><strong>Искусственный интеллект (ИИ)</strong> — область информатики, связанная с созданием компьютерных систем, способных выполнять задачи, для решения которых обычно требуется человеческий интеллект. К таким задачам относятся распознавание изображений и речи, перевод текста, поиск закономерностей, прогнозирование, принятие решений и создание нового контента.</p>
+        <p>Искусственный интеллект не является одной программой или устройством. Это совокупность различных методов, алгоритмов и технологий.</p>
+        <p>В развитии ИИ можно выделить три взаимосвязанных фактора. Нажмите на карточки, чтобы раскрыть пояснения.</p>
+        <div class="factor-grid">
+          <details open><summary><span class="factor-icon">⌘</span>Алгоритмы</summary><p>Способы решения задач и обучения моделей.</p></details>
+          <details><summary><span class="factor-icon">▦</span>Вычислительные технологии</summary><p>Процессоры, графические ускорители, память, серверы и облачные системы.</p></details>
+          <details><summary><span class="factor-icon">◫</span>Данные</summary><p>Тексты, изображения, звуковые записи, видеоматериалы и другие примеры, используемые для обучения моделей.</p></details>
+        </div>
+        <div class="callout"><span class="callout-icon">◆</span><p><strong>Главная закономерность:</strong> наиболее значительные достижения ИИ происходили тогда, когда одновременно совершенствовались алгоритмы, увеличивалась вычислительная мощность и становились доступными большие объёмы данных.</p></div>
+        <div class="plus-formula" aria-label="Формула развития искусственного интеллекта"><span>Алгоритмы</span><span class="operator">+</span><span>Вычисления</span><span class="operator">+</span><span>Данные</span><span class="operator">→</span><span>Новые возможности ИИ</span></div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s1">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s2" data-title="Теоретические основы искусственного интеллекта">
+        <div class="eyebrow">Раздел 2 · 1940–1950-е годы</div>
+        <h2>Теоретические основы искусственного интеллекта</h2>
+        <h3>Зарождение идей</h3>
+        <p>В первой половине XX века компьютеры могли выполнять главным образом математические вычисления. Однако учёные уже рассматривали возможность создания машин, способных моделировать отдельные процессы человеческого мышления.</p>
+        <p>В <strong>1943 году</strong> нейрофизиолог Уоррен Мак-Каллок и математик Уолтер Питтс предложили математическую модель искусственного нейрона. Они показали, что сеть простых элементов может выполнять логические операции. Эта работа стала одной из теоретических основ нейронных сетей. Факт публикации работы в 1943 году подтверждается <a href="https://link.springer.com/article/10.1007/BF02478259" target="_blank" rel="noopener noreferrer">оригинальной научной статьёй</a>.</p>
+        <p>В <strong>1950 году</strong> английский математик Алан Тьюринг опубликовал статью «Вычислительные машины и разум». Он предложил проводить испытание, позднее получившее название <strong>теста Тьюринга</strong>.</p>
+        <div class="definition"><strong>Как проходит тест?</strong><br>Человек общается с двумя невидимыми собеседниками — человеком и компьютерной программой. Если по ответам невозможно уверенно определить, кто из собеседников является машиной, считается, что программа успешно имитирует разумное поведение.</div>
+        <p>Тест оценивает внешнее поведение системы, но не доказывает, что машина действительно обладает сознанием или мыслит как человек. <a href="https://academic.oup.com/mind/article/LIX/236/433/986238" target="_blank" rel="noopener noreferrer">Статья Тьюринга</a> была опубликована в октябре 1950 года.</p>
+
+        <div class="timeline-wrap" aria-labelledby="timelineTitle">
+          <h3 id="timelineTitle">Интерактивная хронология</h3>
+          <p class="lead">Выберите год, чтобы увидеть, какое изменение произошло и почему оно важно.</p>
+          <div class="timeline" role="tablist" aria-label="Ключевые события истории ИИ">
+            <button class="active" type="button" role="tab" aria-selected="true" data-year="1943" data-name="Модель искусственного нейрона" data-info="Мак-Каллок и Питтс показали, что сеть простых элементов способна выполнять логические операции. Возникла теоретическая основа нейронных сетей.">1943</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1950" data-name="Тест Тьюринга" data-info="Алан Тьюринг предложил оценивать способность машины имитировать разумное поведение в текстовом диалоге.">1950</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1956" data-name="Дартмутский семинар" data-info="ИИ оформился как самостоятельное научное направление; исследователи сформулировали основные задачи новой области.">1956</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1966" data-name="ELIZA" data-info="Ранняя диалоговая программа создавала впечатление осмысленной беседы, используя ключевые слова и правила.">1966</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1970-е" data-name="Первая зима ИИ" data-info="Завышенные ожидания столкнулись с ограничениями алгоритмов, вычислительной мощности и данных.">1970-е</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1980-е" data-name="Экспертные системы" data-info="Знания специалистов стали представлять в виде баз фактов и правил для решения задач в узких областях.">1980-е</button>
+            <button type="button" role="tab" aria-selected="false" data-year="1997" data-name="Deep Blue" data-info="Сочетание алгоритмов поиска, специализированного оборудования и базы партий позволило системе победить чемпиона мира по шахматам.">1997</button>
+            <button type="button" role="tab" aria-selected="false" data-year="2012" data-name="AlexNet" data-info="Большой набор изображений, глубокая сеть и GPU обеспечили качественный скачок в распознавании объектов.">2012</button>
+            <button type="button" role="tab" aria-selected="false" data-year="2017" data-name="Transformer" data-info="Механизм внимания и параллельная обработка последовательностей открыли путь к большим языковым моделям.">2017</button>
+            <button type="button" role="tab" aria-selected="false" data-year="2022" data-name="Массовое распространение генеративного ИИ" data-info="Публичный запуск ChatGPT сделал генеративные модели доступными широкой аудитории.">2022</button>
+          </div>
+          <div class="timeline-panel" role="tabpanel" aria-live="polite"><span class="year" id="timelineYear">1943</span><h3 id="timelineName">Модель искусственного нейрона</h3><p id="timelineInfo">Мак-Каллок и Питтс показали, что сеть простых элементов способна выполнять логические операции. Возникла теоретическая основа нейронных сетей.</p></div>
+        </div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s2">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s3" data-title="Оформление ИИ как научного направления">
+        <div class="eyebrow">Раздел 3 · 1956 год</div>
+        <h2>Оформление ИИ как научного направления</h2>
+        <h3>Дартмутский семинар</h3>
+        <p>Летом 1956 года в Дартмутском колледже в США состоялся научный семинар, организованный Джоном Маккарти, Марвином Мински, Натаниэлем Рочестером и Клодом Шенноном.</p>
+        <p>В материалах семинара использовался термин «искусственный интеллект». Учёные предполагали, что отдельные процессы обучения и мышления можно описать настолько точно, чтобы их могла воспроизвести машина. Дартмутский семинар принято считать началом искусственного интеллекта как самостоятельного научного направления. <a href="https://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf" target="_blank" rel="noopener noreferrer">Первоначальная заявка на проведение проекта</a> была подготовлена в 1955 году, а сам семинар состоялся в 1956 году.</p>
+        <p>Исследователи работали в двух основных направлениях:</p>
+        <div class="compare">
+          <div class="compare-card"><h3>Символьный подход</h3><p>Представление знаний с помощью символов, правил и логических выражений.</p></div>
+          <div class="compare-vs">и</div>
+          <div class="compare-card"><h3>Нейросетевой подход</h3><p>Моделирование работы нервной системы с помощью искусственных нейронов.</p></div>
+        </div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s3">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s4" data-title="Период раннего энтузиазма">
+        <div class="eyebrow">Раздел 4 · 1950–1960-е годы</div>
+        <h2>Период раннего энтузиазма</h2>
+        <p>После Дартмутского семинара учёные ожидали быстрого создания машинного интеллекта. Появились программы, которые могли доказывать теоремы, играть в простые игры, решать логические задачи и обрабатывать текст.</p>
+        <div class="event-grid">
+          <article class="event"><span class="year">1956</span><h3>Logic Theorist</h3><p>Программа, способная доказывать некоторые математические теоремы.</p></article>
+          <article class="event"><span class="year">1957</span><h3>Перцептрон</h3><p>Фрэнк Розенблатт предложил обучаемую модель искусственного нейрона, изменявшую параметры на основе примеров и распознававшую простые образы.</p></article>
+          <article class="event"><span class="year">1966</span><h3>ELIZA</h3><p>Джозеф Вейценбаум описал программу, имитировавшую диалог с психотерапевтом.</p></article>
+        </div>
+        <p>ELIZA находила в сообщении пользователя ключевые слова и формировала ответ по заранее заданным правилам. Она не понимала смысл разговора, но создавала у пользователя ощущение осмысленного общения. В оригинальной публикации ELIZA определяется именно как <a href="https://dl.acm.org/doi/10.1145/365153.365168" target="_blank" rel="noopener noreferrer">компьютерная программа</a>, а не как робот.</p>
+        <p>Ранние системы ИИ имели существенные ограничения:</p>
+        <ul class="checks">
+          <li>компьютеры обладали небольшой памятью и низкой скоростью работы;</li>
+          <li>цифровых данных было мало;</li>
+          <li>большинство знаний приходилось вручную записывать в виде правил;</li>
+          <li>программы успешно работали только в узких и заранее определённых ситуациях.</li>
+        </ul>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s4">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s5" data-title="Первая зима искусственного интеллекта">
+        <div class="eyebrow">Раздел 5 · 1970-е годы</div>
+        <h2>Первая «зима искусственного интеллекта»</h2>
+        <p>Первоначальные ожидания оказались завышенными. Программы успешно решали учебные и демонстрационные задачи, но плохо справлялись с реальными ситуациями.</p>
+        <p>Например, программа могла распознавать объекты на простом изображении, но ошибалась при изменении освещения, положения или фона. Диалоговые системы отвечали по шаблонам и не понимали контекст.</p>
+        <p>Ограниченные вычислительные возможности не позволяли обучать сложные нейронные сети, а небольшого количества цифровых данных было недостаточно для выявления разнообразных закономерностей. Неудачи привели к сокращению финансирования и снижению интереса к исследованиям.</p>
+        <div class="winter-visual" aria-label="Волнообразное развитие искусственного интеллекта">
+          <svg viewBox="0 0 760 180" role="img">
+            <defs><linearGradient id="wave" x1="0" x2="1"><stop stop-color="#2457d6"/><stop offset=".55" stop-color="#d94a68"/><stop offset="1" stop-color="#00a88f"/></linearGradient></defs>
+            <path d="M20 135 C105 20 160 20 235 130 S365 160 425 72 S550 40 605 116 S690 96 740 34" fill="none" stroke="url(#wave)" stroke-width="8" stroke-linecap="round"/>
+            <path d="M20 155H740" stroke="currentColor" opacity=".16" stroke-width="2"/>
+            <g fill="currentColor" font-size="14" font-weight="800"><text x="76" y="26">Энтузиазм</text><text x="245" y="153">Первая зима</text><text x="425" y="52">Экспертные системы</text><text x="573" y="145">Вторая зима</text><text x="678" y="24">Новый рост</text></g>
+          </svg>
+          <div class="winter-labels"><span>1950-е</span><span>1970-е</span><span>1980-е</span><span>1990-е</span><span>2010-е</span></div>
+        </div>
+        <p>Так возник период, получивший название «зима искусственного интеллекта».</p>
+        <div class="definition"><strong>Зима ИИ</strong> — период снижения интереса и финансирования исследований из-за несоответствия между ожидаемыми и полученными результатами.</div>
+        <div class="callout warning"><span class="callout-icon">!</span><p>Первая зима ИИ показывает, что одной перспективной идеи недостаточно. Для её практической реализации необходимы соответствующие технологии, данные и научно обоснованные алгоритмы.</p></div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s5">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s6" data-title="Экспертные системы">
+        <div class="eyebrow">Раздел 6 · 1970–1980-е годы</div>
+        <h2>Экспертные системы</h2>
+        <p>Новым направлением развития стали <strong>экспертные системы</strong> — программы, использующие знания специалистов для принятия решений в определённой предметной области.</p>
+        <p>Экспертная система обычно включала:</p>
+        <div class="system-flow" aria-label="Структура экспертной системы">
+          <div class="flow-node"><strong>База знаний</strong><span>факты и правила специалистов</span></div><span class="arrow">→</span>
+          <div class="flow-node"><strong>Механизм вывода</strong><span>алгоритм применения правил</span></div><span class="arrow">→</span>
+          <div class="flow-node"><strong>Интерфейс</strong><span>взаимодействие с пользователем</span></div>
+        </div>
+        <p>Экспертные системы применялись для медицинской диагностики, поиска неисправностей оборудования, геологических исследований и настройки компьютерных систем.</p>
+        <p>Однако их создание требовало ручного ввода большого количества правил. При изменении условий базу знаний приходилось обновлять. Система не могла самостоятельно обнаружить закономерность, если соответствующее правило не было предусмотрено разработчиком.</p>
+        <p>В конце 1980-х годов высокая стоимость разработки и сопровождения экспертных систем, а также очередное завышение ожиданий стали причинами второй зимы ИИ.</p>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s6">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s7" data-title="Переход к машинному обучению">
+        <div class="eyebrow">Раздел 7 · 1990–2000-е годы</div>
+        <h2>Переход к машинному обучению</h2>
+        <p>Постепенно исследователи стали переходить от программирования готовых правил к обучению систем на примерах.</p>
+        <div class="definition"><strong>Машинное обучение</strong> — направление ИИ, в котором компьютерная модель выявляет закономерности в данных и использует их для прогнозирования или принятия решений.</div>
+        <p>Развитию машинного обучения способствовали:</p>
+        <ul class="checks">
+          <li>распространение персональных компьютеров;</li>
+          <li>появление интернета;</li>
+          <li>увеличение объёма цифровой памяти;</li>
+          <li>создание электронных баз данных;</li>
+          <li>рост производительности процессоров;</li>
+          <li>совершенствование статистических алгоритмов.</li>
+        </ul>
+        <div class="compare">
+          <div class="compare-card"><h3>Раньше: готовое правило</h3><p>«Если произошло условие A, выполнить действие B».</p></div>
+          <div class="compare-vs">→</div>
+          <div class="compare-card"><h3>Теперь: обучение</h3><p>Модель получает множество примеров и определяет, какие признаки связаны с нужным результатом.</p></div>
+        </div>
+        <p>В <strong>1997 году</strong> шахматная система Deep Blue компании IBM победила чемпиона мира Гарри Каспарова. Успех обеспечили специализированные вычислительные компоненты, параллельная обработка, алгоритмы поиска и база шахматных партий. Следовательно, результат был достигнут не только благодаря программе, но и благодаря сочетанию алгоритмов, оборудования и данных. Это подчёркивается в <a href="https://research.ibm.com/publications/deep-blue" target="_blank" rel="noopener noreferrer">описании проекта IBM</a>.</p>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s7">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s8" data-title="Большие данные и глубокое обучение">
+        <div class="eyebrow">Раздел 8 · 2000–2010-е годы</div>
+        <h2>Большие данные и глубокое обучение</h2>
+        <p>Интернет, социальные сети, смартфоны, цифровые камеры и различные датчики стали ежедневно создавать огромные объёмы информации. Появились массивы размеченных изображений, текстов и аудиозаписей.</p>
+        <p>Одновременно получили распространение <strong>графические процессоры — GPU</strong>. Первоначально они использовались для обработки компьютерной графики, но оказались эффективными и для обучения нейронных сетей, поскольку могли одновременно выполнять большое количество математических операций.</p>
+        <p>Это создало условия для развития <strong>глубокого обучения</strong> — машинного обучения с использованием многослойных нейронных сетей.</p>
+        <p>В <strong>2012 году</strong> нейронная сеть AlexNet продемонстрировала высокие результаты в распознавании изображений. Она обучалась примерно на 1,2 миллиона изображений, относящихся к 1000 категориям, и использовала GPU для ускорения вычислений. Результаты были значительно лучше результатов многих предыдущих методов. Описание архитектуры и эксперимента представлено в <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="noopener noreferrer">первичной статье AlexNet</a>.</p>
+        <p>Этот пример показывает причинно-следственную связь:</p>
+        <div class="plus-formula"><span>Большой набор изображений</span><span class="operator">+</span><span>Глубокая сеть</span><span class="operator">+</span><span>GPU</span><span class="operator">→</span><span>Лучшее распознавание</span></div>
+        <p>Глубокое обучение стало применяться для:</p>
+        <div class="application-cloud"><span>распознавания речи и изображений</span><span>автоматического перевода</span><span>медицинской диагностики</span><span>рекомендательных систем</span><span>управления транспортом</span><span>анализа больших данных</span></div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s8">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s9" data-title="Трансформеры и генеративный ИИ">
+        <div class="eyebrow">Раздел 9 · С 2017 года</div>
+        <h2>Трансформеры и генеративный искусственный интеллект</h2>
+        <p>В <strong>2017 году</strong> группа исследователей представила архитектуру <strong>Transformer</strong>. Она использует механизм внимания, позволяющий модели определять, какие части входных данных наиболее важны для выполнения задачи.</p>
+        <p>Трансформеры могут обрабатывать элементы последовательности параллельно. Это ускорило обучение и позволило создавать модели с большим количеством параметров. Архитектура была представлена в статье <a href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf" target="_blank" rel="noopener noreferrer">Attention Is All You Need</a>.</p>
+        <div class="system-flow" aria-label="Принцип работы современных языковых моделей">
+          <div class="flow-node"><strong>Большие данные</strong><span>значительные объёмы текстов</span></div><span class="arrow">→</span>
+          <div class="flow-node"><strong>Transformer</strong><span>механизм внимания</span></div><span class="arrow">→</span>
+          <div class="flow-node"><strong>Генерация</strong><span>текст, перевод, код, обобщение</span></div>
+        </div>
+        <p>На основе трансформеров стали развиваться большие языковые модели, обучающиеся на значительных объёмах текстовых данных. Они способны отвечать на вопросы, создавать тексты, переводить, обобщать информацию и генерировать программный код.</p>
+        <p>В <strong>2022 году</strong> был открыт публичный доступ к ChatGPT, что способствовало массовому распространению генеративного ИИ. Разработчики представили систему как исследовательскую версию, предназначенную для получения обратной связи о её возможностях и недостатках. <a href="https://openai.com/index/chatgpt/" target="_blank" rel="noopener noreferrer">Официальная публикация OpenAI</a> подчёркивает, что одной из задач запуска было изучение сильных и слабых сторон модели.</p>
+        <p>Современные модели становятся <strong>мультимодальными</strong>: они могут работать с текстом, изображениями, звуком и видео.</p>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s9">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s10" data-title="Как технологии и данные изменяли возможности ИИ">
+        <div class="eyebrow">Раздел 10 · Сравнение этапов</div>
+        <h2>Как технологии и данные изменяли возможности ИИ</h2>
+        <p class="lead">Таблица помогает увидеть не только последовательность этапов, но и зависимость возможностей ИИ от технологий и данных.</p>
+        <div class="table-scroll" tabindex="0" aria-label="Сравнительная таблица этапов развития ИИ">
+          <table>
+            <thead><tr><th>Этап</th><th>Основной подход</th><th>Технологии и данные</th><th>Возможности</th><th>Ограничения</th></tr></thead>
+            <tbody>
+              <tr><td>1940–1950-е</td><td>Теоретические модели</td><td>Первые электронные компьютеры</td><td>Моделирование логических операций</td><td>Низкая вычислительная мощность</td></tr>
+              <tr><td>1950–1960-е</td><td>Правила, поиск, перцептроны</td><td>Небольшие наборы данных</td><td>Теоремы, игры, простые диалоги</td><td>Работа только в заданных ситуациях</td></tr>
+              <tr><td>1970–1980-е</td><td>Экспертные системы</td><td>Базы знаний, вводимые вручную</td><td>Диагностика и поддержка решений</td><td>Высокая стоимость обновления правил</td></tr>
+              <tr><td>1990–2000-е</td><td>Статистическое машинное обучение</td><td>Интернет, цифровые базы, более быстрые процессоры</td><td>Прогнозирование и классификация</td><td>Зависимость от качества признаков</td></tr>
+              <tr><td>2010-е</td><td>Глубокое обучение</td><td>GPU, облачные вычисления, большие данные</td><td>Распознавание речи, изображений и сложных закономерностей</td><td>Большие затраты на обучение</td></tr>
+              <tr><td>С 2017 года</td><td>Трансформеры и генеративные модели</td><td>Вычислительные кластеры, огромные наборы данных</td><td>Создание текста, изображений, кода и мультимодального контента</td><td>Ошибки, предвзятость, проблема достоверности</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s10">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s11" data-title="Всегда ли больше данных означает лучший результат">
+        <div class="eyebrow">Раздел 11 · Цифровая грамотность</div>
+        <h2>Всегда ли больше данных означает лучший результат?</h2>
+        <p>Увеличение количества данных обычно расширяет возможности модели, но само по себе не гарантирует высокое качество.</p>
+        <p>Если обучающие данные содержат ошибки, устаревшую информацию или представляют только часть общества, модель может воспроизводить эти недостатки. Поэтому важны:</p>
+        <div class="quality-grid">
+          <div class="quality-item"><span>✓</span><span>достоверность данных;</span></div>
+          <div class="quality-item"><span>✓</span><span>полнота и разнообразие примеров;</span></div>
+          <div class="quality-item"><span>✓</span><span>отсутствие систематических искажений;</span></div>
+          <div class="quality-item"><span>✓</span><span>законность получения информации;</span></div>
+          <div class="quality-item"><span>✓</span><span>защита персональных данных;</span></div>
+          <div class="quality-item"><span>✓</span><span>проверка результатов человеком.</span></div>
+        </div>
+        <p>Современный ИИ может создавать убедительно звучащие, но фактически неверные ответы. Пользователь должен проверять значимую информацию по нескольким надёжным источникам.</p>
+        <div class="callout warning"><span class="callout-icon">!</span><p><strong>Правило цифровой грамотности:</strong> правдоподобный ответ системы ИИ не равнозначен достоверному ответу.</p></div>
+        <p>При работе с цифровой хронологией необходимо проверять автора источника, дату публикации и подтверждение ключевых фактов в научных или официальных материалах.</p>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s11">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="section-card tracked" id="s12" data-title="Основные выводы">
+        <div class="eyebrow">Раздел 12 · Обобщение</div>
+        <h2>Основные выводы</h2>
+        <p>История искусственного интеллекта развивалась неравномерно: периоды научных достижений сменялись периодами разочарования и снижения финансирования.</p>
+        <p>Главными этапами развития ИИ стали:</p>
+        <ol class="summary-steps">
+          <li>создание теоретической модели искусственного нейрона;</li>
+          <li>появление теста Тьюринга;</li>
+          <li>оформление ИИ как научного направления;</li>
+          <li>развитие символьных программ и перцептронов;</li>
+          <li>появление экспертных систем;</li>
+          <li>переход к машинному обучению;</li>
+          <li>развитие глубоких нейронных сетей;</li>
+          <li>появление трансформеров и генеративного ИИ.</li>
+        </ol>
+        <p>Каждый крупный прорыв был связан с сочетанием трёх факторов:</p>
+        <div class="plus-formula"><span>Новые алгоритмы</span><span class="operator">+</span><span>Мощные технологии</span><span class="operator">+</span><span>Качественные данные</span></div>
+        <p>Следовательно, развитие ИИ нельзя объяснить только совершенствованием программ или только увеличением количества данных. Результат возникает благодаря их взаимодействию.</p>
+        <div class="section-footer"><button class="study-btn" type="button" data-complete="s12">Отметить раздел изученным</button></div>
+      </section>
+
+      <section class="glossary" aria-labelledby="glossaryTitle">
+        <div class="eyebrow">Словарь</div>
+        <h2 id="glossaryTitle">Ключевые понятия</h2>
+        <p class="lead">Нажимайте на термины, чтобы раскрыть краткие определения.</p>
+        <div class="glossary-grid">
+          <details><summary>Искусственный интеллект</summary><p>Область информатики, связанная с созданием систем, выполняющих задачи, обычно требующие человеческого интеллекта.</p></details>
+          <details><summary>Тест Тьюринга</summary><p>Испытание способности программы имитировать разумное поведение в текстовом диалоге.</p></details>
+          <details><summary>Искусственный нейрон</summary><p>Математическая модель простого элемента, принимающего входные сигналы и формирующего выход.</p></details>
+          <details><summary>Символьный ИИ</summary><p>Подход, представляющий знания с помощью символов, правил и логических выражений.</p></details>
+          <details><summary>Экспертная система</summary><p>Программа, использующая базу знаний специалистов и механизм логического вывода.</p></details>
+          <details><summary>Зима искусственного интеллекта</summary><p>Период снижения интереса и финансирования из-за несоответствия ожиданий и результатов.</p></details>
+          <details><summary>Машинное обучение</summary><p>Направление ИИ, в котором модель выявляет закономерности в данных.</p></details>
+          <details><summary>Большие данные</summary><p>Значительные по объёму и разнообразию массивы цифровой информации.</p></details>
+          <details><summary>Глубокое обучение</summary><p>Машинное обучение с использованием многослойных нейронных сетей.</p></details>
+          <details><summary>Трансформер</summary><p>Архитектура нейронной сети, использующая механизм внимания и параллельную обработку последовательностей.</p></details>
+          <details><summary>Генеративный ИИ</summary><p>Системы, способные создавать новый контент на основе закономерностей, выявленных в обучающих данных.</p></details>
+          <details><summary>Мультимодальная модель</summary><p>Модель, способная работать с несколькими типами данных: текстом, изображениями, звуком или видео.</p></details>
+        </div>
+      </section>
+
+      <section class="tasks" aria-labelledby="tasksTitle">
+        <div class="eyebrow">Самопроверка</div>
+        <h2 id="tasksTitle">Вопросы и задания</h2>
+        <div class="task-list">
+          <div class="task"><span class="task-level">Понимание</span><p>Объясните, почему Дартмутский семинар считается важным этапом истории ИИ.</p></div>
+          <div class="task"><span class="task-level">Применение</span><p>Составьте цифровую хронологию минимум из шести ключевых событий.</p></div>
+          <div class="task"><span class="task-level">Анализ</span><p>Установите не менее двух причинно-следственных связей между развитием вычислительных технологий, ростом данных и возможностями ИИ.</p></div>
+          <div class="task"><span class="task-level">Оценка</span><p>Какой фактор — алгоритмы, вычислительные мощности или данные — сильнее всего повлиял на современное развитие ИИ? Обоснуйте позицию не менее чем тремя фактами.</p></div>
+        </div>
+      </section>
+
+      <section class="test-cta" id="test" aria-labelledby="testTitle">
+        <div class="eyebrow">Завершение изучения</div>
+        <h2 id="testTitle">Проверьте свои знания</h2>
+        <p>Если все разделы изучены и вы можете объяснить связь между алгоритмами, технологиями, данными и возможностями ИИ, переходите к итоговому тесту.</p>
+        <a class="test-button" href="https://onlinetestpad.com/t/10-01-02-fo-history-ai" target="_blank" rel="noopener noreferrer">Выполнить тест <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+  </div>
+
+  <footer>© Муршель Татьяна Викторовна, учитель информатики КГУ &quot;Экономический лицей&quot; отдела образования г. Семей управления образования области Абай, 2026</footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeBtn = document.getElementById('themeToggle');
+      const savedTheme = localStorage.getItem('aiTextbookTheme');
+      const preferredDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = savedTheme || (preferredDark ? 'dark' : 'light');
+      root.dataset.theme = initialTheme;
+      themeBtn.textContent = initialTheme === 'dark' ? '☀' : '☾';
+
+      themeBtn.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        themeBtn.textContent = next === 'dark' ? '☀' : '☾';
+        localStorage.setItem('aiTextbookTheme', next);
+      });
+
+      let size = Number(localStorage.getItem('aiTextbookFont') || 17);
+      const applySize = () => root.style.setProperty('--base-size', size + 'px');
+      applySize();
+      document.getElementById('fontDown').addEventListener('click', () => { size = Math.max(14, size - 1); applySize(); localStorage.setItem('aiTextbookFont', size); });
+      document.getElementById('fontUp').addEventListener('click', () => { size = Math.min(22, size + 1); applySize(); localStorage.setItem('aiTextbookFont', size); });
+
+      const progressBar = document.getElementById('progressBar');
+      const updateProgress = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const value = max > 0 ? Math.min(100, Math.max(0, window.scrollY / max * 100)) : 0;
+        progressBar.style.width = value + '%';
+      };
+      updateProgress();
+      addEventListener('scroll', updateProgress, { passive: true });
+      addEventListener('resize', updateProgress);
+
+      const navLinks = [...document.querySelectorAll('.side-nav a[data-section]')];
+      const sections = [...document.querySelectorAll('.tracked')];
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === visible.target.id));
+      }, { rootMargin: '-20% 0px -64% 0px', threshold: [0, .15, .4] });
+      sections.forEach(section => observer.observe(section));
+
+      const storageKey = 'aiHistoryCompletedSections';
+      let completed;
+      try { completed = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]')); } catch { completed = new Set(); }
+      const completeCount = document.getElementById('completeCount');
+      const renderComplete = () => {
+        document.querySelectorAll('[data-complete]').forEach(btn => {
+          const done = completed.has(btn.dataset.complete);
+          btn.classList.toggle('done', done);
+          btn.textContent = done ? '✓ Раздел изучен' : 'Отметить раздел изученным';
+          btn.setAttribute('aria-pressed', String(done));
+        });
+        navLinks.forEach(link => link.classList.toggle('done', completed.has(link.dataset.section)));
+        completeCount.textContent = completed.size + '/12';
+      };
+      document.querySelectorAll('[data-complete]').forEach(btn => btn.addEventListener('click', () => {
+        const id = btn.dataset.complete;
+        completed.has(id) ? completed.delete(id) : completed.add(id);
+        localStorage.setItem(storageKey, JSON.stringify([...completed]));
+        renderComplete();
+      }));
+      renderComplete();
+
+      const timelineButtons = [...document.querySelectorAll('.timeline button')];
+      const year = document.getElementById('timelineYear');
+      const name = document.getElementById('timelineName');
+      const info = document.getElementById('timelineInfo');
+      timelineButtons.forEach(button => button.addEventListener('click', () => {
+        timelineButtons.forEach(item => { item.classList.remove('active'); item.setAttribute('aria-selected', 'false'); });
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        year.textContent = button.dataset.year;
+        name.textContent = button.dataset.name;
+        info.textContent = button.dataset.info;
+      }));
+    })();
+  </script>
+</body>
+</html>
