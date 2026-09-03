@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный учебник для 7 класса по теме личной цифровой безопасности, надёжных паролей, 2FA, антивирусной защиты и архивации данных.">
+  <meta name="theme-color" content="#102a43">
+  <title>Личная безопасность и роль сервисных программ в ней — 7 класс</title>
+  <style>
+    :root {
+      --ink: #102a43;
+      --ink-soft: #486581;
+      --paper: #ffffff;
+      --page: #f3f7fb;
+      --line: #d7e3ef;
+      --blue: #1769aa;
+      --cyan: #0e9f9a;
+      --cyan-soft: #e8f8f6;
+      --blue-soft: #eaf3fb;
+      --orange: #d97706;
+      --orange-soft: #fff5df;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+      --green: #16803c;
+      --green-soft: #eaf8ef;
+      --shadow: 0 18px 48px rgba(16, 42, 67, .09);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(23, 105, 170, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 105, 170, .035) 1px, transparent 1px),
+        var(--page);
+      background-size: 28px 28px;
+      font-family: Inter, Aptos, "Segoe UI", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.68;
+    }
+
+    a { color: var(--blue); }
+    a:hover { text-decoration-thickness: 2px; }
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 1000;
+      top: 10px;
+      left: 10px;
+      transform: translateY(-150%);
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: white;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .scroll-progress {
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(255,255,255,.6);
+    }
+    .scroll-progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), #4cc9f0, #f59e0b);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background:
+        radial-gradient(circle at 85% 18%, rgba(76,201,240,.35), transparent 25%),
+        radial-gradient(circle at 10% 95%, rgba(14,159,154,.30), transparent 28%),
+        linear-gradient(125deg, #0b1f33, #123f67 62%, #1769aa);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -110px;
+      bottom: -170px;
+      width: 420px;
+      height: 420px;
+      border: 2px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 36px rgba(255,255,255,.04), 0 0 0 72px rgba(255,255,255,.025);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 68px 28px 60px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 999px;
+      background: rgba(255,255,255,.09);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      max-width: 900px;
+      margin: 20px 0 12px;
+      font-size: clamp(2.25rem, 6vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+    }
+    .hero .lead {
+      max-width: 760px;
+      margin: 0;
+      color: #d9ecfb;
+      font-size: clamp(1.08rem, 2.2vw, 1.35rem);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .hero-meta span {
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.11);
+      color: #eef8ff;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 28px;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .side-panel {
+      align-self: start;
+      position: sticky;
+      top: 24px;
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 10px 28px rgba(16,42,67,.06);
+    }
+    .side-panel h2 {
+      margin: 0 0 12px;
+      font-size: .88rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .side-panel nav { display: grid; gap: 5px; }
+    .side-panel nav a {
+      padding: 9px 10px;
+      border-radius: 10px;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      line-height: 1.3;
+      text-decoration: none;
+    }
+    .side-panel nav a:hover,
+    .side-panel nav a.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 800;
+    }
+    .study-progress { margin-top: 18px; }
+    .study-progress .bar {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #e7eef5;
+    }
+    .study-progress .bar span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      transition: width .25s ease;
+    }
+    .study-progress p {
+      margin: 7px 0 0;
+      color: var(--ink-soft);
+      font-size: .82rem;
+    }
+    .reset-progress {
+      margin-top: 9px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font-size: .8rem;
+      text-decoration: underline;
+    }
+
+    main { min-width: 0; }
+    .card {
+      margin-bottom: 24px;
+      padding: clamp(24px, 4vw, 42px);
+      scroll-margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .section-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .section-kicker .number {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--blue-soft);
+      font-size: .9rem;
+    }
+    h2, h3 { line-height: 1.18; }
+    main h2 {
+      margin: 0 0 18px;
+      font-size: clamp(1.75rem, 3.8vw, 2.65rem);
+      letter-spacing: -.025em;
+    }
+    main h3 {
+      margin: 30px 0 12px;
+      font-size: 1.35rem;
+    }
+    p { margin: 0 0 16px; }
+    ul, ol { padding-left: 1.25em; }
+    li { margin: 7px 0; }
+    strong { color: #0b355a; }
+
+    .definition,
+    .callout {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 5px solid var(--cyan);
+      border-radius: 0 16px 16px 0;
+      background: var(--cyan-soft);
+    }
+    .callout.warning {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+    }
+    .callout.danger {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+    .callout p:last-child, .definition p:last-child { margin-bottom: 0; }
+
+    .objective {
+      padding: 24px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #eef6fd, #e9faf7);
+    }
+    .objective h3 { margin-top: 0; }
+    .objective ul { margin-bottom: 0; }
+
+    .visual-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 26px 0;
+    }
+    .protect-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 190px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfdff;
+    }
+    .protect-card::after {
+      content: attr(data-step);
+      position: absolute;
+      right: 10px;
+      bottom: -24px;
+      color: rgba(23,105,170,.07);
+      font-size: 7rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .icon {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      font-size: 1.45rem;
+    }
+    .protect-card h3 { margin: 0 0 7px; font-size: 1.12rem; }
+    .protect-card p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
+
+    .table-wrap { overflow-x: auto; margin: 22px 0; }
+    table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--ink);
+      color: white;
+      font-size: .88rem;
+      letter-spacing: .02em;
+    }
+    tbody tr:nth-child(even) { background: #f7fafc; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 9px; margin: 16px 0 24px; }
+    .chip {
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f8fbfe;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      font-weight: 750;
+    }
+
+    .feature-grid,
+    .factor-grid,
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .feature-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+    .mini-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfdff;
+    }
+    .mini-card h4 { margin: 0 0 7px; font-size: 1rem; }
+    .mini-card p { margin: 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.5; }
+
+    .activity {
+      margin: 26px 0;
+      padding: 22px;
+      border: 1px dashed #8eb9dc;
+      border-radius: 18px;
+      background: #f6fbff;
+    }
+    .activity h3 { margin-top: 0; }
+    .activity-label {
+      margin-bottom: 10px;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .sample-buttons,
+    .scenario-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .sample-buttons button,
+    .scenario-buttons button,
+    .factor-controls select {
+      min-height: 44px;
+      padding: 9px 13px;
+      border: 1px solid #a9c3d8;
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+    .sample-buttons button:hover,
+    .scenario-buttons button:hover,
+    .sample-buttons button.selected,
+    .scenario-buttons button.selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .feedback-box {
+      margin-top: 14px;
+      padding: 15px 17px;
+      border-radius: 13px;
+      background: white;
+      color: var(--ink-soft);
+    }
+    .feedback-box.good { border-left: 4px solid var(--green); background: var(--green-soft); }
+    .feedback-box.bad { border-left: 4px solid var(--red); background: var(--red-soft); }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 22px 0;
+      padding: 0;
+    }
+    .steps li {
+      position: relative;
+      min-height: 54px;
+      margin: 0;
+      padding: 0 0 21px 56px;
+      counter-increment: step;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+    }
+    .steps li:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 41px;
+      width: 2px;
+      height: calc(100% - 41px);
+      background: var(--line);
+    }
+
+    .factor-grid { grid-template-columns: repeat(3, 1fr); }
+    .factor-card {
+      padding: 20px;
+      border-radius: 18px;
+      color: white;
+      background: linear-gradient(145deg, #174b75, #1769aa);
+    }
+    .factor-card:nth-child(2) { background: linear-gradient(145deg, #087f7b, #0e9f9a); }
+    .factor-card:nth-child(3) { background: linear-gradient(145deg, #9a5b06, #d97706); }
+    .factor-card h4 { margin: 0 0 8px; font-size: 1.08rem; }
+    .factor-card p { margin: 0; color: rgba(255,255,255,.9); font-size: .92rem; }
+    .factor-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .factor-controls label { display: grid; gap: 5px; font-size: .86rem; font-weight: 800; }
+
+    .scan-types {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .scan-types div {
+      padding: 15px;
+      border-radius: 15px;
+      background: var(--blue-soft);
+    }
+    .scan-types strong { display: block; }
+    .scan-types span { color: var(--ink-soft); font-size: .88rem; }
+
+    .compare-grid article {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f9fcff;
+    }
+    .compare-grid article:last-child { background: var(--green-soft); border-color: #b9dfc6; }
+    .compare-grid h3 { margin-top: 0; }
+    .compare-grid .arrow {
+      margin-top: 16px;
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    details {
+      margin: 10px 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfdff;
+    }
+    summary {
+      padding: 15px 18px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    details > div { padding: 0 18px 16px; color: var(--ink-soft); }
+
+    .complete-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .complete-row span { color: var(--ink-soft); font-size: .9rem; }
+    .complete-btn {
+      min-height: 44px;
+      padding: 9px 15px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+    }
+    .complete-btn.done { background: var(--green); }
+
+    .test-card {
+      text-align: center;
+      color: white;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(76,201,240,.28), transparent 30%),
+        linear-gradient(130deg, #102a43, #1769aa);
+    }
+    .test-card h2 { max-width: 700px; margin-left: auto; margin-right: auto; }
+    .test-card p { max-width: 720px; margin-left: auto; margin-right: auto; color: #ddecf8; }
+    .test-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      margin-top: 10px;
+      padding: 12px 22px;
+      border-radius: 14px;
+      background: #fbbf24;
+      color: #2f2300;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    }
+    .test-link:hover { background: #fcd34d; transform: translateY(-1px); }
+
+    .sources { font-size: .94rem; }
+    .sources ol { padding-left: 1.25em; }
+    .sources li { margin: 10px 0; }
+
+    footer {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 12px 28px 42px;
+      color: var(--ink-soft);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 1000px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-panel { position: relative; top: 0; max-height: none; }
+      .side-panel nav { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .feature-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .hero-inner { padding: 54px 20px 42px; }
+      .layout { padding: 16px; }
+      .card { padding: 23px 19px; border-radius: 18px; }
+      .visual-map, .factor-grid, .compare-grid, .scan-types { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .factor-controls { grid-template-columns: 1fr; }
+      .complete-row { align-items: stretch; flex-direction: column; }
+      .side-panel nav { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 430px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.35rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+    @media print {
+      body { background: white; color: black; font-size: 11pt; }
+      .scroll-progress, .side-panel, .complete-row, .activity, .test-link { display: none !important; }
+      .hero { color: black; background: white; border-bottom: 2px solid #333; }
+      .hero .lead, .hero-meta span { color: #333; }
+      .hero-meta span { border: 1px solid #aaa; }
+      .layout { display: block; max-width: none; padding: 0; }
+      .card { break-inside: avoid; box-shadow: none; border: 1px solid #bbb; }
+      a { color: black; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Перейти к содержанию</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollBar"></span></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Цифровая безопасность • 7 класс</div>
+      <h1>Личная безопасность и роль сервисных программ в ней</h1>
+      <p class="lead">Как защищать учётные записи, компьютер и данные с помощью надёжных паролей, двухфакторной аутентификации, антивируса и архивации.</p>
+      <div class="hero-meta" aria-label="Сведения об учебном материале">
+        <span>Информатика</span>
+        <span>Цель обучения 7.4.1.1</span>
+        <span>Интерактивный учебник</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side-panel" aria-label="Навигация по учебнику">
+      <h2>Содержание</h2>
+      <nav id="toc">
+        <a href="#importance">1. Почему это важно</a>
+        <a href="#utilities">2. Сервисные программы</a>
+        <a href="#password">3. Надёжный пароль</a>
+        <a href="#twofa">4. Двухфакторная защита</a>
+        <a href="#antivirus">5. Антивирус</a>
+        <a href="#archive">6. Архивация данных</a>
+        <a href="#choice">7. Выбор защиты</a>
+        <a href="#summary">8. Главное и самопроверка</a>
+        <a href="#test">Итоговый тест</a>
+        <a href="#sources">Источники</a>
+      </nav>
+      <div class="study-progress">
+        <div class="bar" aria-hidden="true"><span id="studyBar"></span></div>
+        <p id="studyLabel" aria-live="polite">Изучено разделов: 0 из 8</p>
+        <button class="reset-progress" id="resetProgress" type="button">Сбросить отметки</button>
+      </div>
+    </aside>
+
+    <main id="content">
+      <section class="card track-section" id="importance" data-section="importance">
+        <div class="section-kicker"><span class="number">1</span> Личная цифровая безопасность</div>
+        <h2>Почему личная безопасность важна</h2>
+
+        <p>Представь ситуацию: Алия готовила школьный проект несколько недель. Файлы хранились только на ноутбуке, а пароль от почты совпадал с её именем и годом рождения. Однажды неизвестный вошёл в почту, а вредоносная программа повредила папку с проектом. Одновременно Алия потеряла доступ и к учётной записи, и к данным.</p>
+
+        <div class="definition">
+          <p><strong>Цифровая безопасность</strong> — это защита человека, его учётных записей, устройств и данных от несанкционированного доступа, повреждения, кражи или потери.</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>Главная идея.</strong> Один способ защиты не решает все проблемы. Надёжный пароль и двухфакторная аутентификация защищают учётную запись, антивирус — компьютер, а архивная резервная копия — данные.</p>
+        </div>
+
+        <div class="visual-map" aria-label="Карта средств цифровой защиты">
+          <article class="protect-card" data-step="1">
+            <div class="icon" aria-hidden="true">🔑</div>
+            <h3>Учётная запись</h3>
+            <p>Надёжный пароль и двухфакторная аутентификация против подбора или кражи пароля.</p>
+          </article>
+          <article class="protect-card" data-step="2">
+            <div class="icon" aria-hidden="true">🛡️</div>
+            <h3>Компьютер</h3>
+            <p>Антивирус против известных вредоносных программ и опасных файлов.</p>
+          </article>
+          <article class="protect-card" data-step="3">
+            <div class="icon" aria-hidden="true">📦</div>
+            <h3>Данные</h3>
+            <p>Отдельная архивная резервная копия против удаления, поломки и шифрования.</p>
+          </article>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption class="visually-hidden">Что защищают основные средства безопасности</caption>
+            <thead><tr><th>Что защищаем</th><th>Основное средство</th><th>От какой опасности</th></tr></thead>
+            <tbody>
+              <tr><td>Учётную запись</td><td>Пароль и двухфакторная аутентификация</td><td>Подбор или кража пароля</td></tr>
+              <tr><td>Компьютер</td><td>Антивирус</td><td>Вредоносные программы</td></tr>
+              <tr><td>Данные</td><td>Архивная резервная копия</td><td>Удаление, поломка, шифрование</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="objective">
+          <h3>После изучения темы ты сможешь</h3>
+          <ul>
+            <li>называть четыре средства защиты учётной записи и компьютера;</li>
+            <li>объяснять назначение каждого средства защиты;</li>
+            <li>создавать надёжный пароль и применять двухфакторную аутентификацию, антивирус и архивацию по алгоритму;</li>
+            <li>выбирать подходящее средство защиты в контекстных ситуациях.</li>
+          </ul>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="utilities" data-section="utilities">
+        <div class="section-kicker"><span class="number">2</span> Инструменты обслуживания</div>
+        <h2>Что такое сервисные программы</h2>
+        <p><strong>Сервисные программы</strong> — это программы, предназначенные для обслуживания компьютера, защиты данных и поддержания работоспособности системы. Их также называют <strong>утилитами</strong>.</p>
+        <p>К сервисным программам относятся антивирусы, архиваторы, средства резервного копирования, программы очистки диска и диагностики системы.</p>
+        <div class="chips" aria-label="Примеры сервисных программ">
+          <span class="chip">Антивирусы</span>
+          <span class="chip">Архиваторы</span>
+          <span class="chip">Резервное копирование</span>
+          <span class="chip">Очистка диска</span>
+          <span class="chip">Диагностика системы</span>
+        </div>
+        <div class="callout warning">
+          <p>В этой теме рассматриваются антивирусные программы и архиваторы. <strong>Надёжный пароль и двухфакторная аутентификация не являются сервисными программами</strong>, но вместе с ними образуют систему личной защиты.</p>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="password" data-section="password">
+        <div class="section-kicker"><span class="number">3</span> Первый рубеж</div>
+        <h2>Надёжный пароль</h2>
+        <p><strong>Пароль</strong> — это секретная последовательность символов, подтверждающая право пользователя войти в учётную запись. Если пароль легко угадать или он используется на разных сайтах, злоумышленнику проще получить доступ сразу к нескольким аккаунтам.</p>
+
+        <h3>Признаки надёжного пароля</h3>
+        <div class="feature-grid">
+          <article class="mini-card"><h4>Длинный</h4><p>Старайся использовать не менее 8 символов, если сервис это допускает.</p></article>
+          <article class="mini-card"><h4>Уникальный</h4><p>Для каждой важной учётной записи нужен отдельный пароль.</p></article>
+          <article class="mini-card"><h4>Непредсказуемый</h4><p>Без имени, даты рождения, телефона, школы и простых последовательностей.</p></article>
+          <article class="mini-card"><h4>Запоминаемый</h4><p>Удобный вариант — фраза из нескольких несвязанных слов.</p></article>
+          <article class="mini-card"><h4>Секретный</h4><p>Нельзя сообщать другим или хранить открыто рядом с компьютером.</p></article>
+        </div>
+
+        <div class="callout">
+          <p><strong>Учебный пример:</strong> Лампа-Облако-Трамвай-47. Это длинная парольная фраза, но использовать опубликованный пример для настоящей учётной записи нельзя.</p>
+        </div>
+
+        <p>Современные рекомендации делают основной упор на длину и уникальность пароля. Обязательное добавление заглавной буквы, цифры и специального знака само по себе не гарантирует надёжность: пароль <strong>Qwerty123!</strong> всё равно легко предсказать. Требования конкретного сервиса необходимо выполнять, но пароль должен прежде всего быть длинным и неизвестным другим людям.</p>
+
+        <div class="activity" aria-labelledby="passwordActivityTitle">
+          <div class="activity-label">Интерактивная проверка</div>
+          <h3 id="passwordActivityTitle">Сравни учебные примеры</h3>
+          <p>Выбери пример и определи, соответствует ли он признакам надёжного пароля. Не вводи настоящий пароль.</p>
+          <div class="sample-buttons" id="passwordSamples">
+            <button type="button" data-sample="name">Aruzhan2013</button>
+            <button type="button" data-sample="common">Qwerty123456789!</button>
+            <button type="button" data-sample="phrase">Tuman-Reka-Fonar-Kaktus-47</button>
+            <button type="button" data-sample="school">Licey7klass!2026</button>
+          </div>
+          <div class="feedback-box" id="passwordFeedback" aria-live="polite">Выбери один из примеров.</div>
+        </div>
+
+        <h3>Алгоритм создания учебного пароля</h3>
+        <ol class="steps">
+          <li>Выбери 2–3 случайных, не связанных между собой слов.</li>
+          <li>Соедини слова в длинную фразу.</li>
+          <li>При необходимости добавь цифры или знаки, не связанные с личными данными.</li>
+          <li>Проверь длину, уникальность и отсутствие предсказуемых сведений.</li>
+          <li>Не используй на уроке настоящий пароль и никому его не сообщай.</li>
+        </ol>
+
+        <div class="callout danger">
+          <p>Если пароль мог стать известен другому человеку, измени его на официальном сайте или в приложении, заверши неизвестные сеансы входа и сообщи взрослому. Не переходи по ссылке из подозрительного сообщения.</p>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="twofa" data-section="twofa">
+        <div class="section-kicker"><span class="number">4</span> Второй рубеж</div>
+        <h2>Двухфакторная аутентификация</h2>
+        <p><strong>Аутентификация</strong> — это проверка личности пользователя при входе. <strong>Двухфакторная аутентификация (2FA)</strong> требует два разных подтверждения. Даже если пароль похищен, без второго фактора войти в учётную запись значительно сложнее.</p>
+
+        <h3>Три группы факторов</h3>
+        <div class="factor-grid">
+          <article class="factor-card"><h4>То, что ты знаешь</h4><p>Пароль или PIN-код.</p></article>
+          <article class="factor-card"><h4>То, что у тебя есть</h4><p>Телефон, приложение-аутентификатор или электронный ключ.</p></article>
+          <article class="factor-card"><h4>То, чем ты являешься</h4><p>Отпечаток пальца или изображение лица.</p></article>
+        </div>
+        <p>При 2FA используются факторы из двух разных групп. Например, пароль и одноразовый код из приложения. Два пароля не являются двумя факторами, потому что оба относятся к тому, что пользователь знает.</p>
+
+        <div class="activity" aria-labelledby="factorActivityTitle">
+          <div class="activity-label">Интерактивная модель</div>
+          <h3 id="factorActivityTitle">Образуют ли способы настоящую 2FA?</h3>
+          <div class="factor-controls">
+            <label>Первый способ
+              <select id="factorOne">
+                <option value="knowledge">Пароль</option>
+                <option value="knowledge">PIN-код</option>
+                <option value="possession">Код из приложения</option>
+                <option value="biometric">Отпечаток пальца</option>
+              </select>
+            </label>
+            <label>Второй способ
+              <select id="factorTwo">
+                <option value="knowledge">PIN-код</option>
+                <option value="possession">Код из приложения</option>
+                <option value="biometric">Отпечаток пальца</option>
+                <option value="knowledge">Пароль</option>
+              </select>
+            </label>
+          </div>
+          <div class="feedback-box" id="factorFeedback" aria-live="polite"></div>
+        </div>
+
+        <h3>Как подключить 2FA</h3>
+        <ol class="steps">
+          <li>Открой настройки безопасности своей учётной записи на официальном сайте или в приложении.</li>
+          <li>Найди пункт «Двухфакторная аутентификация», «Двухэтапная проверка» или «Многофакторная аутентификация».</li>
+          <li>Выбери доступный способ подтверждения и выполни инструкции сервиса.</li>
+          <li>Сохрани резервные коды в защищённом месте, недоступном посторонним.</li>
+          <li>Проверь вход и не разрешай чужому или общедоступному компьютеру запоминать учётную запись.</li>
+        </ol>
+
+        <div class="callout danger">
+          <p><strong>Важно!</strong> Одноразовый код подтверждения является секретом. Его нельзя сообщать даже человеку, который представляется сотрудником поддержки. Если запрос на подтверждение входа появился без твоих действий, отклони его и смени пароль.</p>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="antivirus" data-section="antivirus">
+        <div class="section-kicker"><span class="number">5</span> Защита компьютера</div>
+        <h2>Антивирус</h2>
+        <p><strong>Вредоносная программа</strong> — это программа, созданная для нарушения работы устройства, кражи сведений, показа нежелательной рекламы, шифрования или удаления файлов. Она может попасть на компьютер через вложение, загрузку из ненадёжного источника или заражённый накопитель.</p>
+        <p><strong>Антивирус</strong> — сервисная программа, которая обнаруживает, блокирует и удаляет известные вредоносные программы. Подозрительный файл может быть помещён в <strong>карантин</strong> — изолированную область, где он не сможет выполняться.</p>
+
+        <h3>Что выполняет антивирус</h3>
+        <ul>
+          <li>проверяет открываемые и загружаемые файлы в режиме реального времени;</li>
+          <li>выполняет быструю, полную или выборочную проверку;</li>
+          <li>сравнивает объекты с обновляемыми сведениями об угрозах;</li>
+          <li>сообщает о найденной угрозе и предлагает безопасное действие.</li>
+        </ul>
+        <div class="scan-types" aria-label="Виды антивирусной проверки">
+          <div><strong>Быстрая</strong><span>Проверяет наиболее уязвимые области.</span></div>
+          <div><strong>Полная</strong><span>Исследует всё доступное содержимое устройства.</span></div>
+          <div><strong>Выборочная</strong><span>Проверяет выбранный файл, папку или накопитель.</span></div>
+        </div>
+
+        <h3>Алгоритм проверки файла или папки</h3>
+        <ol class="steps">
+          <li>Убедись, что антивирус включён и обновлён.</li>
+          <li>Выдели файл, папку или подключённый накопитель.</li>
+          <li>Открой контекстное меню и выбери команду проверки антивирусом. Название команды зависит от программы.</li>
+          <li>Дождись завершения и прочитай результат.</li>
+          <li>При обнаружении угрозы не открывай файл. Выполни рекомендованное безопасное действие и сообщи учителю или взрослому.</li>
+        </ol>
+        <div class="callout warning">
+          <p><strong>Антивирус не заменяет осторожность.</strong> Не открывай неизвестные вложения, не устанавливай программы из случайных источников и не отключай защиту по просьбе сайта или сообщения.</p>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="archive" data-section="archive">
+        <div class="section-kicker"><span class="number">6</span> Сохранность данных</div>
+        <h2>Архивация и резервное копирование</h2>
+        <p><strong>Архиватор</strong> — сервисная программа, которая объединяет один или несколько файлов в архив и часто уменьшает их размер с помощью сжатия. Распространённые форматы архивов: <strong>ZIP, 7Z и RAR</strong>.</p>
+        <p>Архивация удобна для хранения и передачи набора файлов. Но архив, лежащий рядом с исходными файлами на том же диске, не защищает от поломки компьютера или вредоносной программы. Для защиты нужна <strong>резервная копия</strong> — дополнительный экземпляр данных, сохранённый отдельно.</p>
+
+        <div class="compare-grid" aria-label="Сравнение архива и резервной копии">
+          <article>
+            <div class="icon" aria-hidden="true">🗜️</div>
+            <h3>Архивирование</h3>
+            <p>Объединяет файлы и может уменьшать их размер.</p>
+            <div class="arrow">Файлы → один архив</div>
+          </article>
+          <article>
+            <div class="icon" aria-hidden="true">↗</div>
+            <h3>Резервное копирование</h3>
+            <p>Создаёт дополнительный экземпляр данных для восстановления.</p>
+            <div class="arrow">Оригинал → отдельное место</div>
+          </article>
+        </div>
+        <div class="callout">
+          <p><strong>Запомни различие.</strong> Архивирование объединяет и может сжимать файлы. Резервное копирование создаёт дополнительную копию для восстановления. Архив становится средством защиты данных, когда его копия хранится отдельно от оригинала.</p>
+        </div>
+
+        <h3>Алгоритм создания архивной резервной копии</h3>
+        <ol class="steps">
+          <li>Собери важные учебные файлы в одну папку и удали только ненужные копии.</li>
+          <li>Выдели папку и выбери команду создания ZIP-архива или команду установленного архиватора.</li>
+          <li>Дай архиву понятное имя с датой, например <strong>Проект_робот_2026-09-02.zip</strong>.</li>
+          <li>Скопируй архив на другой разрешённый носитель или в одобренное облачное хранилище.</li>
+          <li>Проверь копию: открой архив и извлеки один файл в тестовую папку.</li>
+        </ol>
+        <p>Резервные копии следует обновлять после значительных изменений. Если вредоносная программа зашифрует исходные файлы, отдельная исправная копия поможет восстановить работу. Нельзя загружать личные или чужие данные в облачное хранилище без разрешения.</p>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="choice" data-section="choice">
+        <div class="section-kicker"><span class="number">7</span> Анализ ситуации</div>
+        <h2>Как выбрать средство защиты</h2>
+        <p>Сначала определи, что находится под угрозой: <strong>учётная запись, компьютер или данные</strong>. Затем выбери средство, которое воздействует именно на эту угрозу. Иногда необходимо сочетать несколько мер.</p>
+
+        <h3>Контекстный пример</h3>
+        <p>Дамир скачал файл для школьного проекта. Сайт попросил отключить антивирус, а после загрузки на экране появилось предупреждение. В то же время Дамир получил запрос на подтверждение входа в почту, хотя сам не входил.</p>
+        <div class="callout">
+          <p><strong>Безопасное решение:</strong> не открывать файл, не отключать антивирус, выполнить проверку, отклонить запрос на вход, открыть настройки почты через официальный адрес, сменить пароль и проверить 2FA. Если проект важен, восстановить его только из заранее созданной проверенной копии.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption class="visually-hidden">Ситуации, угрозы и безопасные действия</caption>
+            <thead><tr><th>Ситуация</th><th>Угроза</th><th>Действие</th><th>Почему</th></tr></thead>
+            <tbody>
+              <tr><td>Один пароль используется в почте и игре</td><td>Захват нескольких аккаунтов</td><td>Создать разные длинные пароли; включить 2FA</td><td>Кража одного пароля не откроет другие аккаунты</td></tr>
+              <tr><td>Получена неизвестная флешка</td><td>Вредоносные файлы</td><td>Не открывать; проверить антивирусом</td><td>Проверка может обнаружить и изолировать угрозу</td></tr>
+              <tr><td>Проект хранится только на ноутбуке</td><td>Потеря при поломке или атаке</td><td>Создать архивную копию и хранить отдельно</td><td>Файлы можно восстановить</td></tr>
+              <tr><td>Пришло письмо «Срочно подтвердите пароль»</td><td>Фишинг</td><td>Не переходить по ссылке; открыть официальный сайт самостоятельно</td><td>Пароль и код могут похитить на поддельной странице</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="activity" aria-labelledby="scenarioActivityTitle">
+          <div class="activity-label">Тренажёр решений</div>
+          <h3 id="scenarioActivityTitle">Выбери ситуацию</h3>
+          <div class="scenario-buttons" id="scenarioButtons">
+            <button type="button" data-scenario="account">Один пароль везде</button>
+            <button type="button" data-scenario="usb">Неизвестная флешка</button>
+            <button type="button" data-scenario="files">Одна копия проекта</button>
+            <button type="button" data-scenario="phishing">Подозрительное письмо</button>
+          </div>
+          <div class="feedback-box" id="scenarioFeedback" aria-live="polite">Выбери ситуацию, чтобы увидеть объект защиты и безопасное решение.</div>
+        </div>
+
+        <div class="callout warning">
+          <p><strong>Ответственный цифровой гражданин</strong> защищает не только собственные данные, но и уважает безопасность других: не пытается войти в чужую учётную запись, не распространяет подозрительные файлы и сообщает о риске взрослому.</p>
+        </div>
+        <div class="complete-row"><span>Заверши чтение раздела и отметь его.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card track-section" id="summary" data-section="summary">
+        <div class="section-kicker"><span class="number">8</span> Закрепление</div>
+        <h2>Главное по теме</h2>
+        <ul>
+          <li>Длинный уникальный пароль снижает риск угадывания и повторного использования украденных данных.</li>
+          <li>Двухфакторная аутентификация добавляет второе независимое подтверждение личности.</li>
+          <li>Антивирус защищает компьютер только при включённой и обновлённой защите, но не отменяет осторожность пользователя.</li>
+          <li>Архивирование объединяет и сжимает файлы, а отдельная резервная копия позволяет восстановить данные.</li>
+          <li>В сложной ситуации нужно определить объект и вид угрозы, а затем сочетать подходящие меры защиты.</li>
+        </ul>
+
+        <h3>Вопросы для самопроверки</h3>
+        <p>Сначала ответь самостоятельно, затем раскрой подсказку.</p>
+        <details><summary>1. Какие четыре средства защиты рассматриваются в теме?</summary><div>Надёжный пароль, двухфакторная аутентификация, антивирус и архивная резервная копия.</div></details>
+        <details><summary>2. Почему длинный уникальный пароль надёжнее короткого и повторяющегося?</summary><div>Длинный пароль сложнее угадать, а уникальный пароль не открывает доступ к другим учётным записям при утечке.</div></details>
+        <details><summary>3. Почему пароль и второй пароль не образуют двухфакторную аутентификацию?</summary><div>Оба способа относятся к одной группе — «то, что пользователь знает». Для 2FA нужны факторы из разных групп.</div></details>
+        <details><summary>4. Что происходит с подозрительным файлом в карантине?</summary><div>Он помещается в изолированную область и не может выполняться до принятия безопасного решения.</div></details>
+        <details><summary>5. Чем архив отличается от резервной копии?</summary><div>Архив объединяет и может сжимать файлы. Резервная копия создаётся отдельно для последующего восстановления данных.</div></details>
+        <details><summary>6. Какие средства защиты нужны, если злоумышленник пытается войти в почту, а важные файлы хранятся только на компьютере?</summary><div>Нужно отклонить запрос, сменить уникальный пароль, проверить и включить 2FA, а для файлов создать отдельную резервную копию. Компьютер также должен быть защищён обновлённым антивирусом.</div></details>
+        <div class="complete-row"><span>После самопроверки отметь последний раздел.</span><button class="complete-btn" type="button">Отметить изученным</button></div>
+      </section>
+
+      <section class="card test-card" id="test">
+        <div class="section-kicker" style="justify-content:center;color:#9fe7e2"><span class="number" style="background:rgba(255,255,255,.15);color:white">✓</span> Итоговая проверка</div>
+        <h2>Проверь, как ты усвоил тему</h2>
+        <p>Выполни тест с выбором одного правильного ответа. В заданиях проверяются знание понятий, понимание назначения средств защиты, применение алгоритмов и анализ контекстных ситуаций.</p>
+        <a class="test-link" href="https://onlinetestpad.com/t/7-01-fo-personal-safety" target="_blank" rel="noopener noreferrer">Перейти к тесту ↗</a>
+      </section>
+
+      <section class="card sources" id="sources">
+        <div class="section-kicker">Справочные материалы</div>
+        <h2>Источники и актуальные рекомендации</h2>
+        <p>Материал подготовлен по официальным рекомендациям и справочным руководствам. Дата обращения: 2 сентября 2026 года.</p>
+        <ol>
+          <li>NIST. <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener noreferrer">Special Publication 800-63B-4: Authentication and Authenticator Management</a>.</li>
+          <li>CISA. <a href="https://www.cisa.gov/secure-our-world/use-strong-passwords" target="_blank" rel="noopener noreferrer">Use Strong Passwords</a>.</li>
+          <li>CISA. <a href="https://www.cisa.gov/secure-our-world/turn-mfa" target="_blank" rel="noopener noreferrer">Turn On MFA</a>.</li>
+          <li>FTC. <a href="https://consumer.ftc.gov/articles/use-two-factor-authentication-protect-your-accounts" target="_blank" rel="noopener noreferrer">Use Two-Factor Authentication To Protect Your Accounts</a>.</li>
+          <li>Microsoft Support. <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/virus-and-threat-protection-in-the-windows-security-app" target="_blank" rel="noopener noreferrer">Virus and Threat Protection in the Windows Security App</a>.</li>
+          <li>Microsoft Support. <a href="https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/zip-and-unzip-files" target="_blank" rel="noopener noreferrer">Zip and unzip files</a>.</li>
+          <li>Microsoft Support. <a href="https://support.microsoft.com/en-us/windows/experience/backup-recovery/back-up-and-restore-with-windows-backup" target="_blank" rel="noopener noreferrer">Back up and restore with Windows Backup</a>.</li>
+          <li>CISA. <a href="https://www.cisa.gov/stopransomware/ransomware-guide" target="_blank" rel="noopener noreferrer">StopRansomware Guide</a>.</li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    © Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026
+  </footer>
+
+  <script>
+    (() => {
+      const sectionIds = [...document.querySelectorAll('.track-section')].map(section => section.dataset.section);
+      const storageKey = 'personalSafetyTextbookProgressV1';
+      let completed = new Set();
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        completed = new Set(saved.filter(id => sectionIds.includes(id)));
+      } catch (_) {
+        completed = new Set();
+      }
+
+      const studyBar = document.getElementById('studyBar');
+      const studyLabel = document.getElementById('studyLabel');
+
+      function saveProgress() {
+        try { localStorage.setItem(storageKey, JSON.stringify([...completed])); } catch (_) {}
+      }
+
+      function updateProgress() {
+        const percent = Math.round((completed.size / sectionIds.length) * 100);
+        studyBar.style.width = `${percent}%`;
+        studyLabel.textContent = `Изучено разделов: ${completed.size} из ${sectionIds.length}`;
+        document.querySelectorAll('.track-section').forEach(section => {
+          const button = section.querySelector('.complete-btn');
+          const isDone = completed.has(section.dataset.section);
+          button.classList.toggle('done', isDone);
+          button.textContent = isDone ? 'Изучено ✓' : 'Отметить изученным';
+          button.setAttribute('aria-pressed', String(isDone));
+        });
+      }
+
+      document.querySelectorAll('.complete-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const id = button.closest('.track-section').dataset.section;
+          if (completed.has(id)) completed.delete(id); else completed.add(id);
+          saveProgress();
+          updateProgress();
+        });
+      });
+
+      document.getElementById('resetProgress').addEventListener('click', () => {
+        completed.clear();
+        saveProgress();
+        updateProgress();
+      });
+
+      const scrollBar = document.getElementById('scrollBar');
+      function updateScroll() {
+        const available = document.documentElement.scrollHeight - window.innerHeight;
+        const value = available > 0 ? (window.scrollY / available) * 100 : 0;
+        scrollBar.style.width = `${Math.min(100, Math.max(0, value))}%`;
+      }
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      updateScroll();
+
+      const tocLinks = [...document.querySelectorAll('#toc a')];
+      const observed = [...document.querySelectorAll('main section[id]')];
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+          const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+          tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`));
+        }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, .2, .5] });
+        observed.forEach(section => observer.observe(section));
+      }
+
+      const passwordData = {
+        name: ['bad', '<strong>Слабый выбор.</strong> Длиннее простого слова, но содержит имя и предсказуемый год. Личные сведения легко проверить.'],
+        common: ['bad', '<strong>Слабый выбор.</strong> Пароль длинный и содержит разные символы, но начинается с общеизвестной последовательности Qwerty.'],
+        phrase: ['good', '<strong>Лучший учебный пример.</strong> Длинная фраза из несвязанных слов без очевидных личных сведений. Для настоящего аккаунта придумай собственный секретный вариант.'],
+        school: ['bad', '<strong>Рискованный выбор.</strong> Содержит название лицея, класс и год — сведения, которые могут быть известны другим людям.']
+      };
+      const passwordFeedback = document.getElementById('passwordFeedback');
+      document.getElementById('passwordSamples').addEventListener('click', event => {
+        const button = event.target.closest('button[data-sample]');
+        if (!button) return;
+        document.querySelectorAll('#passwordSamples button').forEach(item => item.classList.toggle('selected', item === button));
+        const [kind, text] = passwordData[button.dataset.sample];
+        passwordFeedback.className = `feedback-box ${kind}`;
+        passwordFeedback.innerHTML = text;
+      });
+
+      const factorOne = document.getElementById('factorOne');
+      const factorTwo = document.getElementById('factorTwo');
+      const factorFeedback = document.getElementById('factorFeedback');
+      function updateFactors() {
+        const different = factorOne.value !== factorTwo.value;
+        factorFeedback.className = `feedback-box ${different ? 'good' : 'bad'}`;
+        factorFeedback.innerHTML = different
+          ? '<strong>Да.</strong> Способы относятся к разным группам факторов, поэтому такое сочетание может использоваться для 2FA.'
+          : '<strong>Нет.</strong> Оба способа относятся к одной группе. Выбери второе подтверждение другого типа.';
+      }
+      factorOne.addEventListener('change', updateFactors);
+      factorTwo.addEventListener('change', updateFactors);
+      updateFactors();
+
+      const scenarios = {
+        account: '<strong>Защищаем учётные записи.</strong> Создай разные длинные пароли и включи 2FA. Тогда кража одного пароля не откроет остальные аккаунты.',
+        usb: '<strong>Защищаем компьютер.</strong> Не открывай файлы и сначала проверь накопитель обновлённым антивирусом.',
+        files: '<strong>Защищаем данные.</strong> Создай архивную резервную копию, сохрани её отдельно и проверь восстановление файла.',
+        phishing: '<strong>Защищаем учётную запись.</strong> Не переходи по ссылке. Самостоятельно открой официальный сайт, проверь сеансы и 2FA; при необходимости смени пароль.'
+      };
+      const scenarioFeedback = document.getElementById('scenarioFeedback');
+      document.getElementById('scenarioButtons').addEventListener('click', event => {
+        const button = event.target.closest('button[data-scenario]');
+        if (!button) return;
+        document.querySelectorAll('#scenarioButtons button').forEach(item => item.classList.toggle('selected', item === button));
+        scenarioFeedback.className = 'feedback-box good';
+        scenarioFeedback.innerHTML = scenarios[button.dataset.scenario];
+      });
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
