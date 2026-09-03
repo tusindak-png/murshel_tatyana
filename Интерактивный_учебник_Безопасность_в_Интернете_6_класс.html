@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный учебник для 6 класса: безопасность и ответственность при работе в сети Интернет.">
+  <title>Безопасность и ответственность в Интернете — 6 класс</title>
+  <style>
+    :root {
+      --navy: #102a43;
+      --blue: #1769aa;
+      --blue-2: #2f80c5;
+      --sky: #eaf5ff;
+      --cyan: #19a7ae;
+      --mint: #e7f8f4;
+      --amber: #f1ad24;
+      --amber-soft: #fff4d5;
+      --coral: #e75b52;
+      --coral-soft: #fff0ee;
+      --ink: #17212b;
+      --muted: #587087;
+      --line: #d9e5ef;
+      --surface: #ffffff;
+      --page: #f3f7fb;
+      --shadow: 0 14px 38px rgba(27, 67, 101, .11);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 86px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 6%, rgba(25,167,174,.10), transparent 24rem),
+        radial-gradient(circle at 4% 24%, rgba(47,128,197,.08), transparent 22rem),
+        var(--page);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue); }
+    a:hover { color: #0f4f84; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    img, svg { max-width: 100%; }
+    .skip-link {
+      position: fixed; left: 14px; top: -80px; z-index: 1000;
+      padding: 10px 14px; background: var(--navy); color: #fff; border-radius: 10px;
+    }
+    .skip-link:focus { top: 14px; }
+
+    .topbar {
+      position: fixed; inset: 0 0 auto 0; z-index: 100;
+      display: flex; align-items: center; gap: 18px;
+      min-height: 70px; padding: 10px clamp(16px, 4vw, 52px);
+      background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 245px; font-weight: 800; color: var(--navy); }
+    .brand-mark { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 12px; background: var(--navy); color: #fff; }
+    .top-progress { flex: 1; height: 9px; overflow: hidden; background: #e5edf4; border-radius: 999px; }
+    .top-progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--blue-2)); transition: width .18s ease; }
+    .progress-label { min-width: 48px; text-align: right; color: var(--muted); font-size: .88rem; font-weight: 700; }
+    .menu-button { display: none; border: 0; border-radius: 10px; padding: 8px 11px; background: var(--sky); color: var(--navy); font-weight: 800; }
+
+    .layout { display: grid; grid-template-columns: 250px minmax(0, 980px); gap: 34px; justify-content: center; padding: 104px 24px 56px; }
+    .sidebar { position: sticky; top: 96px; align-self: start; max-height: calc(100vh - 116px); overflow: auto; }
+    .sidebar nav { background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: 20px; padding: 14px; box-shadow: 0 8px 30px rgba(27,67,101,.07); }
+    .sidebar a { display: block; padding: 9px 11px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: .9rem; line-height: 1.3; }
+    .sidebar a:hover, .sidebar a.active { color: var(--blue); background: var(--sky); font-weight: 750; }
+    .completion { margin-top: 14px; padding: 14px; background: var(--navy); color: #fff; border-radius: 16px; font-size: .88rem; }
+    .completion strong { display: block; font-size: 1.25rem; }
+
+    main { min-width: 0; }
+    .hero, .chapter, .test-panel, .sources, .author {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .hero { position: relative; overflow: hidden; padding: clamp(28px, 5vw, 58px); min-height: 530px; display: grid; grid-template-columns: 1.25fr .9fr; align-items: center; gap: 34px; }
+    .hero::before { content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%; right: -100px; top: -120px; background: rgba(25,167,174,.12); }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; padding: 7px 11px; border-radius: 999px; background: var(--sky); color: var(--blue); font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .055em; }
+    h1 { margin: 18px 0 14px; color: var(--navy); font-size: clamp(2.25rem, 5.2vw, 4.35rem); line-height: 1.03; letter-spacing: -.04em; }
+    .lead { margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); }
+    .goal { margin-top: 24px; padding: 16px 18px; border-left: 5px solid var(--amber); background: var(--amber-soft); border-radius: 6px 14px 14px 6px; }
+    .goal strong { color: var(--navy); }
+
+    .hero-visual { position: relative; z-index: 1; display: grid; place-items: center; }
+    .orbit { position: relative; width: min(310px, 70vw); aspect-ratio: 1; border-radius: 50%; background: linear-gradient(145deg, #e9f6ff, #e7fbf4); border: 1px solid #cce4f1; }
+    .shield { position: absolute; inset: 21% 27%; display: grid; place-items: center; color: #fff; font-size: 4.3rem; background: linear-gradient(155deg, var(--blue-2), var(--cyan)); clip-path: polygon(50% 0, 92% 16%, 84% 70%, 50% 100%, 16% 70%, 8% 16%); filter: drop-shadow(0 14px 15px rgba(23,105,170,.2)); }
+    .orbit-badge { position: absolute; display: grid; place-items: center; width: 72px; height: 72px; border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: var(--shadow); font-size: 1.9rem; }
+    .b1 { top: 0; left: 38%; } .b2 { top: 38%; right: -6px; } .b3 { bottom: 1%; left: 38%; } .b4 { top: 38%; left: -6px; }
+
+    .outcomes { margin-top: 28px; }
+    .outcomes h2 { margin-bottom: 12px; }
+    .chip-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .chip { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff; font-size: .95rem; }
+    .chip::before { content: "✓"; color: #fff; background: var(--cyan); border-radius: 50%; width: 23px; height: 23px; display: grid; place-items: center; flex: 0 0 23px; font-size: .8rem; font-weight: 900; }
+
+    .chapter, .test-panel, .sources { margin-top: 28px; padding: clamp(24px, 4vw, 44px); }
+    .chapter-head { display: grid; grid-template-columns: minmax(0,1fr) 260px; gap: 28px; align-items: center; margin-bottom: 22px; }
+    .chapter-number { color: var(--cyan); font-size: .83rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    h2 { margin: 5px 0 10px; color: var(--navy); font-size: clamp(1.75rem, 3.8vw, 2.55rem); line-height: 1.13; letter-spacing: -.025em; }
+    h3 { margin: 30px 0 10px; color: var(--blue); font-size: 1.28rem; line-height: 1.25; }
+    h4 { margin: 0 0 6px; color: var(--navy); }
+    p { margin: 9px 0; }
+    .intro { color: var(--muted); font-size: 1.04rem; }
+    .visual-card { min-height: 180px; padding: 18px; display: grid; place-items: center; border-radius: 20px; background: linear-gradient(145deg, var(--sky), var(--mint)); border: 1px solid #cfe6ef; }
+    .visual-card figcaption { color: var(--muted); font-size: .77rem; text-align: center; margin-top: 7px; }
+
+    .definition-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .definition { padding: 16px; background: #f9fbfd; border: 1px solid var(--line); border-radius: 15px; }
+    .definition strong { display: block; color: var(--navy); }
+    .definition p { margin: 5px 0 0; color: var(--muted); font-size: .94rem; }
+    .question-callout, .note, .warning, .success { padding: 16px 18px; margin: 18px 0; border-radius: 14px; }
+    .question-callout { background: var(--navy); color: #fff; }
+    .note { background: var(--sky); border-left: 5px solid var(--blue-2); }
+    .warning { background: var(--amber-soft); border-left: 5px solid var(--amber); }
+    .success { background: var(--mint); border-left: 5px solid var(--cyan); }
+
+    .flow { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 7px; margin: 18px 0; }
+    .flow-step { position: relative; display: grid; place-items: center; min-height: 80px; padding: 9px; text-align: center; border-radius: 13px; color: var(--navy); background: var(--sky); border: 1px solid #cfe2f2; font-size: .82rem; font-weight: 750; }
+    .flow-step:not(:last-child)::after { content: "›"; position: absolute; right: -7px; z-index: 2; color: var(--blue); font-size: 1.5rem; }
+
+    .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .panel { padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: #fbfdff; }
+    .panel h3 { margin-top: 0; }
+    .clean-list { margin: 10px 0 0; padding-left: 1.25em; }
+    .clean-list li { margin: 7px 0; padding-left: 4px; }
+    .clean-list li::marker { color: var(--blue-2); font-weight: 900; }
+    .number-list { counter-reset: safe; list-style: none; padding: 0; }
+    .number-list li { counter-increment: safe; display: grid; grid-template-columns: 36px 1fr; gap: 10px; align-items: start; margin: 10px 0; }
+    .number-list li::before { content: counter(safe); display: grid; place-items: center; width: 32px; height: 32px; color: #fff; background: var(--blue); border-radius: 10px; font-weight: 850; }
+
+    .phone { width: 190px; padding: 11px; border-radius: 28px; background: var(--navy); box-shadow: 0 16px 30px rgba(16,42,67,.18); }
+    .phone-screen { min-height: 260px; padding: 18px 12px; background: #f6fbff; border-radius: 20px; }
+    .phone-top { width: 55px; height: 6px; margin: 0 auto 22px; border-radius: 99px; background: #9eb0c0; }
+    .fake-message { padding: 11px; border-radius: 14px 14px 14px 4px; background: var(--coral-soft); color: #8e2f29; font-size: .76rem; line-height: 1.35; }
+    .fake-link { margin-top: 10px; padding: 7px; border: 1px dashed var(--coral); border-radius: 8px; word-break: break-all; }
+    .phone-shield { display: grid; place-items: center; width: 42px; height: 42px; margin: 18px auto 0; border-radius: 50%; background: var(--mint); color: var(--cyan); font-weight: 900; }
+
+    .practice-box { margin-top: 22px; padding: 20px; border: 1px solid #c7dceb; border-radius: 18px; background: linear-gradient(150deg,#f9fcff,#f1fbf8); }
+    .practice-box h3 { margin-top: 0; }
+    .choice-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+    .choice { border: 1px solid #b9cfdf; border-radius: 11px; padding: 9px 13px; background: #fff; color: var(--navy); font-weight: 750; }
+    .choice:hover, .choice.selected { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .feedback { min-height: 50px; margin-top: 12px; padding: 13px 15px; background: #fff; border-radius: 12px; border: 1px dashed #b9cfdf; color: var(--muted); }
+
+    .network-visual { position: relative; width: 220px; height: 180px; }
+    .person { position: absolute; display: grid; place-items: center; width: 55px; height: 55px; border-radius: 50%; color: #fff; background: var(--blue-2); border: 5px solid rgba(255,255,255,.9); box-shadow: 0 8px 18px rgba(23,105,170,.2); }
+    .person::after { content: ""; position: absolute; width: 2px; background: #8bc3d0; z-index: -1; transform-origin: top; }
+    .p-a { left: 82px; top: 58px; background: var(--coral); } .p-b { left: 0; top: 6px; } .p-c { right: 0; top: 5px; } .p-d { left: 8px; bottom: 0; } .p-e { right: 7px; bottom: 0; }
+    .p-b::after { height: 95px; transform: rotate(-56deg); left: 49px; top: 44px; }
+    .p-c::after { height: 95px; transform: rotate(56deg); right: 49px; top: 44px; }
+    .p-d::after { height: 95px; transform: rotate(-120deg); left: 50px; top: 10px; }
+    .p-e::after { height: 95px; transform: rotate(120deg); right: 50px; top: 10px; }
+
+    .impact-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+    .impact { padding: 15px; border-radius: 15px; border: 1px solid var(--line); background: #fff; }
+    .impact span { font-size: 1.6rem; }
+    .impact p { color: var(--muted); font-size: .9rem; }
+
+    .balance { position: relative; width: 230px; height: 180px; }
+    .beam { position: absolute; left: 32px; right: 32px; top: 73px; height: 8px; border-radius: 8px; background: var(--navy); transform: rotate(-3deg); }
+    .stand { position: absolute; left: 105px; top: 78px; width: 20px; height: 70px; background: var(--blue-2); clip-path: polygon(50% 0,100% 100%,0 100%); }
+    .pan { position: absolute; top: 85px; width: 80px; height: 42px; border: 4px solid var(--cyan); border-top: 0; border-radius: 0 0 45px 45px; display: grid; place-items: center; padding-top: 6px; font-size: 1.4rem; }
+    .pan::before, .pan::after { content:""; position:absolute; top:-42px; width:2px; height:44px; background:var(--cyan); }
+    .pan::before { left:13px; transform:rotate(17deg); } .pan::after { right:13px; transform:rotate(-17deg); }
+    .pan-left { left: 0; } .pan-right { right: 0; top: 75px; }
+
+    .check-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .check-item { display: flex; gap: 9px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .check-item input { margin-top: 6px; accent-color: var(--blue); }
+    .meter { height: 12px; overflow: hidden; border-radius: 99px; background: #e4edf4; }
+    .meter span { display: block; height: 100%; width: 0; background: linear-gradient(90deg,var(--cyan),var(--amber),var(--coral)); transition: width .25s ease; }
+
+    .footprint { display: flex; gap: 8px; align-items: end; transform: rotate(-8deg); }
+    .foot { position: relative; width: 58px; height: 92px; border-radius: 50% 50% 45% 45%; background: linear-gradient(160deg,var(--blue-2),var(--cyan)); opacity: .9; }
+    .foot:nth-child(2) { transform: translateY(-32px) scale(.82); opacity:.65; }
+    .foot:nth-child(3) { transform: translateY(-61px) scale(.64); opacity:.4; }
+    .foot::before { content:""; position:absolute; width:20px; height:24px; border-radius:50%; background:inherit; top:-17px; left:3px; box-shadow: 16px -6px 0 -2px currentColor, 30px -1px 0 -4px currentColor; color: var(--cyan); }
+    .pause-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 16px 0; }
+    .pause-check { position: relative; }
+    .pause-check input { position: absolute; opacity: 0; }
+    .pause-check label { display: grid; place-items: center; min-height: 96px; padding: 10px; text-align: center; background: #f8fbfd; border: 2px solid var(--line); border-radius: 14px; cursor: pointer; font-size:.88rem; font-weight:700; }
+    .pause-check input:checked + label { color: #0d6f64; background: var(--mint); border-color: var(--cyan); }
+
+    .analysis-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; margin: 16px 0; border: 1px solid #bfd0de; border-radius: 14px; font-size: .92rem; }
+    .analysis-table th, .analysis-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid #d7e3ec; }
+    .analysis-table th { color: var(--navy); background: #e8f0f7; }
+    .analysis-table th:first-child, .analysis-table td:first-child { width: 31%; font-weight: 750; }
+    .analysis-table tr:last-child td { border-bottom: 0; }
+    .model-answer { display: none; margin-top: 12px; padding: 16px; border-radius: 13px; background: #fff; border: 1px solid var(--line); }
+    .model-answer.show { display: block; }
+    .scenario-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 9px; margin-top: 16px; }
+    .summary-item { min-height: 128px; padding: 13px; border-radius: 15px; background: var(--navy); color: #fff; font-size: .86rem; }
+    .summary-item b { display: block; color: #79e1d8; font-size: 1.35rem; }
+
+    details { margin: 10px 0; border: 1px solid var(--line); border-radius: 13px; background: #fbfdff; }
+    summary { padding: 14px 16px; color: var(--navy); font-weight: 750; cursor: pointer; }
+    details p { padding: 0 16px 14px; color: var(--muted); }
+    .quiz-visual { position:relative; display:grid; place-items:center; width:170px; height:170px; border-radius:50%; background:conic-gradient(var(--cyan) 0 72%, #dce8f0 72%); }
+    .quiz-visual::after { content:"7"; display:grid; place-items:center; width:125px; height:125px; border-radius:50%; background:#fff; color:var(--navy); font-size:3rem; font-weight:900; }
+    .quiz-visual::before { content:"вопросов"; position:absolute; z-index:2; top:105px; color:var(--muted); font-size:.74rem; font-weight:800; text-transform:uppercase; }
+
+    .task-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 22px; align-items: start; }
+    textarea { width: 100%; min-height: 90px; resize: vertical; padding: 11px; border: 1px solid #b9cfdf; border-radius: 11px; background: #fff; color: var(--ink); }
+    textarea:focus, button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid rgba(25,167,174,.35); outline-offset: 2px; }
+    .field { margin: 12px 0; }
+    .field label { display: block; margin-bottom: 5px; color: var(--navy); font-weight: 750; }
+    .poster-preview { position:sticky; top:96px; min-height:430px; padding:20px; border-radius:20px; background: linear-gradient(160deg,#123b5c,#1769aa 60%,#19a7ae); color:#fff; box-shadow: var(--shadow); }
+    .poster-preview h3 { margin-top:0; color:#fff; }
+    .poster-rule { margin:10px 0; padding:11px; border-radius:12px; background:rgba(255,255,255,.13); font-size:.9rem; }
+    .poster-rule b { color:#ffe39a; }
+    .primary, .secondary { display:inline-flex; justify-content:center; align-items:center; gap:8px; padding:11px 16px; border-radius:12px; font-weight:800; text-decoration:none; }
+    .primary { border:1px solid var(--blue); background:var(--blue); color:#fff; }
+    .primary:hover { color:#fff; background:#0f568f; }
+    .secondary { border:1px solid #b9cfdf; background:#fff; color:var(--navy); }
+
+    .criteria { margin-top:18px; padding:18px; border-radius:16px; background:var(--mint); }
+    .criteria ul { columns:2; }
+    .complete-button { margin-top:20px; border:0; padding:11px 15px; border-radius:12px; color:var(--navy); background:var(--amber-soft); font-weight:850; }
+    .complete-button.done { color:#fff; background:var(--cyan); }
+
+    .test-panel { overflow:hidden; position:relative; color:#fff; background:linear-gradient(125deg,var(--navy),#164d75 65%,#167f86); border:0; }
+    .test-panel::after { content:"?"; position:absolute; right:34px; top:-45px; font-size:14rem; line-height:1; color:rgba(255,255,255,.07); font-weight:900; }
+    .test-panel h2 { color:#fff; }
+    .test-panel p { max-width:700px; color:#d5e9f5; }
+    .test-link { position:relative; z-index:2; display:inline-flex; gap:10px; align-items:center; margin-top:15px; padding:14px 20px; border-radius:13px; background:var(--amber); color:var(--navy); text-decoration:none; font-weight:900; }
+    .test-link:hover { color:var(--navy); background:#ffc959; transform:translateY(-1px); }
+
+    .sources-grid { display:grid; grid-template-columns:72px 1fr; gap:20px; align-items:start; }
+    .book-icon { display:grid; place-items:center; width:70px; height:70px; border-radius:20px; background:var(--sky); color:var(--blue); font-size:2rem; }
+    .source-list { margin:10px 0 0; padding-left:1.2em; }
+    .source-list li { margin:9px 0; }
+    .author { margin-top:28px; padding:22px 26px; text-align:center; color:var(--muted); font-size:.9rem; }
+    .back-top { display:inline-flex; margin-top:12px; text-decoration:none; font-weight:800; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; padding-top: 92px; }
+      .sidebar { position: fixed; z-index: 90; left: 16px; right: 16px; top: 78px; max-height: calc(100vh - 96px); transform: translateY(-130%); transition: transform .2s ease; }
+      .sidebar.open { transform: translateY(0); }
+      .menu-button { display: block; }
+      .brand span:last-child { display:none; }
+      .brand { min-width:auto; }
+    }
+    @media (max-width: 760px) {
+      body { font-size:16px; }
+      .layout { padding-inline:12px; }
+      .hero { grid-template-columns:1fr; }
+      .hero-visual { order:-1; }
+      .orbit { width:220px; }
+      .chapter-head { grid-template-columns:1fr; }
+      .visual-card { min-height:155px; }
+      .split, .definition-grid, .impact-grid, .task-layout { grid-template-columns:1fr; }
+      .flow { grid-template-columns:1fr 1fr; }
+      .flow-step:not(:last-child)::after { display:none; }
+      .pause-grid, .summary-grid { grid-template-columns:1fr 1fr; }
+      .check-grid { grid-template-columns:1fr; }
+      .poster-preview { position:static; }
+      .criteria ul { columns:1; }
+      .topbar { gap:10px; padding-inline:12px; }
+      .progress-label { display:none; }
+    }
+    @media (max-width: 470px) {
+      .chip-grid, .pause-grid, .summary-grid, .flow { grid-template-columns:1fr; }
+      .chapter, .test-panel, .sources { padding:21px 17px; }
+      .analysis-table { display:block; overflow-x:auto; }
+    }
+    @media print {
+      .topbar, .sidebar, .choice-row, .complete-button, .test-link, .back-top { display:none !important; }
+      body { background:#fff; font-size:11pt; }
+      .layout { display:block; padding:0; }
+      .hero, .chapter, .test-panel, .sources, .author { box-shadow:none; break-inside:avoid; }
+      .test-panel { color:var(--ink); background:#fff; border:1px solid var(--line); }
+      .test-panel h2, .test-panel p { color:var(--ink); }
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#content">Перейти к содержанию</a>
+  <header class="topbar">
+    <button class="menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false">☰ Содержание</button>
+    <div class="brand"><span class="brand-mark">✓</span><span>Информатика и ИИ · 6 класс</span></div>
+    <div class="top-progress" aria-label="Прогресс чтения"><span id="readingBar"></span></div>
+    <div class="progress-label" id="progressLabel">0%</div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <nav aria-label="Содержание учебника">
+        <a href="#start">Начало</a>
+        <a href="#safety">1. Безопасность и ответственность</a>
+        <a href="#fraud">2. Интернет-мошенничество</a>
+        <a href="#aggression">3. Интернет-агрессия</a>
+        <a href="#gaming">4. Игровая зависимость</a>
+        <a href="#footprint">5. Цифровой след</a>
+        <a href="#reasoning">6. Анализ последствий</a>
+        <a href="#selfcheck">7. Проверь себя</a>
+        <a href="#task">Практическое задание</a>
+        <a href="#finaltest">Итоговый тест</a>
+        <a href="#sources">Источники</a>
+      </nav>
+      <div class="completion" aria-live="polite">Изучено разделов<strong id="doneCount">0 из 8</strong></div>
+    </aside>
+
+    <main id="content">
+      <section class="hero" id="start">
+        <div>
+          <span class="eyebrow">Интерактивный учебник · 6 класс</span>
+          <h1>Безопасность и ответственность при работе в сети Интернет</h1>
+          <p class="lead">Как распознавать угрозы, оценивать последствия и выбирать безопасный способ действий.</p>
+          <div class="goal"><strong>Цель обучения 6.4.1.1.</strong><br>Рассуждать о последствиях нарушения правил безопасности в сети: мошенничестве, интернет-агрессии и игровой зависимости.</div>
+          <div class="outcomes">
+            <h2>Вы научитесь</h2>
+            <div class="chip-grid">
+              <div class="chip">Распознавать признаки трёх интернет-угроз</div>
+              <div class="chip">Определять ближайшие и долгосрочные последствия</div>
+              <div class="chip">Выбирать и обосновывать безопасные действия</div>
+              <div class="chip">Составлять правила ответственного поведения</div>
+            </div>
+          </div>
+        </div>
+        <figure class="hero-visual" aria-label="Щит, защищающий данные, общение, время и устройства">
+          <div class="orbit">
+            <div class="shield">✓</div>
+            <div class="orbit-badge b1" title="Личные данные">🔐</div>
+            <div class="orbit-badge b2" title="Общение">💬</div>
+            <div class="orbit-badge b3" title="Время">⏱️</div>
+            <div class="orbit-badge b4" title="Устройство">💻</div>
+          </div>
+        </figure>
+      </section>
+
+      <section class="chapter trackable" id="safety" data-title="Безопасность и ответственность">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 01</div><h2>Безопасность и ответственность в цифровой среде</h2><p class="intro">Интернет помогает общаться, учиться, находить информацию, совершать покупки и играть. Но действия в сети могут иметь последствия и для пользователя, и для других людей.</p></div>
+          <figure class="visual-card">
+            <svg viewBox="0 0 240 150" role="img" aria-label="Человек принимает решение между безопасным и опасным действием">
+              <defs><linearGradient id="g1" x1="0" x2="1"><stop stop-color="#2f80c5"/><stop offset="1" stop-color="#19a7ae"/></linearGradient></defs>
+              <circle cx="120" cy="42" r="23" fill="url(#g1)"/><path d="M91 122c3-34 15-50 29-50s26 16 29 50" fill="#d9edf8" stroke="#1769aa" stroke-width="4"/>
+              <path d="M89 73 45 45M151 73l44-28" stroke="#1769aa" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="34" cy="35" r="24" fill="#e7f8f4"/><path d="m23 35 8 8 15-18" fill="none" stroke="#19a7ae" stroke-width="6"/>
+              <circle cx="206" cy="35" r="24" fill="#fff0ee"/><path d="m195 24 22 22m0-22-22 22" stroke="#e75b52" stroke-width="6"/>
+            </svg>
+            <figcaption>Перед действием оцени возможный результат.</figcaption>
+          </figure>
+        </div>
+
+        <div class="split">
+          <div class="panel"><h3>Безопасность</h3><p><strong>Безопасность в интернете</strong> — соблюдение правил, которые помогают защитить личные данные, деньги, устройства, здоровье и отношения с людьми.</p></div>
+          <div class="panel"><h3>Ответственность</h3><p><strong>Ответственное поведение</strong> — осознанные действия пользователя, который учитывает возможные последствия своих сообщений, публикаций и решений.</p></div>
+        </div>
+        <div class="question-callout"><strong>Перед действием спроси себя:</strong> безопасно ли это для меня? Может ли это причинить вред другому человеку? Готов ли я отвечать за последствия?</div>
+
+        <h3>Ключевые понятия</h3>
+        <div class="definition-grid">
+          <div class="definition"><strong>Интернет-мошенничество</strong><p>Обман с использованием цифровых технологий с целью получить деньги, личные данные или доступ к аккаунту.</p></div>
+          <div class="definition"><strong>Фишинг</strong><p>Создание поддельных сообщений и сайтов для похищения конфиденциальных данных.</p></div>
+          <div class="definition"><strong>Интернет-агрессия</strong><p>Оскорбительное, угрожающее или унижающее поведение в цифровой среде.</p></div>
+          <div class="definition"><strong>Кибербуллинг</strong><p>Целенаправленная и обычно повторяющаяся травля с использованием цифровых технологий.</p></div>
+          <div class="definition"><strong>Игровая зависимость</strong><p>Потеря контроля над игрой, когда она вытесняет важные занятия и продолжается несмотря на вредные последствия.</p></div>
+          <div class="definition"><strong>Цифровой след</strong><p>Информация, которая сохраняется после действий пользователя в интернете.</p></div>
+        </div>
+
+        <h3>Причинно-следственная связь</h3>
+        <p>Чтобы рассуждать о последствиях, недостаточно назвать угрозу. Нужно объяснить, какое действие привело к проблеме, кто может пострадать и как можно было поступить безопасно.</p>
+        <div class="flow" aria-label="Схема анализа интернет-ситуации">
+          <div class="flow-step">Ситуация</div><div class="flow-step">Нарушенное правило</div><div class="flow-step">Угроза</div><div class="flow-step">Ближайшие последствия</div><div class="flow-step">Долгосрочные последствия</div><div class="flow-step">Безопасное решение</div>
+        </div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="fraud" data-title="Интернет-мошенничество">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 02</div><h2>Интернет-мошенничество</h2><p class="intro"><strong>Интернет-мошенничество</strong> — обман с использованием цифровых технологий, цель которого — получить чужие деньги, личные данные или доступ к аккаунту.</p></div>
+          <figure class="visual-card">
+            <div class="phone" aria-label="Пример фишингового сообщения">
+              <div class="phone-screen"><div class="phone-top"></div><div class="fake-message"><b>Срочно!</b> Ты выиграл 10 000 монет. Введи пароль, чтобы получить приз.<div class="fake-link">game-pr1ze.example</div></div><div class="phone-shield">✕</div></div>
+            </div>
+            <figcaption>Неожиданный приз и просьба ввести пароль — признаки фишинга.</figcaption>
+          </figure>
+        </div>
+        <p>Одна из распространённых разновидностей мошенничества — <strong>фишинг</strong>. Мошенники создают сообщения и сайты, похожие на официальные, чтобы получить логин, пароль, данные банковской карты или код подтверждения.</p>
+
+        <div class="split">
+          <div class="panel"><h3>Как действуют мошенники</h3><ul class="clean-list"><li>обещают бесплатную игровую валюту, подарок или приз;</li><li>сообщают о неожиданном выигрыше;</li><li>просят проголосовать или перейти по ссылке;</li><li>пишут от имени знакомого и просят деньги;</li><li>предлагают установить неизвестную программу;</li><li>требуют пароль или код из СМС;</li><li>предлагают лёгкий заработок или пугают блокировкой аккаунта.</li></ul><p class="note">Они воздействуют на эмоции: страх, любопытство, доверие, желание получить подарок или стремление действовать быстро.</p></div>
+          <div class="panel"><h3>Как распознать обман</h3><ul class="clean-list"><li>отправитель торопит и требует действовать немедленно;</li><li>просит никому не рассказывать;</li><li>запрашивает пароль, код или банковские данные;</li><li>обещает большую выгоду без усилий;</li><li>присылает подозрительную ссылку или файл;</li><li>адрес отличается от настоящего одной буквой, цифрой или знаком;</li><li>сообщение пришло с незнакомого или необычного аккаунта.</li></ul><p class="warning"><strong>Важно!</strong> Значок замка и https означают защищённое соединение, но не доказывают, что сайт настоящий. Проверяй весь адрес.</p></div>
+        </div>
+
+        <h3>Возможные последствия</h3>
+        <div class="impact-grid">
+          <div class="impact"><span>🔓</span><h4>Доступ</h4><p>Потеря аккаунта, файлов и игровых предметов.</p></div>
+          <div class="impact"><span>💳</span><h4>Деньги и данные</h4><p>Кража денег, банковских и личных данных.</p></div>
+          <div class="impact"><span>🦠</span><h4>Устройство</h4><p>Заражение вредоносной программой.</p></div>
+          <div class="impact"><span>📨</span><h4>Сообщения</h4><p>Рассылка от имени владельца аккаунта.</p></div>
+          <div class="impact"><span>👥</span><h4>Другие люди</h4><p>Обман друзей и родственников через взломанный аккаунт.</p></div>
+        </div>
+
+        <h3>Алгоритм безопасных действий</h3>
+        <ol class="number-list"><li><span><strong>Остановись:</strong> не выполняй требования отправителя.</span></li><li><span>Не переходи по ссылке и не открывай неизвестный файл.</span></li><li><span>Не сообщай пароль, код подтверждения и данные карты.</span></li><li><span>Проверь информацию через официальный сайт или другой канал связи.</span></li><li><span>Покажи сообщение родителям или другому взрослому.</span></li><li><span>Заблокируй отправителя и отправь жалобу администрации сервиса.</span></li></ol>
+        <div class="note"><strong>Если данные уже переданы:</strong> сразу смени пароль, заверши незнакомые сеансы входа и сообщи взрослому. Если затронуты платёжные данные, взрослым необходимо обратиться в банк.</div>
+
+        <div class="practice-box" data-correct="safe">
+          <h3>Мини-ситуация: выбери действие</h3>
+          <p>В игровом чате незнакомец обещает редкий предмет и просит перейти по ссылке. Что сделать?</p>
+          <div class="choice-row"><button class="choice" type="button" data-answer="unsafe">Перейти — вдруг повезёт</button><button class="choice" type="button" data-answer="unsafe">Переслать другу</button><button class="choice" type="button" data-answer="safe">Не переходить и показать взрослому</button></div>
+          <div class="feedback" aria-live="polite">Выбери ответ, чтобы увидеть объяснение.</div>
+        </div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="aggression" data-title="Интернет-агрессия">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 03</div><h2>Интернет-агрессия и кибербуллинг</h2><p class="intro"><strong>Интернет-агрессия</strong> — грубое, оскорбительное или угрожающее поведение в цифровой среде. Если действия направлены на систематическое запугивание, унижение или преследование, их называют <strong>кибербуллингом</strong>.</p></div>
+          <figure class="visual-card"><div class="network-visual" aria-label="Сеть пользователей, в центре которой находится пострадавший"><div class="person p-a">😟</div><div class="person p-b">💬</div><div class="person p-c">↗</div><div class="person p-d">♡</div><div class="person p-e">⚑</div></div><figcaption>Каждая реакция наблюдателя влияет на ситуацию.</figcaption></figure>
+        </div>
+        <h3>Формы интернет-агрессии</h3>
+        <ul class="clean-list"><li>оскорбления, угрозы и унижающие комментарии;</li><li>распространение слухов;</li><li>создание обидных изображений и мемов;</li><li>публикация чужих фотографий и переписки без разрешения;</li><li>исключение человека из общего чата с целью унижения;</li><li>создание поддельного аккаунта от имени другого человека;</li><li>поддержка травли отметками «Нравится» и пересылками.</li></ul>
+
+        <h3>Почему интернет-агрессия опасна</h3>
+        <p>Иногда пользователь думает, что сообщение в сети не причиняет настоящего вреда. Однако за каждым аккаунтом находится реальный человек.</p>
+        <div class="impact-grid">
+          <div class="impact"><span>😔</span><h4>Пострадавший</h4><p>Страх, тревога, одиночество, снижение самооценки, нежелание общаться или посещать школу, ухудшение внимания и учебных результатов.</p></div>
+          <div class="impact"><span>⚠️</span><h4>Автор агрессии</h4><p>Потеря доверия, конфликты, блокировка аккаунта, дисциплинарные меры и негативный цифровой след.</p></div>
+          <div class="impact"><span>👁️</span><h4>Наблюдатели</h4><p>Пересылка, смех или отметка «Нравится» увеличивают аудиторию и поддерживают агрессию.</p></div>
+        </div>
+
+        <h3>Как действовать</h3>
+        <ol class="number-list"><li><span>Не отвечай оскорблением на оскорбление.</span></li><li><span>Сохрани сообщения и сделай скриншоты.</span></li><li><span>Заблокируй агрессора.</span></li><li><span>Отправь жалобу администрации платформы.</span></li><li><span>Расскажи родителям, учителю или другому взрослому.</span></li><li><span>Не пересылай оскорбительные материалы.</span></li><li><span>Поддержи пострадавшего и предложи обратиться за помощью.</span></li></ol>
+        <div class="warning"><strong>Запомни:</strong> обращение за помощью — не проявление слабости, а ответственный способ защитить себя и других.</div>
+
+        <div class="practice-box" data-correct="support">
+          <h3>Роль наблюдателя</h3><p>В групповом чате опубликовали обидное изображение одноклассника. Какое действие действительно помогает?</p>
+          <div class="choice-row"><button class="choice" type="button" data-answer="no">Поставить отметку «Нравится»</button><button class="choice" type="button" data-answer="no">Молча переслать знакомому</button><button class="choice" type="button" data-answer="support">Не пересылать, поддержать и сообщить взрослому</button></div>
+          <div class="feedback" aria-live="polite">Выбери ответ, чтобы увидеть объяснение.</div>
+        </div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="gaming" data-title="Игровая зависимость">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 04</div><h2>Игровая зависимость</h2><p class="intro">Компьютерные игры могут развивать внимание, реакцию, воображение и умение работать в команде. Проблема возникает тогда, когда человек теряет контроль над игрой.</p></div>
+          <figure class="visual-card"><div class="balance" aria-label="Весы: игра и повседневная жизнь"><div class="beam"></div><div class="stand"></div><div class="pan pan-left">🎮</div><div class="pan pan-right">📚</div></div><figcaption>Главный признак проблемы — потеря контроля и нарушение жизненного баланса.</figcaption></figure>
+        </div>
+        <p><strong>Игровая зависимость</strong> — состояние, при котором игра становится важнее учёбы, сна, общения и других занятий, а человек продолжает играть, несмотря на отрицательные последствия.</p>
+
+        <div class="split">
+          <div class="panel"><h3>Тревожные признаки</h3><ul class="clean-list"><li>трудно самостоятельно закончить игру;</li><li>время игры постоянно увеличивается;</li><li>игра мешает вовремя ложиться спать;</li><li>снижается интерес к учёбе, спорту и общению;</li><li>возникает раздражение при необходимости прекратить игру;</li><li>человек скрывает реальное время, проведённое в игре;</li><li>игра продолжается, несмотря на конфликты и ухудшение самочувствия.</li></ul></div>
+          <div class="panel"><h3>Возможные последствия</h3><ul class="clean-list"><li>недостаток сна и постоянная усталость;</li><li>снижение физической активности;</li><li>ухудшение внимания и успеваемости;</li><li>невыполнение обязанностей;</li><li>конфликты с родителями и друзьями;</li><li>отказ от прежних интересов;</li><li>ухудшение эмоционального состояния.</li></ul></div>
+        </div>
+        <div class="note"><strong>Важно!</strong> Большое количество времени за компьютером само по себе ещё не доказывает наличие зависимости. Важно определить, потерял ли человек контроль и мешает ли игра повседневной жизни.</div>
+
+        <h3>Как сохранить баланс</h3>
+        <ul class="clean-list"><li>заранее определить продолжительность игры;</li><li>использовать таймер или настройки экранного времени;</li><li>сначала выполнять учебные и домашние обязанности;</li><li>делать перерывы и физические упражнения;</li><li>не сокращать время сна ради игры;</li><li>сочетать цифровые развлечения со спортом и живым общением;</li><li>обратиться к взрослым, если самостоятельно остановиться трудно.</li></ul>
+
+        <div class="practice-box" id="gamingCheck">
+          <h3>Самонаблюдение: баланс занятий</h3>
+          <p>Отметь ситуации, которые повторяются. Это не медицинская диагностика, а повод задуматься и при необходимости поговорить со взрослым.</p>
+          <div class="check-grid"><label class="check-item"><input type="checkbox">Трудно закончить игру</label><label class="check-item"><input type="checkbox">Игра мешает сну</label><label class="check-item"><input type="checkbox">Снижается интерес к учёбе</label><label class="check-item"><input type="checkbox">Появляются конфликты</label><label class="check-item"><input type="checkbox">Скрывается время игры</label><label class="check-item"><input type="checkbox">Игнорируются обязанности</label></div>
+          <div class="meter" aria-hidden="true"><span></span></div><div class="feedback" aria-live="polite">Отметь пункты, чтобы оценить, требует ли твой игровой режим внимания.</div>
+        </div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="footprint" data-title="Цифровой след">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 05</div><h2>Цифровой след и ответственность</h2><p class="intro"><strong>Цифровой след</strong> — информация, которая остаётся после действий пользователя: публикации, комментарии, фотографии, отметки, поисковые запросы и сведения об активности.</p></div>
+          <figure class="visual-card"><div class="footprint" aria-label="Следы, остающиеся после действий в сети"><div class="foot"></div><div class="foot"></div><div class="foot"></div></div><figcaption>Даже удалённый материал может сохраниться в копии или на скриншоте.</figcaption></figure>
+        </div>
+        <p>Даже удалённое сообщение может сохраниться у другого пользователя в виде копии или скриншота. Поэтому до публикации необходимо оценить её возможные последствия.</p>
+        <h3>Правило «Пауза перед отправкой»</h3>
+        <p>Перед публикацией отметь каждый вопрос, на который можешь уверенно ответить «да».</p>
+        <div class="pause-grid" id="pauseGrid">
+          <div class="pause-check"><input id="q1" type="checkbox"><label for="q1">Это правда?</label></div>
+          <div class="pause-check"><input id="q2" type="checkbox"><label for="q2">Это безопасно?</label></div>
+          <div class="pause-check"><input id="q3" type="checkbox"><label for="q3">Это не причинит вреда?</label></div>
+          <div class="pause-check"><input id="q4" type="checkbox"><label for="q4">Имею ли я право это публиковать?</label></div>
+          <div class="pause-check"><input id="q5" type="checkbox"><label for="q5">Готов ли я отвечать за последствия?</label></div>
+        </div>
+        <div class="feedback" id="pauseFeedback" aria-live="polite">Публикация требует проверки по всем пяти вопросам.</div>
+        <div class="success"><strong>Ответственный пользователь</strong> защищает свои и чужие данные, проверяет информацию, уважительно общается, не участвует в травле, контролирует время в сети и обращается за помощью при возникновении угрозы.</div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="reasoning" data-title="Анализ последствий">
+        <div class="chapter-head">
+          <div><div class="chapter-number">Раздел 06</div><h2>Как рассуждать о последствиях</h2><p class="intro">При анализе интернет-ситуации последовательно ответь на вопросы. Так вывод будет полным и обоснованным.</p></div>
+          <figure class="visual-card"><svg viewBox="0 0 250 155" role="img" aria-label="Схема от факта к безопасному решению"><path d="M26 78h190" stroke="#b9d7e9" stroke-width="8" stroke-linecap="round"/><circle cx="28" cy="78" r="20" fill="#2f80c5"/><circle cx="76" cy="78" r="20" fill="#278dbd"/><circle cx="124" cy="78" r="20" fill="#19a7ae"/><circle cx="172" cy="78" r="20" fill="#f1ad24"/><circle cx="220" cy="78" r="20" fill="#1769aa"/><g fill="#fff" font-family="Arial" font-size="13" font-weight="700" text-anchor="middle"><text x="28" y="83">1</text><text x="76" y="83">2</text><text x="124" y="83">3</text><text x="172" y="83">4</text><text x="220" y="83">5</text></g><text x="125" y="132" text-anchor="middle" fill="#587087" font-family="Arial" font-size="13">факт → угроза → последствия → решение</text></svg><figcaption>Рассуждение строится как логическая цепочка.</figcaption></figure>
+        </div>
+
+        <div class="flow" aria-label="Шесть шагов анализа"><div class="flow-step">Что произошло?</div><div class="flow-step">Какая угроза?</div><div class="flow-step">Какое правило нарушено?</div><div class="flow-step">Кто пострадает?</div><div class="flow-step">Каковы последствия?</div><div class="flow-step">Как поступить?</div></div>
+        <table class="analysis-table">
+          <thead><tr><th>Вопрос</th><th>Что необходимо определить</th></tr></thead>
+          <tbody><tr><td>Что произошло?</td><td>Опиши только факты, не обвиняя участников.</td></tr><tr><td>Какая это угроза?</td><td>Определи: мошенничество, интернет-агрессия или потеря контроля над игрой.</td></tr><tr><td>Какое правило нарушено?</td><td>Назови небезопасное или безответственное действие.</td></tr><tr><td>Кто может пострадать?</td><td>Учти самого пользователя, других людей и близких.</td></tr><tr><td>Каковы последствия?</td><td>Укажи не менее одного ближайшего и одного долгосрочного последствия.</td></tr><tr><td>Как поступить безопасно?</td><td>Предложи действие и обоснуй его выбор.</td></tr></tbody>
+        </table>
+
+        <h3>Разбор примера</h3>
+        <div class="note"><strong>Ситуация:</strong> ученик получил сообщение: «Ты выиграл 10 000 игровых монет. Перейди по ссылке и введи пароль».</div>
+        <div class="split"><div class="panel"><p><strong>Угроза:</strong> интернет-мошенничество.</p><p><strong>Нарушенное правило:</strong> нельзя вводить пароль на непроверенном сайте.</p><p><strong>Ближайшее последствие:</strong> мошенник может получить доступ к аккаунту.</p><p><strong>Долгосрочное последствие:</strong> аккаунт могут использовать для обмана других людей.</p></div><div class="panel"><p><strong>Безопасное решение:</strong> не переходить по ссылке, показать сообщение взрослому и пожаловаться на отправителя.</p><p><strong>Обоснование:</strong> пароль является конфиденциальной информацией, а неожиданный приз может использоваться для привлечения на поддельный сайт.</p></div></div>
+
+        <div class="practice-box" id="caseTrainer">
+          <h3>Тренажёр рассуждения</h3>
+          <div class="scenario-tabs"><button class="choice selected" type="button" data-case="fraud">Мошенничество</button><button class="choice" type="button" data-case="aggression">Агрессия</button><button class="choice" type="button" data-case="gaming">Игровой баланс</button></div>
+          <p id="caseText"><strong>Ситуация:</strong> игрок получил ссылку на «бесплатные монеты» с просьбой ввести пароль.</p>
+          <button class="primary" id="showModel" type="button">Показать образец рассуждения</button>
+          <div class="model-answer" id="modelAnswer" aria-live="polite"></div>
+        </div>
+
+        <h3>Главное</h3>
+        <div class="summary-grid"><div class="summary-item"><b>1</b>Угрозы можно распознать по характерным признакам.</div><div class="summary-item"><b>2</b>Нарушения ведут к потере данных, денег, здоровья, доверия и отношений.</div><div class="summary-item"><b>3</b>Нужно остановиться, проверить информацию и обратиться к взрослому.</div><div class="summary-item"><b>4</b>Оскорбительные действия причиняют реальный вред.</div><div class="summary-item"><b>5</b>Ответственный пользователь оценивает последствия заранее.</div></div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="selfcheck" data-title="Проверь себя">
+        <div class="chapter-head"><div><div class="chapter-number">Раздел 07</div><h2>Проверь себя</h2><p class="intro">Сначала ответь самостоятельно. Затем раскрой подсказку и сравни ход рассуждения.</p></div><figure class="visual-card"><div class="quiz-visual" aria-label="Семь вопросов для самопроверки"></div><figcaption>Не запоминай ответы механически — объясняй причинно-следственную связь.</figcaption></figure></div>
+        <details><summary>1. Какие признаки указывают на интернет-мошенничество?</summary><p>Срочность, секретность, запрос пароля или кода, обещание большой выгоды без усилий, подозрительная ссылка, необычный аккаунт или адрес сайта с подменённым символом.</p></details>
+        <details><summary>2. Чем единичное проявление интернет-агрессии отличается от кибербуллинга?</summary><p>Интернет-агрессия может проявиться один раз. Кибербуллинг — целенаправленное и обычно повторяющееся запугивание, унижение или преследование.</p></details>
+        <details><summary>3. Почему пересылка оскорбительного изображения поддерживает агрессию?</summary><p>Она увеличивает аудиторию, распространяет вредный материал и показывает агрессору, что его действия получают внимание.</p></details>
+        <details><summary>4. Какие признаки могут указывать на потерю контроля над игрой?</summary><p>Невозможность остановиться, рост времени игры, нарушение сна, отказ от учёбы и прежних интересов, раздражение, сокрытие времени и продолжение игры несмотря на вред.</p></details>
+        <details><summary>5. Почему продолжительность игры нельзя считать единственным признаком зависимости?</summary><p>Важно не только количество времени, но и потеря контроля, приоритет игры над другими занятиями и продолжение игры несмотря на отрицательные последствия.</p></details>
+        <details><summary>6. Какие действия выполнить при получении подозрительной ссылки?</summary><p>Не переходить по ней, не вводить данные, проверить информацию официальным способом, показать сообщение взрослому, заблокировать отправителя и пожаловаться.</p></details>
+        <details><summary>7. Как цифровой след связан с ответственностью пользователя?</summary><p>Публикации и реакции могут сохраниться и повлиять на других людей и репутацию автора, поэтому последствия нужно оценивать до отправки.</p></details>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="chapter trackable" id="task" data-title="Практическое задание">
+        <div class="chapter-head"><div><div class="chapter-number">Практика</div><h2>Создай цифровую памятку</h2><p class="intro">Тема памятки — «Безопасность и ответственность в интернете». Она должна быть понятна учащимся твоего возраста.</p></div><figure class="visual-card"><svg viewBox="0 0 220 155" role="img" aria-label="Макет цифровой памятки"><rect x="35" y="10" width="150" height="135" rx="12" fill="#fff" stroke="#1769aa" stroke-width="4"/><rect x="53" y="28" width="114" height="17" rx="8" fill="#1769aa"/><circle cx="62" cy="68" r="11" fill="#19a7ae"/><rect x="82" y="61" width="72" height="7" rx="3" fill="#9fb7c9"/><rect x="82" y="73" width="54" height="6" rx="3" fill="#d4e0e8"/><circle cx="62" cy="103" r="11" fill="#f1ad24"/><rect x="82" y="96" width="72" height="7" rx="3" fill="#9fb7c9"/><rect x="82" y="108" width="60" height="6" rx="3" fill="#d4e0e8"/></svg><figcaption>Правило + последствие + понятная визуальная подсказка.</figcaption></figure></div>
+        <p>Включи не менее трёх правил: защиту от интернет-мошенничества; противодействие интернет-агрессии; сохранение разумного баланса между играми и другими занятиями. Для каждого правила укажи возможное последствие его нарушения. Добавь заголовок, тематические значки или изображения и проверь, легко ли читается текст.</p>
+        <div class="task-layout">
+          <div>
+            <div class="field"><label for="ruleFraud">🔐 Защита от мошенничества</label><textarea id="ruleFraud">Не переходи по подозрительным ссылкам и никому не сообщай пароль. Последствие нарушения: потеря аккаунта или личных данных.</textarea></div>
+            <div class="field"><label for="ruleAggression">💬 Противодействие агрессии</label><textarea id="ruleAggression">Не пересылай оскорбительные материалы, сохрани доказательства и обратись к взрослому. Последствие нарушения: усиление травли и вред человеку.</textarea></div>
+            <div class="field"><label for="ruleGame">⏱️ Баланс игр и других занятий</label><textarea id="ruleGame">Определи время игры заранее и не сокращай сон. Последствие нарушения: усталость, снижение внимания и конфликты.</textarea></div>
+            <button class="primary" id="updatePoster" type="button">Обновить памятку</button> <button class="secondary" id="printPoster" type="button">Печать</button>
+          </div>
+          <aside class="poster-preview" aria-label="Предварительный просмотр памятки"><h3>Моя безопасная сеть</h3><div class="poster-rule"><b>🔐 Мошенничество</b><br><span id="outFraud"></span></div><div class="poster-rule"><b>💬 Общение</b><br><span id="outAggression"></span></div><div class="poster-rule"><b>⏱️ Игровой баланс</b><br><span id="outGame"></span></div></aside>
+        </div>
+        <div class="criteria"><h3>Критерии успешной работы</h3><ul class="clean-list"><li>представлены три направления интернет-безопасности;</li><li>указаны последствия нарушения каждого правила;</li><li>советы сформулированы конкретно и выполнимо;</li><li>информация расположена логично и хорошо читается;</li><li>использованы только уместные изображения без раскрытия личных данных.</li></ul></div>
+        <button class="complete-button" type="button">Отметить раздел изученным</button>
+      </section>
+
+      <section class="test-panel" id="finaltest">
+        <span class="eyebrow">Формативное оценивание</span>
+        <h2>Проверь знания в итоговом тесте</h2>
+        <p>Заверши изучение темы тестом. В новой вкладке откроется Online Test Pad.</p>
+        <a class="test-link" href="https://onlinetestpad.com/t/6-01-fo-online-safety" target="_blank" rel="noopener noreferrer">Перейти к тесту <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="sources" id="sources">
+        <div class="sources-grid"><div class="book-icon" aria-hidden="true">▤</div><div><h2>Источники</h2><p>Материал подготовлен на основе официальных и образовательных ресурсов. Ссылки активны.</p><ol class="source-list"><li><a href="https://www.unicef.org/kazakhstan/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%89%D0%B8%D1%82%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D0%BE%D1%82-%D0%BA%D0%B8%D0%B1%D0%B5%D1%80%D0%B1%D1%83%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%B0" target="_blank" rel="noopener noreferrer">ЮНИСЕФ Казахстан: «Как защититься от кибербуллинга?»</a></li><li><a href="https://www.gov.kz/memleket/entities/ardfm/press/news/details/1007388?lang=ru" target="_blank" rel="noopener noreferrer">Агентство РК: «Фишинг и поддельные сайты»</a></li><li><a href="https://fingramota.kz/ru/post/naibolee-rasprostranennye-vidy-internet-moshennichestva-2025-goda-kak-zashchitit-sebya" target="_blank" rel="noopener noreferrer">Fingramota.kz: распространённые виды интернет-мошенничества</a></li><li><a href="https://www.who.int/ru/news-room/questions-and-answers/item/gaming-disorder" target="_blank" rel="noopener noreferrer">Всемирная организация здравоохранения: «Игровое расстройство»</a></li></ol><a class="back-top" href="#top">↑ Вернуться в начало</a></div></div>
+      </section>
+
+      <footer class="author">© Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026</footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const readingBar = document.getElementById('readingBar');
+      const progressLabel = document.getElementById('progressLabel');
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menuButton');
+      const navLinks = [...document.querySelectorAll('.sidebar nav a')];
+      const sections = [...document.querySelectorAll('main section[id]')];
+
+      const updateReading = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const percent = max > 0 ? Math.min(100, Math.round(scrollY / max * 100)) : 100;
+        readingBar.style.width = percent + '%';
+        progressLabel.textContent = percent + '%';
+      };
+      addEventListener('scroll', updateReading, {passive:true});
+      updateReading();
+
+      menuButton.addEventListener('click', () => {
+        const open = sidebar.classList.toggle('open');
+        menuButton.setAttribute('aria-expanded', String(open));
+      });
+      navLinks.forEach(link => link.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }));
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+        });
+      }, {rootMargin:'-22% 0px -65% 0px', threshold:0});
+      sections.forEach(s => observer.observe(s));
+
+      document.querySelectorAll('.practice-box[data-correct]').forEach(box => {
+        const correct = box.dataset.correct;
+        const feedback = box.querySelector('.feedback');
+        box.querySelectorAll('.choice').forEach(button => button.addEventListener('click', () => {
+          box.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+          button.classList.add('selected');
+          if (button.dataset.answer === correct) {
+            feedback.innerHTML = '<strong>Верно.</strong> Безопасное действие останавливает распространение вреда и позволяет получить помощь.';
+            feedback.style.borderColor = '#19a7ae';
+          } else {
+            feedback.innerHTML = '<strong>Подумай ещё.</strong> Это действие повышает риск или поддерживает распространение вредного материала.';
+            feedback.style.borderColor = '#e75b52';
+          }
+        }));
+      });
+
+      const gamingCheck = document.getElementById('gamingCheck');
+      const gamingInputs = [...gamingCheck.querySelectorAll('input')];
+      const gamingMeter = gamingCheck.querySelector('.meter span');
+      const gamingFeedback = gamingCheck.querySelector('.feedback');
+      const updateGaming = () => {
+        const count = gamingInputs.filter(i => i.checked).length;
+        gamingMeter.style.width = (count / gamingInputs.length * 100) + '%';
+        gamingFeedback.textContent = count === 0 ? 'Повторяющиеся признаки не отмечены. Продолжай соблюдать разумный режим.' : count <= 2 ? 'Обрати внимание на отмеченные ситуации и попробуй изменить режим с помощью таймера и плана.' : 'Несколько ситуаций повторяются. Обсуди игровой режим с родителями или другим взрослым, которому доверяешь.';
+      };
+      gamingInputs.forEach(i => i.addEventListener('change', updateGaming));
+
+      const pauseInputs = [...document.querySelectorAll('#pauseGrid input')];
+      const pauseFeedback = document.getElementById('pauseFeedback');
+      const updatePause = () => {
+        const checked = pauseInputs.filter(i => i.checked).length;
+        pauseFeedback.textContent = checked === 5 ? 'Все пять условий выполнены. Теперь ещё раз оцени контекст и только затем принимай решение.' : `Проверено ${checked} из 5. Если хотя бы на один вопрос нет уверенного «да», сделай паузу и не публикуй.`;
+        pauseFeedback.style.borderColor = checked === 5 ? '#19a7ae' : '#b9cfdf';
+      };
+      pauseInputs.forEach(i => i.addEventListener('change', updatePause));
+
+      const cases = {
+        fraud: {text:'<strong>Ситуация:</strong> игрок получил ссылку на «бесплатные монеты» с просьбой ввести пароль.', answer:'<strong>Угроза:</strong> мошенничество. <strong>Правило:</strong> не сообщать пароль и не переходить по подозрительной ссылке. <strong>Ближайшее последствие:</strong> потеря аккаунта. <strong>Долгосрочное:</strong> аккаунт используют для обмана других. <strong>Решение:</strong> закрыть ссылку, показать сообщение взрослому и пожаловаться.'},
+        aggression: {text:'<strong>Ситуация:</strong> участники чата пересылают обидную фотографию ученика и добавляют насмешки.', answer:'<strong>Угроза:</strong> интернет-агрессия, возможно кибербуллинг. <strong>Правило:</strong> нельзя распространять унижающие материалы. <strong>Ближайшее последствие:</strong> эмоциональный вред пострадавшему. <strong>Долгосрочное:</strong> конфликты, снижение доверия и негативный цифровой след. <strong>Решение:</strong> не пересылать, сохранить доказательства, поддержать ученика и сообщить взрослому.'},
+        gaming: {text:'<strong>Ситуация:</strong> ученик ежедневно играет до поздней ночи, не выполняет задания и раздражается, когда его просят остановиться.', answer:'<strong>Угроза:</strong> потеря контроля над игрой. <strong>Правило:</strong> соблюдать баланс сна, учёбы, общения и игр. <strong>Ближайшее последствие:</strong> недосып и невыполненные задания. <strong>Долгосрочное:</strong> ухудшение успеваемости, здоровья и отношений. <strong>Решение:</strong> составить режим, использовать таймер и обратиться к взрослому за поддержкой.'}
+      };
+      let currentCase = 'fraud';
+      const caseText = document.getElementById('caseText');
+      const modelAnswer = document.getElementById('modelAnswer');
+      document.querySelectorAll('#caseTrainer [data-case]').forEach(button => button.addEventListener('click', () => {
+        currentCase = button.dataset.case;
+        document.querySelectorAll('#caseTrainer [data-case]').forEach(b => b.classList.toggle('selected', b === button));
+        caseText.innerHTML = cases[currentCase].text;
+        modelAnswer.classList.remove('show');
+      }));
+      document.getElementById('showModel').addEventListener('click', () => {
+        modelAnswer.innerHTML = cases[currentCase].answer;
+        modelAnswer.classList.add('show');
+      });
+
+      const updatePoster = () => {
+        document.getElementById('outFraud').textContent = document.getElementById('ruleFraud').value.trim() || 'Добавь правило и последствие.';
+        document.getElementById('outAggression').textContent = document.getElementById('ruleAggression').value.trim() || 'Добавь правило и последствие.';
+        document.getElementById('outGame').textContent = document.getElementById('ruleGame').value.trim() || 'Добавь правило и последствие.';
+      };
+      document.getElementById('updatePoster').addEventListener('click', updatePoster);
+      document.getElementById('printPoster').addEventListener('click', () => window.print());
+      updatePoster();
+
+      const storageKey = 'internet-safety-6-completed';
+      let completed = new Set();
+      try { completed = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]')); } catch (_) {}
+      const trackable = [...document.querySelectorAll('.trackable')];
+      const updateCompletion = () => {
+        document.getElementById('doneCount').textContent = `${completed.size} из ${trackable.length}`;
+        trackable.forEach(section => {
+          const button = section.querySelector('.complete-button');
+          const done = completed.has(section.id);
+          button.classList.toggle('done', done);
+          button.textContent = done ? '✓ Раздел изучен' : 'Отметить раздел изученным';
+        });
+        try { localStorage.setItem(storageKey, JSON.stringify([...completed])); } catch (_) {}
+      };
+      trackable.forEach(section => section.querySelector('.complete-button').addEventListener('click', () => {
+        completed.has(section.id) ? completed.delete(section.id) : completed.add(section.id);
+        updateCompletion();
+      }));
+      updateCompletion();
+    })();
+  </script>
+</body>
+</html>
