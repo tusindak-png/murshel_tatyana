@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Основные понятия машинного обучения</title>
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --ink:#172033;
+  --muted:#667085;
+  --accent:#3b82f6;
+  --accent2:#7c3aed;
+  --good:#0f9d73;
+  --warn:#f59e0b;
+  --border:#dfe5ee;
+  --shadow:0 14px 40px rgba(23,32,51,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(180deg,#eef4ff 0,#f8fafc 360px,#f5f7fb 100%);
+  line-height:1.65;
+}
+header{
+  padding:56px 20px 34px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+header::before, header::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(6px);
+  opacity:.2;
+}
+header::before{width:280px;height:280px;background:#60a5fa;left:-100px;top:-100px}
+header::after{width:220px;height:220px;background:#8b5cf6;right:-80px;top:0}
+.hero{
+  max-width:1050px;
+  margin:auto;
+  position:relative;
+  z-index:1;
+}
+.kicker{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#e7efff;
+  color:#2457c5;
+  font-weight:700;
+  font-size:.9rem;
+}
+h1{
+  font-size:clamp(2.1rem,5vw,4.2rem);
+  line-height:1.05;
+  margin:16px 0 16px;
+  letter-spacing:-.035em;
+}
+.lead{
+  max-width:820px;
+  margin:0 auto 26px;
+  color:#465269;
+  font-size:1.15rem;
+}
+.chain{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+  margin:28px auto 0;
+  max-width:1100px;
+}
+.chain a{
+  text-decoration:none;
+  color:inherit;
+}
+.step{
+  background:rgba(255,255,255,.88);
+  border:1px solid var(--border);
+  padding:13px 10px;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  font-weight:700;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+nav{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.navwrap{
+  max-width:1180px;
+  margin:auto;
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:9px 14px;
+}
+.navwrap a{
+  white-space:nowrap;
+  text-decoration:none;
+  color:#344054;
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:.92rem;
+}
+.navwrap a:hover{background:#eef4ff;color:#1d4ed8}
+main{max-width:1180px;margin:auto;padding:24px 18px 64px}
+section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:clamp(22px,4vw,42px);
+  margin:20px 0;
+  box-shadow:var(--shadow);
+  scroll-margin-top:72px;
+}
+section h2{
+  margin-top:0;
+  font-size:clamp(1.6rem,3vw,2.35rem);
+  letter-spacing:-.02em;
+}
+section h3{margin-top:26px}
+.grid2{
+  display:grid;
+  grid-template-columns:1.08fr .92fr;
+  gap:28px;
+  align-items:center;
+}
+.callout{
+  border-left:5px solid var(--accent);
+  background:#f4f8ff;
+  padding:16px 18px;
+  border-radius:12px;
+  margin:18px 0;
+}
+.definition{
+  padding:18px;
+  background:linear-gradient(135deg,#eef5ff,#f8f3ff);
+  border:1px solid #d8e5ff;
+  border-radius:16px;
+  margin:18px 0;
+}
+.definition b{color:#234aa5}
+.visual{
+  background:#f8fafc;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+}
+.visual svg{width:100%;height:auto;display:block}
+.badge{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:.8rem;
+  font-weight:700;
+  background:#eef2ff;
+  color:#4f46e5;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+  font-size:.96rem;
+}
+th,td{
+  border:1px solid var(--border);
+  padding:10px 11px;
+  text-align:left;
+  vertical-align:top;
+}
+th{background:#f2f5f9}
+.small{font-size:.9rem;color:var(--muted)}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin:18px 0;
+}
+.card{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  background:#fbfcfe;
+}
+.card h4{margin:0 0 8px}
+.codeflow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin:18px 0;
+}
+.pill{
+  padding:10px 13px;
+  border-radius:999px;
+  background:#eef5ff;
+  font-weight:700;
+}
+.arrow{color:#94a3b8;font-size:1.4rem}
+details{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px 14px;
+  background:#fbfcfe;
+  margin:10px 0;
+}
+summary{cursor:pointer;font-weight:700}
+.quizbox{
+  background:linear-gradient(135deg,#f7fbff,#fbf8ff);
+}
+.question{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin:12px 0;
+  background:white;
+}
+.options label{
+  display:block;
+  padding:9px 10px;
+  border-radius:10px;
+  margin:6px 0;
+  border:1px solid transparent;
+  cursor:pointer;
+}
+.options label:hover{background:#f5f7fb;border-color:#e5e7eb}
+button,.btn{
+  appearance:none;
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+button{background:#1f2937;color:#fff}
+.btn.primary{background:linear-gradient(135deg,#2563eb,#7c3aed);color:white}
+.btn.secondary{background:#eef2f7;color:#253049}
+.result{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  display:none;
+}
+.result.show{display:block}
+.result.ok{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
+.result.no{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+.bigchain{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+.bigchain .box{
+  border-radius:16px;
+  padding:16px 10px;
+  text-align:center;
+  border:1px solid var(--border);
+  background:#fff;
+}
+.bigchain .box strong{display:block;margin-bottom:4px}
+.test-cta{
+  text-align:center;
+  background:linear-gradient(135deg,#eef6ff,#f4efff);
+}
+.test-cta .btn{font-size:1.05rem;padding:14px 22px}
+footer{
+  max-width:1180px;
+  margin:0 auto 30px;
+  padding:0 18px;
+}
+.footerbox{
+  text-align:center;
+  color:#475467;
+  font-size:.92rem;
+  padding:20px;
+  border-top:1px solid var(--border);
+}
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0;
+  height:4px;
+  background:linear-gradient(90deg,#2563eb,#7c3aed);
+  z-index:99;
+}
+@media(max-width:900px){
+  .chain,.bigchain{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .chain,.bigchain{grid-template-columns:1fr}
+  section{border-radius:18px}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header>
+  <div class="hero">
+    <span class="kicker">Информатика и искусственный интеллект · 10 класс</span>
+    <h1>Основные понятия<br>машинного обучения</h1>
+    <p class="lead">Как данные превращаются в модель, а модель — в прогноз? Разберём весь процесс на одном понятном примере: оценке предполагаемой цены подержанного смартфона.</p>
+
+    <div class="chain">
+      <a href="#training-data"><div class="step">Обучающие данные</div></a>
+      <a href="#features"><div class="step">Признаки</div></a>
+      <a href="#training"><div class="step">Обучение</div></a>
+      <a href="#model"><div class="step">Модель</div></a>
+      <a href="#new-data"><div class="step">Новые данные</div></a>
+      <a href="#prediction"><div class="step">Прогнозирование</div></a>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="navwrap">
+    <a href="#problem">Проблема</a>
+    <a href="#ml">Что такое ML</a>
+    <a href="#training-data">Данные</a>
+    <a href="#features">Признаки</a>
+    <a href="#training">Обучение</a>
+    <a href="#model">Модель</a>
+    <a href="#new-data">Новые данные</a>
+    <a href="#prediction">Прогноз</a>
+    <a href="#difference">Сравнение</a>
+    <a href="#quality">Качество</a>
+    <a href="#summary">Главное</a>
+    <a href="#selfcheck">Самопроверка</a>
+    <a href="#test">Тест</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="problem">
+  <div class="grid2">
+    <div>
+      <span class="badge">Проблемная ситуация</span>
+      <h2>Сколько стоит твой смартфон?</h2>
+      <p>Представьте, что вы решили продать свой смартфон. На сайте объявлений похожие устройства стоят по-разному: одни — 120 000 тенге, другие — 180 000 или даже 250 000 тенге.</p>
+      <p><b>От чего зависит цена?</b></p>
+      <ul>
+        <li>от возраста устройства;</li>
+        <li>объёма памяти;</li>
+        <li>модели процессора;</li>
+        <li>состояния аккумулятора;</li>
+        <li>количества повреждений.</li>
+      </ul>
+      <div class="callout">Можно сравнивать сотни объявлений вручную, а можно использовать данные о ранее проданных смартфонах и обучить систему определять предполагаемую цену нового устройства.</div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 360" aria-label="Схема оценки смартфона">
+        <rect x="52" y="30" width="180" height="300" rx="28" fill="#1f2937"/>
+        <rect x="68" y="58" width="148" height="236" rx="16" fill="#dbeafe"/>
+        <circle cx="142" cy="312" r="8" fill="#94a3b8"/>
+        <rect x="302" y="62" width="170" height="48" rx="14" fill="#eef2ff" stroke="#c7d2fe"/>
+        <text x="387" y="92" text-anchor="middle" font-size="18" font-weight="700" fill="#3730a3">Возраст</text>
+        <rect x="302" y="126" width="170" height="48" rx="14" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="387" y="156" text-anchor="middle" font-size="18" font-weight="700" fill="#1d4ed8">Память</text>
+        <rect x="302" y="190" width="170" height="48" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+        <text x="387" y="220" text-anchor="middle" font-size="18" font-weight="700" fill="#6d28d9">Процессор</text>
+        <rect x="302" y="254" width="170" height="48" rx="14" fill="#ecfdf5" stroke="#a7f3d0"/>
+        <text x="387" y="284" text-anchor="middle" font-size="18" font-weight="700" fill="#047857">Состояние</text>
+        <line x1="232" y1="180" x2="292" y2="180" stroke="#94a3b8" stroke-width="4"/>
+        <polygon points="292,180 278,172 278,188" fill="#94a3b8"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="ml">
+  <div class="grid2">
+    <div>
+      <span class="badge">Ключевое понятие</span>
+      <h2>Что такое машинное обучение?</h2>
+      <div class="definition"><b>Машинное обучение</b> — это направление искусственного интеллекта, при котором компьютерная система выявляет закономерности в данных и использует их для получения результата на новых данных.</div>
+      <p>В нашей задаче система должна научиться по характеристикам подержанного смартфона получать <b>предполагаемую цену</b>.</p>
+      <div class="codeflow">
+        <span class="pill">обучающие данные</span><span class="arrow">→</span>
+        <span class="pill">признаки</span><span class="arrow">→</span>
+        <span class="pill">обучение</span><span class="arrow">→</span>
+        <span class="pill">модель</span><span class="arrow">→</span>
+        <span class="pill">новые данные</span><span class="arrow">→</span>
+        <span class="pill">прогнозирование</span>
+      </div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 360">
+        <circle cx="100" cy="180" r="56" fill="#dbeafe"/>
+        <text x="100" y="174" text-anchor="middle" font-size="18" font-weight="700" fill="#1d4ed8">ДАННЫЕ</text>
+        <text x="100" y="198" text-anchor="middle" font-size="14" fill="#475569">примеры</text>
+        <rect x="210" y="122" width="120" height="116" rx="22" fill="#ede9fe"/>
+        <text x="270" y="172" text-anchor="middle" font-size="18" font-weight="700" fill="#6d28d9">МОДЕЛЬ</text>
+        <text x="270" y="196" text-anchor="middle" font-size="14" fill="#475569">закономерности</text>
+        <circle cx="420" cy="180" r="56" fill="#dcfce7"/>
+        <text x="420" y="174" text-anchor="middle" font-size="18" font-weight="700" fill="#047857">ПРОГНОЗ</text>
+        <text x="420" y="198" text-anchor="middle" font-size="14" fill="#475569">результат</text>
+        <line x1="156" y1="180" x2="205" y2="180" stroke="#94a3b8" stroke-width="4"/>
+        <line x1="330" y1="180" x2="364" y2="180" stroke="#94a3b8" stroke-width="4"/>
+        <polygon points="205,180 191,172 191,188" fill="#94a3b8"/>
+        <polygon points="364,180 350,172 350,188" fill="#94a3b8"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="training-data">
+  <span class="badge">1 из 6</span>
+  <h2>Обучающие данные</h2>
+  <div class="definition"><b>Обучающие данные</b> — это набор примеров, который используется для обучения модели.</div>
+  <p>Чтобы система научилась определять цену смартфона, ей нужны известные примеры из прошлого. Предположим, у нас есть сведения о ранее проданных смартфонах:</p>
+
+  <div style="overflow:auto">
+  <table>
+    <thead><tr><th>Смартфон</th><th>Возраст, мес.</th><th>Память, ГБ</th><th>Процессор</th><th>Аккумулятор, %</th><th>Повреждения</th><th>Цена, тг</th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td>8</td><td>256</td><td>Snapdragon 8 Gen 2</td><td>96</td><td>0</td><td>270 000</td></tr>
+      <tr><td>B</td><td>12</td><td>128</td><td>Snapdragon 8 Gen 1</td><td>92</td><td>1</td><td>225 000</td></tr>
+      <tr><td>C</td><td>18</td><td>256</td><td>Snapdragon 888</td><td>88</td><td>1</td><td>205 000</td></tr>
+      <tr><td>D</td><td>24</td><td>128</td><td>Snapdragon 888</td><td>82</td><td>3</td><td>165 000</td></tr>
+      <tr><td>E</td><td>30</td><td>128</td><td>Snapdragon 870</td><td>77</td><td>5</td><td>130 000</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">Данные условные и используются только для объяснения принципа машинного обучения.</p>
+
+  <div class="grid2">
+    <div>
+      <p>Каждая строка описывает <b>один ранее проданный смартфон</b>. Совокупность таких строк образует набор обучающих данных.</p>
+      <div class="callout"><b>Запомните:</b> один смартфон — один пример; множество примеров — обучающие данные.</div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 300">
+        <rect x="45" y="35" width="430" height="230" rx="16" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+        <line x1="45" y1="85" x2="475" y2="85" stroke="#cbd5e1"/>
+        <line x1="45" y1="130" x2="475" y2="130" stroke="#e2e8f0"/>
+        <line x1="45" y1="175" x2="475" y2="175" stroke="#e2e8f0"/>
+        <line x1="45" y1="220" x2="475" y2="220" stroke="#e2e8f0"/>
+        <text x="68" y="67" font-size="17" font-weight="700" fill="#334155">Обучающие данные</text>
+        <text x="68" y="115" font-size="15" fill="#475569">Смартфон A → признаки + известная цена</text>
+        <text x="68" y="160" font-size="15" fill="#475569">Смартфон B → признаки + известная цена</text>
+        <text x="68" y="205" font-size="15" fill="#475569">Смартфон C → признаки + известная цена</text>
+        <text x="68" y="250" font-size="15" fill="#475569">...много примеров...</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <span class="badge">2 из 6</span>
+  <h2>Признаки</h2>
+  <div class="definition"><b>Признаки</b> — это характеристики объекта, которые используются моделью для анализа данных и получения прогноза.</div>
+
+  <div class="cards">
+    <div class="card"><h4>Возраст</h4><p>Например, 18 месяцев.</p><span class="small">Числовой признак</span></div>
+    <div class="card"><h4>Память</h4><p>Например, 256 ГБ.</p><span class="small">Числовой признак</span></div>
+    <div class="card"><h4>Процессор</h4><p>Например, Snapdragon 888.</p><span class="small">Категориальный признак</span></div>
+    <div class="card"><h4>Аккумулятор</h4><p>Например, 88 %.</p><span class="small">Числовой признак</span></div>
+    <div class="card"><h4>Повреждения</h4><p>Например, 1.</p><span class="small">Числовой признак</span></div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <p>Для смартфона C признаки имеют значения:</p>
+      <ul>
+        <li>18 месяцев;</li>
+        <li>256 ГБ;</li>
+        <li>Snapdragon 888;</li>
+        <li>88 %;</li>
+        <li>1 повреждение.</li>
+      </ul>
+      <div class="callout"><b>Обучающие данные ≠ признаки.</b><br>Обучающие данные — множество примеров. Признаки — характеристики каждого примера.</div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 340">
+        <circle cx="260" cy="170" r="70" fill="#eef2ff"/>
+        <text x="260" y="165" text-anchor="middle" font-size="20" font-weight="800" fill="#4338ca">СМАРТФОН</text>
+        <text x="260" y="192" text-anchor="middle" font-size="14" fill="#475569">объект</text>
+        <g font-size="15" font-weight="700">
+          <rect x="35" y="45" width="145" height="46" rx="12" fill="#dbeafe"/><text x="107" y="74" text-anchor="middle" fill="#1d4ed8">Возраст</text>
+          <rect x="340" y="45" width="145" height="46" rx="12" fill="#dcfce7"/><text x="412" y="74" text-anchor="middle" fill="#047857">Память</text>
+          <rect x="35" y="250" width="145" height="46" rx="12" fill="#fef3c7"/><text x="107" y="279" text-anchor="middle" fill="#92400e">Аккумулятор</text>
+          <rect x="340" y="250" width="145" height="46" rx="12" fill="#fee2e2"/><text x="412" y="279" text-anchor="middle" fill="#b91c1c">Повреждения</text>
+          <rect x="187" y="12" width="145" height="46" rx="12" fill="#ede9fe"/><text x="259" y="41" text-anchor="middle" fill="#6d28d9">Процессор</text>
+        </g>
+        <line x1="180" y1="91" x2="220" y2="120" stroke="#94a3b8" stroke-width="3"/>
+        <line x1="340" y1="91" x2="300" y2="120" stroke="#94a3b8" stroke-width="3"/>
+        <line x1="180" y1="250" x2="220" y2="220" stroke="#94a3b8" stroke-width="3"/>
+        <line x1="340" y1="250" x2="300" y2="220" stroke="#94a3b8" stroke-width="3"/>
+        <line x1="259" y1="58" x2="259" y2="100" stroke="#94a3b8" stroke-width="3"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="training">
+  <span class="badge">3 из 6</span>
+  <h2>Обучение</h2>
+  <div class="definition"><b>Обучение</b> — это процесс, во время которого система анализирует обучающие данные и настраивает модель, выявляя зависимости между признаками и известным результатом.</div>
+
+  <div class="grid2">
+    <div>
+      <p>Система анализирует множество примеров:</p>
+      <p><b>8 мес. + 256 ГБ + Snapdragon 8 Gen 2 + 96 % + 0 повреждений → 270 000 тг</b></p>
+      <p><b>24 мес. + 128 ГБ + Snapdragon 888 + 82 % + 3 повреждения → 165 000 тг</b></p>
+      <p>При этом ей не задают готовое правило вида: «за каждый месяц использования уменьшай цену на определённую сумму». Зависимости определяются на основе данных.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 330">
+        <rect x="35" y="50" width="150" height="230" rx="18" fill="#f8fafc" stroke="#cbd5e1"/>
+        <text x="110" y="82" text-anchor="middle" font-size="18" font-weight="800" fill="#334155">Примеры</text>
+        <circle cx="110" cy="125" r="20" fill="#dbeafe"/><circle cx="110" cy="178" r="20" fill="#dcfce7"/><circle cx="110" cy="231" r="20" fill="#fef3c7"/>
+        <rect x="235" y="92" width="115" height="145" rx="22" fill="#ede9fe"/>
+        <text x="292" y="157" text-anchor="middle" font-size="18" font-weight="800" fill="#6d28d9">ОБУЧЕНИЕ</text>
+        <text x="292" y="184" text-anchor="middle" font-size="13" fill="#475569">поиск связей</text>
+        <rect x="400" y="118" width="85" height="94" rx="20" fill="#dcfce7"/>
+        <text x="442" y="157" text-anchor="middle" font-size="16" font-weight="800" fill="#047857">МОДЕЛЬ</text>
+        <line x1="185" y1="165" x2="230" y2="165" stroke="#94a3b8" stroke-width="4"/>
+        <polygon points="230,165 216,157 216,173" fill="#94a3b8"/>
+        <line x1="350" y1="165" x2="395" y2="165" stroke="#94a3b8" stroke-width="4"/>
+        <polygon points="395,165 381,157 381,173" fill="#94a3b8"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="model">
+  <span class="badge">4 из 6</span>
+  <h2>Модель</h2>
+  <div class="definition"><b>Модель</b> — это результат обучения, содержащий выявленные в данных закономерности и позволяющий получать результат для новых данных.</div>
+
+  <div class="grid2">
+    <div>
+      <p>В нашей задаче модель связывает характеристики смартфона с его предполагаемой ценой.</p>
+      <div class="callout"><b>Важно:</b> модель — это не таблица с исходными смартфонами. Таблица использовалась для обучения, а модель появилась в результате анализа этих данных.</div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 320">
+        <g font-size="15" fill="#334155">
+          <rect x="32" y="30" width="150" height="42" rx="11" fill="#eef6ff"/><text x="107" y="57" text-anchor="middle">Возраст</text>
+          <rect x="32" y="82" width="150" height="42" rx="11" fill="#eef6ff"/><text x="107" y="109" text-anchor="middle">Память</text>
+          <rect x="32" y="134" width="150" height="42" rx="11" fill="#eef6ff"/><text x="107" y="161" text-anchor="middle">Процессор</text>
+          <rect x="32" y="186" width="150" height="42" rx="11" fill="#eef6ff"/><text x="107" y="213" text-anchor="middle">Аккумулятор</text>
+          <rect x="32" y="238" width="150" height="42" rx="11" fill="#eef6ff"/><text x="107" y="265" text-anchor="middle">Повреждения</text>
+        </g>
+        <rect x="224" y="92" width="122" height="138" rx="26" fill="#ede9fe"/>
+        <text x="285" y="156" text-anchor="middle" font-size="19" font-weight="800" fill="#6d28d9">МОДЕЛЬ</text>
+        <text x="285" y="185" text-anchor="middle" font-size="13" fill="#475569">закономерности</text>
+        <rect x="390" y="127" width="100" height="70" rx="18" fill="#dcfce7"/>
+        <text x="440" y="157" text-anchor="middle" font-size="16" font-weight="800" fill="#047857">ЦЕНА</text>
+        <text x="440" y="178" text-anchor="middle" font-size="13" fill="#475569">прогноз</text>
+        <line x1="182" y1="155" x2="219" y2="155" stroke="#94a3b8" stroke-width="4"/>
+        <line x1="346" y1="160" x2="385" y2="160" stroke="#94a3b8" stroke-width="4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="new-data">
+  <span class="badge">5 из 6</span>
+  <h2>Новые данные</h2>
+  <div class="definition"><b>Новые данные</b> — это данные об объекте, который не использовался при обучении модели и для которого требуется получить результат.</div>
+
+  <div class="grid2">
+    <div>
+      <table>
+        <tr><th>Признак</th><th>Значение</th></tr>
+        <tr><td>Возраст</td><td>20 месяцев</td></tr>
+        <tr><td>Память</td><td>256 ГБ</td></tr>
+        <tr><td>Процессор</td><td>Snapdragon 888</td></tr>
+        <tr><td>Состояние аккумулятора</td><td>86 %</td></tr>
+        <tr><td>Повреждения</td><td>2</td></tr>
+      </table>
+      <p>Этого смартфона не было среди примеров, на которых обучалась модель.</p>
+      <div class="callout">Для нового объекта нужно предоставить значения тех же признаков, которые использовались при обучении.</div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 330">
+        <rect x="52" y="35" width="180" height="260" rx="28" fill="#1f2937"/>
+        <rect x="68" y="60" width="148" height="200" rx="15" fill="#f8fafc"/>
+        <text x="142" y="98" text-anchor="middle" font-size="17" font-weight="800" fill="#334155">НОВЫЙ</text>
+        <text x="142" y="122" text-anchor="middle" font-size="17" font-weight="800" fill="#334155">СМАРТФОН</text>
+        <text x="142" y="160" text-anchor="middle" font-size="14" fill="#475569">20 мес.</text>
+        <text x="142" y="185" text-anchor="middle" font-size="14" fill="#475569">256 ГБ</text>
+        <text x="142" y="210" text-anchor="middle" font-size="14" fill="#475569">86 %</text>
+        <text x="142" y="235" text-anchor="middle" font-size="14" fill="#475569">2 повреждения</text>
+        <line x1="232" y1="165" x2="305" y2="165" stroke="#94a3b8" stroke-width="4"/>
+        <polygon points="305,165 291,157 291,173" fill="#94a3b8"/>
+        <rect x="312" y="100" width="155" height="130" rx="24" fill="#ede9fe"/>
+        <text x="389" y="158" text-anchor="middle" font-size="19" font-weight="800" fill="#6d28d9">ОБУЧЕННАЯ</text>
+        <text x="389" y="184" text-anchor="middle" font-size="19" font-weight="800" fill="#6d28d9">МОДЕЛЬ</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="prediction">
+  <span class="badge">6 из 6</span>
+  <h2>Прогнозирование</h2>
+  <div class="definition"><b>Прогнозирование</b> — это использование обученной модели для получения предполагаемого результата на основе новых данных.</div>
+
+  <div class="grid2">
+    <div>
+      <p>Модель получает новые значения:</p>
+      <ul>
+        <li>20 месяцев;</li>
+        <li>256 ГБ;</li>
+        <li>Snapdragon 888;</li>
+        <li>86 %;</li>
+        <li>2 повреждения.</li>
+      </ul>
+      <p>После обработки модель может получить результат, например:</p>
+      <div class="callout"><b>Предполагаемая цена: 190 000 тенге.</b></div>
+      <p>Прогноз не является гарантированно точным ответом. Реальная цена продажи может отличаться, потому что модель основывается на закономерностях, найденных в предыдущих данных.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 330">
+        <rect x="35" y="110" width="150" height="110" rx="20" fill="#eef6ff"/>
+        <text x="110" y="150" text-anchor="middle" font-size="17" font-weight="800" fill="#1d4ed8">НОВЫЕ</text>
+        <text x="110" y="176" text-anchor="middle" font-size="17" font-weight="800" fill="#1d4ed8">ДАННЫЕ</text>
+        <rect x="220" y="92" width="110" height="146" rx="24" fill="#ede9fe"/>
+        <text x="275" y="155" text-anchor="middle" font-size="18" font-weight="800" fill="#6d28d9">МОДЕЛЬ</text>
+        <rect x="365" y="110" width="120" height="110" rx="20" fill="#dcfce7"/>
+        <text x="425" y="150" text-anchor="middle" font-size="16" font-weight="800" fill="#047857">190 000</text>
+        <text x="425" y="177" text-anchor="middle" font-size="15" fill="#047857">тенге</text>
+        <line x1="185" y1="165" x2="215" y2="165" stroke="#94a3b8" stroke-width="4"/>
+        <line x1="330" y1="165" x2="360" y2="165" stroke="#94a3b8" stroke-width="4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="difference">
+  <h2>Чем обучение отличается от прогнозирования?</h2>
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <h4>Обучение</h4>
+        <p>Система работает с большим количеством известных примеров и формирует модель.</p>
+        <p><b>обучающие данные → обучение → модель</b></p>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h4>Прогнозирование</h4>
+        <p>Уже обученная модель получает новый объект и выдаёт предполагаемый результат.</p>
+        <p><b>новые данные → модель → прогноз</b></p>
+      </div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 340">
+        <rect x="48" y="42" width="424" height="95" rx="18" fill="#eef6ff"/>
+        <text x="75" y="78" font-size="18" font-weight="800" fill="#1d4ed8">ОБУЧЕНИЕ</text>
+        <text x="75" y="108" font-size="15" fill="#334155">много известных примеров → модель</text>
+        <rect x="48" y="196" width="424" height="95" rx="18" fill="#ecfdf5"/>
+        <text x="75" y="232" font-size="18" font-weight="800" fill="#047857">ПРОГНОЗИРОВАНИЕ</text>
+        <text x="75" y="262" font-size="15" fill="#334155">новый объект → модель → предполагаемый результат</text>
+        <line x1="260" y1="137" x2="260" y2="188" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6 6"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="quality">
+  <h2>Почему важны данные и признаки?</h2>
+  <div class="grid2">
+    <div>
+      <p>Представьте, что при определении стоимости смартфона системе сообщили только его возраст. Этого может быть недостаточно.</p>
+      <p>Два устройства одного возраста могут отличаться:</p>
+      <ul>
+        <li>объёмом памяти;</li>
+        <li>моделью процессора;</li>
+        <li>состоянием аккумулятора;</li>
+        <li>количеством повреждений.</li>
+      </ul>
+      <p>Поэтому важно выбрать признаки, которые действительно могут быть связаны с результатом. Также важны сами обучающие данные: если в них есть ошибки или слишком мало примеров, найденные закономерности могут оказаться неточными.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 520 330">
+        <rect x="42" y="55" width="185" height="220" rx="22" fill="#fff7ed" stroke="#fed7aa"/>
+        <text x="135" y="92" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">МАЛО ДАННЫХ</text>
+        <text x="135" y="135" text-anchor="middle" font-size="14" fill="#7c2d12">мало примеров</text>
+        <text x="135" y="165" text-anchor="middle" font-size="14" fill="#7c2d12">ошибки</text>
+        <text x="135" y="195" text-anchor="middle" font-size="14" fill="#7c2d12">неполные признаки</text>
+        <text x="135" y="235" text-anchor="middle" font-size="24">⚠</text>
+        <rect x="293" y="55" width="185" height="220" rx="22" fill="#ecfdf5" stroke="#abefc6"/>
+        <text x="385" y="92" text-anchor="middle" font-size="18" font-weight="800" fill="#067647">ХОРОШИЕ ДАННЫЕ</text>
+        <text x="385" y="135" text-anchor="middle" font-size="14" fill="#065f46">достаточно примеров</text>
+        <text x="385" y="165" text-anchor="middle" font-size="14" fill="#065f46">корректные значения</text>
+        <text x="385" y="195" text-anchor="middle" font-size="14" fill="#065f46">полезные признаки</text>
+        <text x="385" y="235" text-anchor="middle" font-size="24">✓</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <h2>Главное</h2>
+  <p>Машинное обучение позволяет компьютерной системе <b>учиться на примерах и использовать найденные закономерности для работы с новыми данными</b>.</p>
+
+  <div class="bigchain">
+    <div class="box"><strong>Обучающие данные</strong><span class="small">набор примеров</span></div>
+    <div class="box"><strong>Признаки</strong><span class="small">характеристики объектов</span></div>
+    <div class="box"><strong>Обучение</strong><span class="small">поиск зависимостей</span></div>
+    <div class="box"><strong>Модель</strong><span class="small">результат обучения</span></div>
+    <div class="box"><strong>Новые данные</strong><span class="small">новый объект</span></div>
+    <div class="box"><strong>Прогнозирование</strong><span class="small">предполагаемый результат</span></div>
+  </div>
+
+  <details open>
+    <summary>Обучающие данные</summary>
+    <p>Набор примеров, используемый для обучения модели.</p>
+  </details>
+  <details>
+    <summary>Признаки</summary>
+    <p>Характеристики объектов, используемые моделью при анализе.</p>
+  </details>
+  <details>
+    <summary>Обучение</summary>
+    <p>Процесс выявления зависимостей в обучающих данных и настройки модели.</p>
+  </details>
+  <details>
+    <summary>Модель</summary>
+    <p>Результат обучения, содержащий выявленные закономерности.</p>
+  </details>
+  <details>
+    <summary>Новые данные</summary>
+    <p>Данные об объекте, который не использовался при обучении модели.</p>
+  </details>
+  <details>
+    <summary>Прогнозирование</summary>
+    <p>Применение обученной модели к новым данным для получения предполагаемого результата.</p>
+  </details>
+</section>
+
+<section id="selfcheck" class="quizbox">
+  <h2>Мини‑самопроверка</h2>
+  <p>Ответьте на вопросы и проверьте, понимаете ли вы логику всей цепочки.</p>
+
+  <div class="question">
+    <b>1. Что является признаком смартфона?</b>
+    <div class="options">
+      <label><input type="radio" name="q1" value="0"> Вся таблица с ранее проданными смартфонами</label>
+      <label><input type="radio" name="q1" value="1"> Модель процессора смартфона</label>
+      <label><input type="radio" name="q1" value="0"> Процесс обучения модели</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <b>2. Что является результатом обучения?</b>
+    <div class="options">
+      <label><input type="radio" name="q2" value="0"> Новый смартфон</label>
+      <label><input type="radio" name="q2" value="1"> Модель</label>
+      <label><input type="radio" name="q2" value="0"> Один признак</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <b>3. Когда происходит прогнозирование?</b>
+    <div class="options">
+      <label><input type="radio" name="q3" value="1"> Когда обученная модель получает новый объект</label>
+      <label><input type="radio" name="q3" value="0"> Когда собирают только обучающие данные</label>
+      <label><input type="radio" name="q3" value="0"> Когда выбирают название процессора</label>
+    </div>
+  </div>
+
+  <button onclick="checkQuiz()">Проверить ответы</button>
+  <div id="quizResult" class="result"></div>
+</section>
+
+<section id="test" class="test-cta">
+  <span class="badge">Формативное оценивание</span>
+  <h2>Проверьте знания по теме</h2>
+  <p>После изучения материала выполните тест по теме «Основные понятия машинного обучения».</p>
+  <p><a class="btn primary" href="https://onlinetestpad.com/t/10-03-04-fo-machine-learning" target="_blank" rel="noopener">Перейти к тесту</a></p>
+</section>
+
+</main>
+
+<footer>
+  <div class="footerbox">© Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026</div>
+</footer>
+
+<script>
+function checkQuiz(){
+  const names=['q1','q2','q3'];
+  let score=0, answered=0;
+  names.forEach(n=>{
+    const el=document.querySelector('input[name="'+n+'"]:checked');
+    if(el){answered++; score += Number(el.value);}
+  });
+  const out=document.getElementById('quizResult');
+  out.classList.remove('ok','no','show');
+  if(answered<3){
+    out.textContent='Ответьте на все три вопроса.';
+    out.classList.add('show','no');
+    return;
+  }
+  if(score===3){
+    out.textContent='Отлично! Вы правильно понимаете связь между признаками, обучением, моделью и прогнозированием.';
+    out.classList.add('show','ok');
+  }else{
+    out.textContent='Есть неточности. Вернитесь к цепочке: обучающие данные → признаки → обучение → модель → новые данные → прогнозирование.';
+    out.classList.add('show','no');
+  }
+}
+
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const scrolled=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  document.getElementById('progress').style.width=scrolled+'%';
+});
+</script>
+</body>
+</html>
