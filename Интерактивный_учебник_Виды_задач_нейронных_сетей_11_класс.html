@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Виды задач, решаемых нейронными сетями — 11 класс</title>
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --ink:#182338;
+  --muted:#5c6b82;
+  --line:#dce4ef;
+  --blue:#2f6fed;
+  --blue2:#6ca0ff;
+  --green:#1f9d72;
+  --amber:#d9901a;
+  --violet:#7b5ce1;
+  --red:#d95858;
+  --shadow:0 14px 40px rgba(38,58,92,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(47,111,237,.10), transparent 24rem),
+    radial-gradient(circle at 100% 20%, rgba(123,92,225,.08), transparent 24rem),
+    var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+}
+a{color:inherit}
+.wrap{max-width:1180px;margin:auto;padding:0 22px}
+.hero{
+  padding:64px 0 34px;
+}
+.hero-card{
+  background:linear-gradient(135deg,#10213f,#1e4a88 68%,#2f6fed);
+  border-radius:32px;
+  color:white;
+  padding:42px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero-card:after{
+  content:"";
+  position:absolute;right:-70px;top:-70px;width:240px;height:240px;
+  border:1px solid rgba(255,255,255,.22);border-radius:50%;
+  box-shadow:0 0 0 35px rgba(255,255,255,.04),0 0 0 70px rgba(255,255,255,.03);
+}
+.eyebrow{
+  text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;font-weight:700;opacity:.78
+}
+h1{font-size:clamp(2rem,5vw,4rem);line-height:1.06;margin:.3em 0 .25em}
+.hero p{max-width:760px;font-size:1.08rem;color:rgba(255,255,255,.88)}
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.meta{
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;padding:16px
+}
+.meta b{display:block;margin-bottom:4px}
+nav.sticky{
+  position:sticky;top:0;z-index:20;
+  background:rgba(245,247,251,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(220,228,239,.9);
+}
+.nav-inner{
+  max-width:1180px;margin:auto;padding:10px 22px;
+  display:flex;gap:8px;overflow:auto
+}
+.nav-inner a{
+  white-space:nowrap;text-decoration:none;font-size:.88rem;
+  padding:8px 12px;border-radius:999px;background:white;border:1px solid var(--line);
+}
+.nav-inner a:hover{border-color:var(--blue);color:var(--blue)}
+section{scroll-margin-top:78px}
+.block{
+  margin:28px 0;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.block-head{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:26px 28px 0;
+}
+.num{
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;background:#eaf1ff;color:var(--blue);font-weight:800;flex:0 0 auto
+}
+.block h2{margin:.1em 0 .3em;font-size:1.65rem}
+.block h3{margin:1.3em 0 .4em}
+.content{padding:0 28px 28px}
+.grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.callout{
+  margin:18px 0;padding:16px 18px;border-radius:16px;background:#f2f6ff;
+  border-left:4px solid var(--blue);font-weight:650
+}
+.callout.green{background:#eefaf6;border-left-color:var(--green)}
+.callout.amber{background:#fff7e9;border-left-color:var(--amber)}
+.callout.violet{background:#f5f1ff;border-left-color:var(--violet)}
+ul{padding-left:1.2em}
+li{margin:.3em 0}
+.visual{
+  background:linear-gradient(180deg,#fbfdff,#f3f6fb);
+  border:1px solid var(--line);border-radius:20px;padding:18px;min-height:220px;
+  position:relative;overflow:hidden
+}
+.visual-title{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:12px}
+.flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.node{
+  padding:14px 16px;border-radius:14px;background:white;border:1px solid #cfd9e7;
+  box-shadow:0 6px 18px rgba(32,55,90,.08);font-weight:700;text-align:center
+}
+.arrow{font-size:1.4rem;color:var(--blue)}
+.pulse{position:relative}
+.pulse:after{
+  content:"";position:absolute;inset:-6px;border:2px solid rgba(47,111,237,.25);border-radius:18px;
+  animation:pulse 2s infinite
+}
+@keyframes pulse{0%{transform:scale(.96);opacity:.7}70%{transform:scale(1.08);opacity:0}100%{opacity:0}}
+.tag{display:inline-block;padding:5px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+.tag.blue{background:#eaf1ff;color:var(--blue)}
+.tag.green{background:#eaf8f3;color:var(--green)}
+.tag.violet{background:#f0ebff;color:var(--violet)}
+.tag.amber{background:#fff2d9;color:#a36a00}
+.class-boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.class-box{
+  border:1px solid var(--line);background:white;border-radius:16px;padding:14px
+}
+.label-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{padding:6px 10px;border-radius:12px;background:#eef3fb;border:1px solid #d7e0ed;font-size:.9rem}
+.scatter{height:180px;position:relative;border-left:2px solid #afbdd0;border-bottom:2px solid #afbdd0;margin:16px}
+.pt{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--blue);transform:translate(-50%,50%)}
+.line{position:absolute;left:10%;bottom:18%;width:76%;height:3px;background:var(--green);transform:rotate(-28deg);transform-origin:left center;border-radius:3px}
+.icon-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.icon-card{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.icon-big{font-size:2rem}
+.compare-stack{display:grid;gap:10px}
+.compare-item{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:white}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;margin:18px 0;background:white}
+th,td{border:1px solid var(--line);padding:12px;vertical-align:top}
+th{background:#eef4ff;text-align:left}
+.car{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px
+}
+.car-card{border-radius:16px;padding:14px;background:white;border:1px solid var(--line)}
+.stepper{display:grid;gap:12px}
+.step{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start}
+.step .dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#eaf1ff;color:var(--blue);font-weight:800}
+.case-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.case{
+  border:1px solid var(--line);border-radius:16px;background:white;overflow:hidden
+}
+.case button{
+  width:100%;border:0;background:white;padding:15px;text-align:left;font:inherit;font-weight:750;cursor:pointer
+}
+.case .ans{display:none;padding:0 15px 15px;color:var(--muted)}
+.case.open .ans{display:block}
+.pipeline{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.pipe{
+  padding:14px;border:1px solid var(--line);background:white;border-radius:14px;text-align:center;min-width:120px
+}
+.digital-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.digital-card{border:1px solid var(--line);background:white;border-radius:16px;padding:16px}
+.risk{
+  margin-top:16px;padding:16px;border-radius:16px;background:#fff7e9;border:1px solid #f4d7a2
+}
+.summary-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px
+}
+.sum{
+  border-radius:18px;padding:18px;color:white;min-height:140px
+}
+.sum.blue{background:linear-gradient(135deg,#326fe5,#5b8df2)}
+.sum.green{background:linear-gradient(135deg,#238a6d,#41b28f)}
+.sum.violet{background:linear-gradient(135deg,#6f55ce,#947bea)}
+.quiz{
+  margin-top:20px;border-top:1px dashed #cdd8e8;padding-top:20px
+}
+.q{
+  padding:14px 0;border-bottom:1px solid #edf1f6
+}
+.q button{
+  margin-top:8px;border:0;background:#eaf1ff;color:#285cc2;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700
+}
+.hint{display:none;margin-top:8px;padding:10px 12px;border-radius:12px;background:#f7f9fc;color:#4d5c72}
+.footer{
+  margin:34px 0 50px;
+  padding:22px;border-top:1px solid var(--line);color:#4f5d73;text-align:center;font-size:.92rem
+}
+.progress{
+  position:fixed;left:0;top:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--violet));width:0;z-index:50
+}
+.small{font-size:.92rem;color:var(--muted)}
+.badge-line{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+@media(max-width:850px){
+  .meta-grid,.grid-2,.grid-3,.digital-grid,.summary-strip,.car,.case-grid{grid-template-columns:1fr}
+  .hero-card{padding:28px}
+  .block-head,.content{padding-left:18px;padding-right:18px}
+  .icon-row{grid-template-columns:1fr}
+  .compare-item{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-card">
+      <div class="eyebrow">Информатика и искусственный интеллект • 11 класс • урок 5–6</div>
+      <h1>Виды задач, решаемых нейронными сетями</h1>
+      <p>Интерактивный учебник по классификации, регрессии и распознаванию образов. Основной ориентир — по описанию жизненного кейса определить тип задачи, обосновать выбор и привести собственный пример.</p>
+      <div class="meta-grid">
+        <div class="meta"><b>Тема</b>Виды задач, решаемых нейронными сетями</div>
+        <div class="meta"><b>Цель обучения</b>11.1.2.3 определять задачи, для решения которых применяются нейронные сети</div>
+        <div class="meta"><b>Ожидаемый результат</b>Определять тип задачи, обосновывать выбор и приводить корректные примеры</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="sticky">
+  <div class="nav-inner">
+    <a href="#s1">1. Основа</a><a href="#s2">2. Классификация</a><a href="#s3">3. Регрессия</a>
+    <a href="#s4">4. Распознавание</a><a href="#s5">5. Различия</a><a href="#s6">6. Сравнение</a>
+    <a href="#s7">7. Одна область</a><a href="#s8">8. Алгоритм</a><a href="#s9">9. Кейсы</a>
+    <a href="#s10">10. Постановка задачи</a><a href="#s11">11. Цифровая среда</a><a href="#s12">12. Итог</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="s1" class="block">
+  <div class="block-head"><div class="num">1</div><div><h2>Что нужно знать о задачах нейронных сетей</h2><div class="small">От входных данных — к результату</div></div></div>
+  <div class="content grid-2">
+    <div>
+      <p>Нейронные сети применяются для решения задач, в которых необходимо обнаруживать закономерности в данных и на их основе получать результат: относить объекты к определённым категориям, прогнозировать числовые значения, распознавать лица, речь, текст и другие сложные образы.</p>
+      <p>В рамках этой темы рассматриваются три основных типа задач: <b>классификация, регрессия и распознавание образов</b>.</p>
+      <p>Например, если необходимо определить стоимость квартиры, на вход нейронной сети могут поступать площадь квартиры, количество комнат, район города, этаж, год постройки дома и расстояние до центра. На выходе сеть должна получить предполагаемую стоимость квартиры.</p>
+      <p>Если же нейронная сеть анализирует электронное письмо, результат может быть другим: <b>«спам»</b> или <b>«не спам»</b>.</p>
+      <div class="callout amber">Главный вопрос при определении типа задачи: какой результат должна получить нейронная сеть?</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Визуальная схема</div>
+      <div class="flow">
+        <div class="node">Входные данные<br><span class="small">текст, числа, фото, звук</span></div>
+        <div class="arrow">→</div>
+        <div class="node pulse">Нейронная сеть<br><span class="small">обработка признаков</span></div>
+        <div class="arrow">→</div>
+        <div class="node">Результат<br><span class="small">класс, число, образ</span></div>
+      </div>
+      <div class="badge-line">
+        <span class="tag blue">категория</span><span class="tag green">число</span><span class="tag violet">идентифицированный образ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s2" class="block">
+  <div class="block-head"><div class="num">2</div><div><h2>Классификация</h2><div class="small">Категория, класс или метка</div></div></div>
+  <div class="content grid-2">
+    <div>
+      <p><b>Классификация</b> — это задача, при которой нейронная сеть должна отнести объект к одному из заранее определённых классов или категорий.</p>
+      <div class="callout">Главный признак классификации: результатом является категория, класс или метка.</div>
+      <p>Например, системе необходимо определить, является ли электронное письмо спамом. На вход поступают текст письма, адрес отправителя, ссылки и другие признаки. На выходе система выбирает один из классов: <b>«спам»</b> или <b>«не спам»</b>.</p>
+      <h3>Примеры задач классификации</h3>
+      <ul>
+        <li>определить, является ли банковская операция обычной или подозрительной;</li>
+        <li>определить эмоциональную окраску отзыва: положительная, нейтральная или отрицательная;</li>
+        <li>определить категорию новости: спорт, экономика, культура, технологии;</li>
+        <li>определить уровень риска: низкий, средний или высокий;</li>
+        <li>определить, является ли сообщение нежелательным.</li>
+      </ul>
+      <h3>Бинарная и многоклассовая классификация</h3>
+      <p>Если имеется только два возможных класса, задача называется <b>бинарной классификацией</b>.</p>
+      <p>Пример: <b>спам / не спам; дефект есть / дефекта нет.</b></p>
+      <p>Если возможных классов несколько, говорят о <b>многоклассовой классификации</b>.</p>
+      <p>Пример: <b>спорт / экономика / наука / культура / технологии.</b></p>
+      <div class="callout green">Если требуется определить, к какой категории относится объект, перед нами задача классификации.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Визуализация классификации</div>
+      <div class="class-boxes">
+        <div class="class-box">
+          <span class="tag blue">Бинарная</span>
+          <div class="label-row"><span class="pill">спам</span><span class="pill">не спам</span></div>
+          <div class="label-row"><span class="pill">дефект есть</span><span class="pill">дефекта нет</span></div>
+        </div>
+        <div class="class-box">
+          <span class="tag violet">Многоклассовая</span>
+          <div class="label-row"><span class="pill">спорт</span><span class="pill">экономика</span><span class="pill">наука</span><span class="pill">культура</span><span class="pill">технологии</span></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="node">Объект</div><div class="arrow">→</div><div class="node">Выбор класса</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s3" class="block">
+  <div class="block-head"><div class="num">3</div><div><h2>Регрессия</h2><div class="small">Прогноз числового значения</div></div></div>
+  <div class="content grid-2">
+    <div>
+      <p><b>Регрессия</b> — это задача, при которой нейронная сеть прогнозирует числовое значение некоторой величины.</p>
+      <div class="callout green">Главный признак регрессии: результатом является число.</div>
+      <p>Рассмотрим задачу прогнозирования стоимости квартиры. На вход нейронной сети поступают характеристики объекта: площадь, количество комнат, этаж, район. На выходе нейронная сеть может получить, например, <b>37 850 000 тенге</b>. Результат представляет собой числовую величину, поэтому это задача регрессии.</p>
+      <h3>Примеры задач регрессии</h3>
+      <ul>
+        <li>прогноз стоимости квартиры;</li>
+        <li>прогноз температуры воздуха;</li>
+        <li>прогноз объёма продаж;</li>
+        <li>прогноз расхода электроэнергии;</li>
+        <li>определение предполагаемого времени доставки заказа;</li>
+        <li>прогноз количества произведённой продукции.</li>
+      </ul>
+      <h3>Чем регрессия отличается от классификации?</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Задача</th><th>Результат</th><th>Тип</th></tr></thead>
+          <tbody>
+            <tr><td>Определить ценовую категорию квартиры</td><td>бюджетная / средняя / дорогая</td><td><b>Классификация</b></td></tr>
+            <tr><td>Определить предполагаемую стоимость квартиры</td><td>42 300 000 тенге</td><td><b>Регрессия</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Визуализация числового прогноза</div>
+      <div class="scatter">
+        <div class="line"></div>
+        <span class="pt" style="left:15%;bottom:20%"></span>
+        <span class="pt" style="left:28%;bottom:34%"></span>
+        <span class="pt" style="left:41%;bottom:38%"></span>
+        <span class="pt" style="left:54%;bottom:53%"></span>
+        <span class="pt" style="left:68%;bottom:58%"></span>
+        <span class="pt" style="left:82%;bottom:72%"></span>
+      </div>
+      <div class="flow">
+        <div class="node">Характеристики квартиры</div><div class="arrow">→</div><div class="node">37 850 000 ₸</div>
+      </div>
+      <p class="small">В отличие от выбора класса, здесь система выдаёт числовую величину.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s4" class="block">
+  <div class="block-head"><div class="num">4</div><div><h2>Распознавание образов</h2><div class="small">Выявление и идентификация объектов, признаков и структур</div></div></div>
+  <div class="content grid-2">
+    <div>
+      <p>Компьютер получает информацию не только в виде чисел и таблиц. Входными данными могут быть фотографии, видеозаписи, человеческая речь, звуки, рукописный текст, отпечатки пальцев и изображения документов.</p>
+      <p><b>Распознавание образов</b> — это задача выявления и идентификации объектов, признаков или структур в сложных данных.</p>
+      <div class="callout violet">Главный вопрос задачи распознавания образов: что или кто представлен в данных?</div>
+      <h3>Примеры распознавания образов</h3>
+      <ul>
+        <li>распознавание лица пользователя;</li>
+        <li>распознавание речи;</li>
+        <li>распознавание рукописной цифры;</li>
+        <li>распознавание дорожного знака на изображении;</li>
+        <li>распознавание текста на фотографии документа;</li>
+        <li>идентификация человека по голосу.</li>
+      </ul>
+      <h3>Пример: разблокировка смартфона</h3>
+      <p>При использовании системы разблокировки смартфона по лицу камера получает изображение пользователя. Нейронная сеть анализирует признаки лица и определяет, соответствует ли полученное изображение зарегистрированному пользователю.</p>
+      <div class="callout">Изображение лица → анализ признаков → идентификация пользователя</div>
+      <h3>Пример: распознавание речи</h3>
+      <div class="callout">Звуковой сигнал → анализ речи → распознанные слова</div>
+      <p>Система преобразует сложный звуковой сигнал в информацию, которую компьютер может далее обрабатывать.</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Три вида сложных данных</div>
+      <div class="icon-row">
+        <div class="icon-card"><div class="icon-big">🙂</div><b>Лицо</b><div class="small">идентификация пользователя</div></div>
+        <div class="icon-card"><div class="icon-big">🎙️</div><b>Речь</b><div class="small">распознанные слова</div></div>
+        <div class="icon-card"><div class="icon-big">📄</div><b>Текст</b><div class="small">символы на фото документа</div></div>
+      </div>
+      <div class="flow">
+        <div class="node">Сложные данные</div><div class="arrow">→</div><div class="node">Распознанный объект</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s5" class="block">
+  <div class="block-head"><div class="num">5</div><div><h2>Классификация и распознавание образов: в чём различие?</h2></div></div>
+  <div class="content grid-2">
+    <div>
+      <p>Эти понятия тесно связаны, поэтому их важно не путать. При классификации основной вопрос: <b>«К какому классу относится объект?»</b> Например, отзыв может быть положительным, нейтральным или отрицательным.</p>
+      <p>При распознавании образов основной вопрос: <b>«Какой объект, образ или структура содержится в сложных данных?»</b> Например, фотография может использоваться для распознавания лица человека.</p>
+      <p>В реальных системах распознавание образов часто включает классификацию как один из этапов. Например, после анализа изображения нейронная сеть может определить, какой объект изображён: автомобиль, велосипед или пешеход.</p>
+      <p>Поэтому в рамках этой темы удобно различать задачи по смыслу практического результата: распределение объектов по заданным категориям — <b>классификация</b>; прогноз числовой величины — <b>регрессия</b>; обнаружение или идентификация объектов в изображениях, звуке, речи и других сложных данных — <b>распознавание образов</b>.</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Фокус на вопросе</div>
+      <div class="compare-stack">
+        <div class="compare-item"><span class="tag blue">Классификация</span><div><b>К какому классу?</b><br><span class="small">положительный / нейтральный / отрицательный</span></div></div>
+        <div class="compare-item"><span class="tag violet">Распознавание</span><div><b>Что или кто в данных?</b><br><span class="small">лицо, речь, символ, объект</span></div></div>
+      </div>
+      <div class="callout amber">Распознавание образов в реальных системах может включать классификацию как этап обработки.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s6" class="block">
+  <div class="block-head"><div class="num">6</div><div><h2>Сравнение основных типов задач</h2></div></div>
+  <div class="content">
+    <div class="summary-strip">
+      <div class="sum blue"><b>Классификация</b><br>Отнести объект к категории<br><span class="small" style="color:#eef4ff">Пример: спам / не спам</span></div>
+      <div class="sum green"><b>Регрессия</b><br>Спрогнозировать величину<br><span class="small" style="color:#effff9">Пример: стоимость квартиры</span></div>
+      <div class="sum violet"><b>Распознавание образов</b><br>Обнаружить или идентифицировать образ<br><span class="small" style="color:#f3efff">Пример: распознавание лица</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Признак</th><th>Классификация</th><th>Регрессия</th><th>Распознавание образов</th></tr></thead>
+        <tbody>
+          <tr><td>Что требуется сделать?</td><td>Отнести объект к категории</td><td>Спрогнозировать величину</td><td>Обнаружить или идентифицировать образ</td></tr>
+          <tr><td>Какой результат?</td><td>Класс, категория</td><td>Число</td><td>Распознанный объект, лицо, речь, текст и др.</td></tr>
+          <tr><td>Пример</td><td>спам / не спам</td><td>стоимость квартиры</td><td>распознавание лица</td></tr>
+          <tr><td>Типичные данные</td><td>признаки объекта, текст, таблицы</td><td>числовые и категориальные признаки</td><td>изображения, видео, звук, речь</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout amber">Главное различие определяется не предметной областью, а тем, какой результат требуется получить.</div>
+  </div>
+</section>
+
+<section id="s7" class="block">
+  <div class="block-head"><div class="num">7</div><div><h2>Одна предметная область — разные типы задач</h2><div class="small">Пример: система искусственного интеллекта для автомобиля</div></div></div>
+  <div class="content">
+    <div class="car">
+      <div class="car-card">
+        <span class="tag blue">Ситуация 1</span>
+        <h3>Исправен / неисправен</h3>
+        <p>По техническим данным автомобиля требуется определить: исправен / неисправен.</p>
+        <b>Классификация</b> — результатом является категория.
+      </div>
+      <div class="car-card">
+        <span class="tag green">Ситуация 2</span>
+        <h3>Расход топлива</h3>
+        <p>По характеристикам автомобиля необходимо спрогнозировать расход топлива: 8,7 л на 100 км.</p>
+        <b>Регрессия</b> — результатом является числовое значение.
+      </div>
+      <div class="car-card">
+        <span class="tag violet">Ситуация 3</span>
+        <h3>Пешеход на дороге</h3>
+        <p>Камера автомобиля должна определить пешехода на дороге.</p>
+        <b>Распознавание образов</b> — система анализирует изображение и обнаруживает объект.
+      </div>
+    </div>
+    <div class="callout green">Нельзя определять тип задачи только по предметной области. Нужно анализировать ожидаемый результат.</div>
+  </div>
+</section>
+
+<section id="s8" class="block">
+  <div class="block-head"><div class="num">8</div><div><h2>Алгоритм определения типа задачи</h2></div></div>
+  <div class="content grid-2">
+    <div class="stepper">
+      <div class="step"><div class="dot">1</div><div><b>Определите входные данные.</b><br>Что получает нейронная сеть: числовые характеристики, текст, фотографию, звук, видеозапись?</div></div>
+      <div class="step"><div class="dot">2</div><div><b>Определите требуемый результат.</b><br>Что именно должна выдать система?</div></div>
+      <div class="step"><div class="dot">3</div><div><b>Определите характер результата.</b><br>Категория → классификация; числовая величина → регрессия; идентификация объекта, лица, речи, символа или другой структуры → распознавание образов.</div></div>
+      <div class="step"><div class="dot">4</div><div><b>Обоснуйте выбор.</b><br>Назовите тип задачи и объясните, какой признак результата позволил сделать вывод.</div></div>
+      <div class="callout amber">Шаблон ответа: «Это задача …, потому что результатом является …».</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Мини-решатель</div>
+      <p><b>Какой результат нужен?</b></p>
+      <div class="class-boxes">
+        <button class="pill" onclick="showDecision('Категория → классификация')">Категория</button>
+        <button class="pill" onclick="showDecision('Число → регрессия')">Число</button>
+        <button class="pill" onclick="showDecision('Распознанный объект / лицо / речь / текст → распознавание образов')">Образ</button>
+      </div>
+      <div id="decision" class="callout" style="margin-top:18px">Выберите тип результата.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s9" class="block">
+  <div class="block-head"><div class="num">9</div><div><h2>Анализ практических ситуаций</h2><div class="small">Нажмите на кейс, чтобы увидеть вывод</div></div></div>
+  <div class="content">
+    <div class="case-grid">
+      <div class="case"><button onclick="toggleCase(this)">Прогноз стоимости недвижимости</button><div class="ans">Нейронная сеть получает площадь квартиры, район, этаж и количество комнат. Необходимо определить предполагаемую цену.<br><b>Вывод: Регрессия — результатом является числовое значение.</b></div></div>
+      <div class="case"><button onclick="toggleCase(this)">Фильтрация электронной почты</button><div class="ans">Система должна определить, является письмо спамом или нет.<br><b>Вывод: Классификация — результатом является одна из двух категорий.</b></div></div>
+      <div class="case"><button onclick="toggleCase(this)">Разблокировка смартфона</button><div class="ans">Камера получает изображение лица и система должна определить пользователя.<br><b>Вывод: Распознавание образов — необходимо идентифицировать лицо.</b></div></div>
+      <div class="case"><button onclick="toggleCase(this)">Анализ продаж магазина</button><div class="ans">По данным за предыдущие месяцы необходимо спрогнозировать объём продаж на следующий месяц.<br><b>Вывод: Регрессия — результатом будет числовое значение.</b></div></div>
+      <div class="case"><button onclick="toggleCase(this)">Анализ отзыва покупателя</button><div class="ans">Нейронная сеть должна определить, является отзыв положительным, нейтральным или отрицательным.<br><b>Вывод: Классификация — результатом является категория.</b></div></div>
+      <div class="case"><button onclick="toggleCase(this)">Система дорожного наблюдения</button><div class="ans">Камера фиксирует автомобиль, а программа определяет его регистрационный номер.<br><b>Вывод: Распознавание образов — система обнаруживает и распознаёт символы на изображении.</b></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="s10" class="block">
+  <div class="block-head"><div class="num">10</div><div><h2>Почему важно правильно определять тип задачи</h2></div></div>
+  <div class="content grid-2">
+    <div>
+      <p>Выбор типа задачи влияет на то, как будет проектироваться система искусственного интеллекта: какие данные потребуется собрать, какой результат будет формировать модель, как следует подготовить обучающие данные и каким образом проверять работу системы.</p>
+      <p>Например, если разработчику необходимо спрогнозировать точную стоимость товара, постановка задачи как классификации <b>«дешёвый / дорогой»</b> не даст требуемого результата.</p>
+      <p>Поэтому разработка системы на основе нейронной сети начинается не с выбора конкретной технологии, а с <b>точной постановки задачи</b>.</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Логика проектирования</div>
+      <div class="pipeline">
+        <div class="pipe">1. Цель задачи</div><div class="arrow">→</div>
+        <div class="pipe">2. Данные</div><div class="arrow">→</div>
+        <div class="pipe">3. Тип результата</div><div class="arrow">→</div>
+        <div class="pipe">4. Проверка</div>
+      </div>
+      <div class="callout amber">Неверно сформулированный результат ведёт к неверному типу задачи.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s11" class="block">
+  <div class="block-head"><div class="num">11</div><div><h2>Нейронные сети в цифровой среде</h2></div></div>
+  <div class="content">
+    <p>Пользователь современных цифровых систем постоянно сталкивается с результатами работы нейронных сетей.</p>
+    <div class="digital-grid">
+      <div class="digital-card"><div class="icon-big">📧</div><b>Классификация</b><p>Электронная почта автоматически помещает сообщения в папку «Спам».</p></div>
+      <div class="digital-card"><div class="icon-big">🚚</div><b>Регрессия</b><p>Сервис доставки рассчитывает предполагаемое время прибытия заказа.</p></div>
+      <div class="digital-card"><div class="icon-big">📱</div><b>Распознавание образов</b><p>Смартфон разблокируется по лицу пользователя.</p></div>
+    </div>
+    <p>Цифровая грамотность предполагает не только умение пользоваться такими сервисами, но и понимание того, какую задачу выполняет система и какой результат она формирует.</p>
+    <div class="risk"><b>Важно помнить:</b> результат нейронной сети не всегда является абсолютно точным. Система может ошибочно классифицировать объект, дать неточный прогноз или неправильно распознать изображение. Поэтому результаты работы искусственного интеллекта необходимо интерпретировать критически, особенно если на их основе принимаются значимые решения.</div>
+  </div>
+</section>
+
+<section id="s12" class="block">
+  <div class="block-head"><div class="num">12</div><div><h2>Главное по теме</h2></div></div>
+  <div class="content">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Тип задачи</th><th>Что делает система</th><th>Пример</th></tr></thead>
+        <tbody>
+          <tr><td><b>Классификация</b></td><td>Определяет категорию объекта</td><td>спам / не спам</td></tr>
+          <tr><td><b>Регрессия</b></td><td>Прогнозирует числовое значение</td><td>стоимость квартиры</td></tr>
+          <tr><td><b>Распознавание образов</b></td><td>Обнаруживает или идентифицирует образ</td><td>распознавание лица</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green"><b>Категория → классификация</b> &nbsp; | &nbsp; <b>Число → регрессия</b> &nbsp; | &nbsp; <b>Распознавание объекта, лица, речи или текста → распознавание образов</b></div>
+    <p>При анализе реальной ситуации сначала определите входные данные, затем ожидаемый результат, после чего выберите тип задачи и обоснуйте свой выбор.</p>
+
+    <div class="visual">
+      <div class="visual-title">Итоговая визуальная памятка</div>
+      <div class="flow">
+        <div class="node">Категория</div><div class="arrow">→</div><div class="node">Классификация</div>
+      </div>
+      <div class="flow">
+        <div class="node">Число</div><div class="arrow">→</div><div class="node">Регрессия</div>
+      </div>
+      <div class="flow">
+        <div class="node">Образ</div><div class="arrow">→</div><div class="node">Распознавание образов</div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <h3>Вопросы для самопроверки</h3>
+
+      <div class="q">
+        <b>1. Как по результату отличить классификацию от регрессии?</b><br>
+        <button onclick="toggleHint(this)">Показать ориентир</button>
+        <div class="hint">Классификация даёт категорию или класс, регрессия — числовое значение.</div>
+      </div>
+
+      <div class="q">
+        <b>2. Почему распознавание лица относят к задачам распознавания образов?</b><br>
+        <button onclick="toggleHint(this)">Показать ориентир</button>
+        <div class="hint">Потому что система анализирует сложные данные — изображение — и идентифицирует объект: лицо пользователя.</div>
+      </div>
+
+      <div class="q">
+        <b>3. Может ли одна предметная область содержать задачи разных типов? Приведите пример.</b><br>
+        <button onclick="toggleHint(this)">Показать ориентир</button>
+        <div class="hint">Да. Например, для автомобиля: исправен / неисправен — классификация; прогноз расхода топлива — регрессия; обнаружение пешехода — распознавание образов.</div>
+      </div>
+
+      <div class="q">
+        <b>4. Определите тип задачи: нейронная сеть прогнозирует продолжительность поездки.</b><br>
+        <button onclick="toggleHint(this)">Показать ответ</button>
+        <div class="hint">Регрессия, потому что результатом является числовое значение.</div>
+      </div>
+
+      <div class="q">
+        <b>5. Определите тип задачи: система относит новость к одной из тематических категорий.</b><br>
+        <button onclick="toggleHint(this)">Показать ответ</button>
+        <div class="hint">Классификация, потому что результатом является категория.</div>
+      </div>
+
+      <div class="q">
+        <b>6. Определите тип задачи: программа распознаёт текст на фотографии документа.</b><br>
+        <button onclick="toggleHint(this)">Показать ответ</button>
+        <div class="hint">Распознавание образов, потому что система распознаёт символы в сложных визуальных данных.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  © Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026
+</footer>
+
+</main>
+
+<script>
+function toggleCase(btn){
+  btn.parentElement.classList.toggle('open');
+}
+function toggleHint(btn){
+  const h = btn.nextElementSibling;
+  const open = h.style.display === 'block';
+  h.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? (btn.textContent.includes('ответ') ? 'Показать ответ' : 'Показать ориентир') : 'Скрыть';
+}
+function showDecision(text){
+  const d = document.getElementById('decision');
+  d.textContent = text;
+}
+window.addEventListener('scroll', ()=>{
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - doc.clientHeight;
+  const p = max > 0 ? (doc.scrollTop/max)*100 : 0;
+  document.getElementById('progress').style.width = p + '%';
+});
+</script>
+</body>
+</html>
