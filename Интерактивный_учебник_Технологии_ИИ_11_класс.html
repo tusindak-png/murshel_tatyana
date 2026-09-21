@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Технологии искусственного интеллекта и области их применения — 11 класс</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#ffffff; --ink:#172033; --muted:#667085;
+  --brand:#5b5bd6; --brand2:#7c3aed; --cyan:#0ea5e9; --teal:#14b8a6;
+  --line:#e5e7eb; --soft:#eef2ff; --shadow:0 16px 45px rgba(31,41,55,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#f8fafc 0,#f5f7fb 100%);color:var(--ink);line-height:1.65}
+header.hero{min-height:92vh;display:flex;align-items:center;padding:64px 7vw;background:
+ radial-gradient(circle at 10% 20%,rgba(14,165,233,.18),transparent 28%),
+ radial-gradient(circle at 90% 10%,rgba(124,58,237,.18),transparent 30%),
+ linear-gradient(135deg,#fff,#f4f2ff)}
+.hero-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
+.kicker{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:13px;color:var(--brand2)}
+h1{font-size:clamp(40px,6vw,78px);line-height:1.04;margin:18px 0 20px;letter-spacing:-.045em}
+h1 span{background:linear-gradient(90deg,var(--brand2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:19px;color:var(--muted);max-width:780px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-badges span{padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:13px}
+.hero-visual{position:relative;min-height:430px;background:linear-gradient(145deg,#17172a,#252556);border-radius:32px;box-shadow:var(--shadow);padding:28px;overflow:hidden;color:#fff}
+.orbit{position:absolute;border:1px solid rgba(255,255,255,.16);border-radius:50%}
+.o1{width:320px;height:320px;left:45px;top:55px}.o2{width:230px;height:230px;left:90px;top:100px}.o3{width:135px;height:135px;left:138px;top:148px}
+.core{position:absolute;left:160px;top:170px;width:90px;height:90px;border-radius:28px;background:linear-gradient(135deg,#7c3aed,#0ea5e9);display:grid;place-items:center;font-size:43px;box-shadow:0 0 55px rgba(14,165,233,.4)}
+.sat{position:absolute;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);padding:10px 12px;border-radius:14px;font-size:13px;font-weight:700}
+.s1{left:12px;top:70px}.s2{right:14px;top:95px}.s3{left:22px;bottom:70px}.s4{right:22px;bottom:65px}.s5{right:120px;top:16px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,231,235,.8);display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.topbar .brand{font-weight:900}.progress-track{height:4px;background:#e9eaf1;position:fixed;top:0;left:0;right:0;z-index:99}.progress{height:100%;width:0;background:linear-gradient(90deg,var(--brand2),var(--cyan))}
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1480px;margin:auto}
+nav.sidebar{position:sticky;top:56px;align-self:start;height:calc(100vh - 56px);overflow:auto;padding:22px 16px 36px;border-right:1px solid var(--line);background:rgba(255,255,255,.66)}
+nav.sidebar a{display:flex;gap:10px;align-items:flex-start;text-decoration:none;color:#475467;padding:9px 10px;border-radius:10px;font-size:13px;line-height:1.3;margin:2px 0}
+nav.sidebar a:hover,nav.sidebar a.active{background:var(--soft);color:var(--brand2)}
+nav.sidebar a span{min-width:24px;height:24px;border-radius:8px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;color:var(--brand2)}
+main{padding:30px clamp(18px,4vw,62px) 80px}
+.lesson-section{padding:44px 0 34px;border-bottom:1px dashed #d9dce5;scroll-margin-top:72px}
+.section-head{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+.section-number{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--brand2),var(--cyan));color:#fff;display:grid;place-items:center;font-size:19px;font-weight:900;box-shadow:0 10px 24px rgba(91,91,214,.22)}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:900;color:var(--brand2)}
+h2{font-size:clamp(27px,3.5vw,44px);line-height:1.15;margin:3px 0 0;letter-spacing:-.025em}
+h3{margin:26px 0 8px;font-size:20px}
+.two-col{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:22px;align-items:start}
+.content-card,.visual-card{background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.content-card{padding:28px}
+.visual-card{padding:20px;position:sticky;top:74px;min-height:300px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.visual-label{position:absolute;left:16px;top:14px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#98a2b3}
+p{margin:10px 0 14px}
+ul,ol{padding-left:22px}
+li{margin:5px 0}
+.callout,.example,.remember{border-radius:18px;padding:16px 18px;margin:18px 0}
+.callout{background:#f0f9ff;border:1px solid #bae6fd}
+.example{background:#f7fee7;border:1px solid #d9f99d}
+.remember{background:#fff7ed;border:1px solid #fed7aa}
+.flow-inline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.flow-inline span{padding:8px 10px;border-radius:10px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:13px}
+.flow-inline i{font-style:normal;color:var(--brand2);font-weight:900}
+.table-wrap{overflow:auto;margin:16px 0}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:560px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f8fafc;font-size:13px}
+tr:last-child td{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0;list-style:none}
+.chips li{padding:8px 10px;background:#f8fafc;border:1px solid var(--line);border-radius:999px;font-size:13px}
+.visual-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-top:20px}
+.visual-grid.five .vcard:last-child{grid-column:1/-1}
+.vcard{padding:18px;border-radius:18px;background:linear-gradient(145deg,#f8fafc,#eef2ff);border:1px solid var(--line);text-align:center;display:flex;flex-direction:column;gap:4px}
+.emoji{font-size:32px}.vcard span{font-size:12px;color:var(--muted)}
+.pipeline{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:7px;padding-top:20px}
+.node{min-width:0;text-align:center;padding:16px 8px;border-radius:18px;background:#f8fafc;border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.node span{font-size:26px}.node b{font-size:12px}.node small{font-size:10px;color:var(--muted)}.node.accent{background:#eef2ff;border-color:#c7d2fe}.arr{font-weight:900;color:var(--brand2)}
+.photo-sim{height:260px;border-radius:22px;background:linear-gradient(#cfe9ff 0 48%,#d7dde3 48% 64%,#555b65 64%);position:relative;overflow:hidden}
+.road{position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(90deg,transparent 49%,#f9fafb 49% 51%,transparent 51%)}
+.obj{position:absolute;font-size:42px;z-index:2}.person{left:22%;bottom:24%}.car{right:18%;bottom:18%}
+.bbox{position:absolute;border:3px solid #7c3aed;z-index:3}.bbox span{position:absolute;top:-26px;left:-3px;background:#7c3aed;color:#fff;padding:2px 6px;border-radius:5px;font-size:11px}
+.b1{left:18%;bottom:20%;width:72px;height:95px}.b2{right:12%;bottom:14%;width:100px;height:72px}.legend{text-align:center;margin-top:10px;font-size:12px;color:var(--muted)}
+.chatviz{display:flex;flex-direction:column;gap:14px;padding-top:22px}.bubble{max-width:82%;padding:12px 14px;border-radius:18px;font-size:14px}.bubble.user{align-self:flex-end;background:#dbeafe}.bubble.bot{align-self:flex-start;background:#ecfdf5}.nlpbox{align-self:center;width:88%;padding:14px;border:1px dashed #a78bfa;border-radius:16px;background:#faf5ff;display:flex;flex-direction:column;gap:4px}.nlpbox span{font-size:12px}.nlpbox em{font-style:normal;font-weight:800;color:var(--brand2)}
+.splitviz{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding-top:22px}.half{min-height:200px;border-radius:20px;background:#f8fafc;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:7px}.half span{font-size:13px;color:var(--muted)}.half small{font-weight:800;color:var(--brand2)}.bigicon{font-size:42px}.vs{font-size:30px;font-weight:900;color:#98a2b3}
+.audio-viz{padding:36px 8px 0;text-align:center}.mic{font-size:54px}.wave{height:80px;display:flex;align-items:center;justify-content:center;gap:5px}.wave i{display:block;width:7px;border-radius:7px;background:linear-gradient(var(--brand2),var(--cyan));animation:pulse 1.1s ease-in-out infinite}.wave i:nth-child(1),.wave i:nth-child(9){height:20px}.wave i:nth-child(2),.wave i:nth-child(8){height:35px}.wave i:nth-child(3),.wave i:nth-child(7){height:54px}.wave i:nth-child(4),.wave i:nth-child(6){height:70px}.wave i:nth-child(5){height:42px}@keyframes pulse{50%{transform:scaleY(.45)}}.transcript{display:inline-block;background:#f8fafc;border:1px solid var(--line);padding:12px 14px;border-radius:14px}
+.tts-viz{display:flex;align-items:center;justify-content:center;gap:18px;padding-top:28px}.paper{padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.06);font-size:13px}.speaker{font-size:54px;display:flex;align-items:center}.soundrings{font-family:monospace;color:var(--brand2);font-size:26px}
+.compare-arrows{display:flex;flex-direction:column;gap:16px;padding-top:28px}.route{display:grid;grid-template-columns:44px 60px 1fr 44px;align-items:center;gap:8px;padding:16px;border-radius:18px;background:#f8fafc;border:1px solid var(--line)}.route small{grid-column:1/-1;color:var(--muted)}.ico{font-size:30px}.longarr{font-size:30px;color:var(--brand2)}
+.matrixviz{display:flex;flex-direction:column;gap:9px;padding-top:24px}.mrow{display:grid;grid-template-columns:34px 1fr auto 80px;gap:8px;align-items:center;padding:12px;border-radius:14px;background:#f8fafc;border:1px solid var(--line)}.mrow strong{color:var(--brand2)}
+.smart-speaker{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:24px}.human,.device{display:flex;gap:10px;align-items:center}.human{font-size:34px}.human span,.device span{font-size:12px;padding:8px 10px;border-radius:12px;background:#f8fafc;border:1px solid var(--line)}.device{font-size:72px;color:var(--brand2)}.chain{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center}.chain span{padding:8px 10px;border-radius:11px;background:#eef2ff;border:1px solid #c7d2fe;font-weight:800;font-size:12px}
+.dualviz{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:24px}.system-card{min-height:220px;border-radius:20px;background:#f8fafc;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16px}.mini-chain{margin-top:14px;padding:8px 10px;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.sector-wheel{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-top:22px}.sector{padding:16px;border-radius:18px;background:#f8fafc;border:1px solid var(--line);display:grid;grid-template-columns:34px 1fr;gap:3px 8px;align-items:center}.sector{font-size:24px}.sector b{font-size:13px}.sector span{grid-column:2;font-size:11px;color:var(--brand2);font-weight:800}
+.steps{display:flex;flex-direction:column;gap:9px;padding-top:22px}.steps div{display:grid;grid-template-columns:38px 1fr;gap:2px 10px;align-items:center;padding:12px;border-radius:14px;background:#f8fafc;border:1px solid var(--line)}.steps span{grid-row:1/3;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand2),var(--cyan));color:#fff;display:grid;place-items:center;font-weight:900}.steps small{color:var(--muted)}
+.conference-viz{padding-top:24px}.stage{text-align:center;padding:18px;border-radius:18px;background:#eef2ff;border:1px solid #c7d2fe}.stage b{margin-left:8px}.fork{display:flex;flex-direction:column;gap:12px;margin-top:18px}.fork div{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px;border-radius:14px;background:#f8fafc;border:1px solid var(--line)}.fork b{color:var(--brand2)}
+.decision-tree{padding-top:24px}.root{margin:auto;width:max-content;padding:12px 18px;border-radius:14px;background:linear-gradient(135deg,var(--brand2),var(--cyan));color:#fff;font-weight:900}.branches{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.branches div{padding:14px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);text-align:center;font-size:13px}
+.literacy-viz{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-top:22px}.literacy-viz div{padding:16px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);display:grid;grid-template-columns:34px 1fr;align-items:center}.literacy-viz b{font-size:13px}.literacy-viz span{grid-column:2;font-size:11px;color:var(--muted)}.literacy-viz div:last-child{grid-column:1/-1}
+.summary-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-top:22px}.summary-cards div{padding:18px;border-radius:18px;background:#f8fafc;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;text-align:center;font-size:26px}.summary-cards b{font-size:15px;margin-top:4px}.summary-cards span{font-size:11px;color:var(--muted)}.summary-cards div:last-child{grid-column:1/-1}
+.quiz-section{padding:64px 0}.quiz-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.qcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}.qnum{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--brand2);font-weight:900}.answers{display:flex;flex-wrap:wrap;gap:8px}.answer{border:1px solid var(--line);background:#f8fafc;padding:9px 11px;border-radius:10px;cursor:pointer;font-weight:700}.answer:hover{border-color:#a5b4fc}.answer.correct{background:#ecfdf5;border-color:#86efac}.answer.wrong{background:#fef2f2;border-color:#fca5a5}.feedback{margin-top:10px;font-size:13px;font-weight:700;min-height:20px}
+footer{padding:34px 7vw 60px;background:#151525;color:#fff;text-align:center}.copyright{max-width:1000px;margin:auto;font-size:14px;color:#d8d9e6}
+.reveal{opacity:0;transform:translateY(16px);transition:.55s ease}.reveal.visible{opacity:1;transform:none}
+.menu-btn{display:none}
+@media (max-width:1080px){
+  .hero-inner{grid-template-columns:1fr}.hero-visual{min-height:360px}
+  .layout{grid-template-columns:1fr}nav.sidebar{display:none}
+  .two-col{grid-template-columns:1fr}.visual-card{position:relative;top:auto}
+}
+@media (max-width:680px){
+  header.hero{padding:42px 18px}.hero-visual{display:none}
+  main{padding:18px}.content-card,.visual-card{padding:18px;border-radius:18px}
+  .pipeline{grid-template-columns:1fr;gap:6px}.pipeline .arr{transform:rotate(90deg);text-align:center}
+  .quiz-grid{grid-template-columns:1fr}.dualviz,.sector-wheel,.branches,.literacy-viz,.summary-cards{grid-template-columns:1fr}
+  .summary-cards div:last-child,.literacy-viz div:last-child{grid-column:auto}
+  h1{font-size:44px}.section-head{align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="progress-track"><div class="progress"></div></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Информатика и искусственный интеллект · 11 класс · уроки 7–8</div>
+      <h1>Технологии <span>искусственного интеллекта</span> и области их применения</h1>
+      <p>Интерактивный учебник по цели обучения <b>11.1.2.4</b>: классификация технологий ИИ по областям применения и декомпозиция комплексных цифровых продуктов.</p>
+      <div class="hero-badges"><span>Computer Vision</span><span>NLP</span><span>Generative AI</span><span>Speech-to-Text</span><span>Text-to-Speech</span></div>
+    </div>
+    <div class="hero-visual" aria-label="Схематическая визуализация технологий искусственного интеллекта">
+      <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+      <div class="core">🧠</div>
+      <div class="sat s1">👁️ Computer Vision</div><div class="sat s2">💬 NLP</div>
+      <div class="sat s3">🎙️ Speech-to-Text</div><div class="sat s4">🔊 Text-to-Speech</div>
+      <div class="sat s5">✨ Generative AI</div>
+    </div>
+  </div>
+</header>
+
+<div class="topbar"><div class="brand">AI · 11 класс</div><div>Интерактивный учебник</div></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Навигация по учебнику"><a href="#intro"><span>•</span>Что вы узнаете</a><a href="#s1"><span>1</span>Что такое технология искусственного интеллекта</a><a href="#s2"><span>2</span>Компьютерное зрение</a><a href="#s3"><span>3</span>Обработка естественного языка</a><a href="#s4"><span>4</span>Генеративные модели</a><a href="#s5"><span>5</span>Распознавание речи</a><a href="#s6"><span>6</span>Синтез речи</a><a href="#s7"><span>7</span>Как различать Speech-to-Text и Text-to-Speech</a><a href="#s8"><span>8</span>Сравнение основных технологий искусственного интеллекта</a><a href="#s9"><span>9</span>Одна цифровая система может использовать несколько технологий</a><a href="#s10"><span>10</span>Другие примеры комплексных систем</a><a href="#s11"><span>11</span>Технологии ИИ в различных сферах</a><a href="#s12"><span>12</span>Как выбрать технологию ИИ для практической задачи</a><a href="#s13"><span>13</span>Применим алгоритм</a><a href="#s14"><span>14</span>Ключевой принцип классификации</a><a href="#s15"><span>15</span>Цифровая грамотность при использовании ИИ</a><a href="#s16"><span>16</span>Главное</a></nav>
+  <main>
+    
+    <section id="intro" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">AI</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Что вы узнаете</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Современные системы искусственного интеллекта работают с разными видами информации: изображениями, видео, текстами, речью и другими данными. В зависимости от того, <strong>какие данные получает система</strong> и <strong>какую задачу она решает</strong>, применяются различные технологии искусственного интеллекта.</p>
+        <p>На этом уроке рассматриваются <strong>компьютерное зрение</strong>, <strong>обработка естественного языка</strong>, <strong>генеративные модели</strong>, <strong>распознавание речи</strong> и <strong>синтез речи</strong>. Цель обучения <strong>11.1.2.4</strong> — классифицировать технологии искусственного интеллекта по областям их применения.</p>
+        <p>После изучения темы вы сможете определить технологию ИИ, лежащую в основе конкретного сервиса, проанализировать сложный цифровой продукт, выделить используемые в нём технологии и выбрать подходящую технологию для решения практической задачи.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="visual-grid five">
+          <div class="vcard"><div class="emoji">👁️</div><b>CV</b><span>изображение и видео</span></div>
+          <div class="vcard"><div class="emoji">💬</div><b>NLP</b><span>текст и смысл</span></div>
+          <div class="vcard"><div class="emoji">✨</div><b>GenAI</b><span>новый контент</span></div>
+          <div class="vcard"><div class="emoji">🎙️</div><b>STT</b><span>речь → текст</span></div>
+          <div class="vcard"><div class="emoji">🔊</div><b>TTS</b><span>текст → речь</span></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s1" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">1</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Что такое технология искусственного интеллекта</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p><strong>Искусственный интеллект (ИИ)</strong> — область информатики, связанная с созданием компьютерных систем, способных выполнять задачи, для которых обычно требуются интеллектуальные способности человека: распознавать объекты и речь, понимать текст, анализировать информацию, принимать решения и создавать новый контент.</p>
+        <p>При этом искусственный интеллект — это не одна технология. В зависимости от характера задачи используются разные направления и методы.</p>
+        <p>В рамках данной темы рассмотрим пять технологий:</p>
+        <ul>
+          <li>компьютерное зрение — <strong>Computer Vision, CV</strong>;</li>
+          <li>обработка естественного языка — <strong>Natural Language Processing, NLP</strong>;</li>
+          <li>генеративные модели — <strong>Generative AI, GenAI</strong>;</li>
+          <li>распознавание речи — <strong>Speech-to-Text, STT</strong>;</li>
+          <li>синтез речи — <strong>Text-to-Speech, TTS</strong>.</li>
+        </ul>
+        <div class="callout"><b>Опорная схема</b><div class="flow-inline"><span>входные данные</span><i>→</i><span>выполняемая операция</span><i>→</i><span>выходной результат</span><i>→</i><span>технология ИИ</span></div></div>
+        <p><strong>Например:</strong> фотография дорожной сцены → обнаружение пешеходов → координаты найденных объектов → компьютерное зрение.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="pipeline">
+          <div class="node"><span>📷</span><b>Фотография</b><small>вход</small></div><div class="arr">→</div>
+          <div class="node"><span>🔎</span><b>Обнаружить пешеходов</b><small>операция</small></div><div class="arr">→</div>
+          <div class="node"><span>📍</span><b>Координаты объектов</b><small>результат</small></div><div class="arr">→</div>
+          <div class="node accent"><span>👁️</span><b>Computer Vision</b><small>технология</small></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s2" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">2</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Компьютерное зрение</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <h3>Что такое компьютерное зрение</h3>
+        <p><strong>Компьютерное зрение (Computer Vision, CV)</strong> — технология искусственного интеллекта, позволяющая компьютерным системам получать и анализировать информацию из изображений и видео.</p>
+        <p>Главный признак этой технологии — работа с <strong>визуальными данными</strong>.</p>
+        <p>Компьютер получает изображение или видеопоток и определяет, какие объекты на них присутствуют, где они расположены или какими признаками обладают.</p>
+        <h3>Основные задачи компьютерного зрения</h3>
+        <ul class="chips">
+          <li>классификация изображений</li><li>обнаружение объектов</li><li>распознавание лиц</li>
+          <li>анализ медицинских снимков</li><li>чтение автомобильных номеров</li>
+          <li>контроль производственных дефектов</li><li>анализ видеопотоков</li>
+        </ul>
+        <div class="example"><b>Пример</b><p>На предприятии камера фотографирует готовую продукцию. Система должна определить, имеются ли на поверхности изделия трещины. Входные данные — изображение. Необходимое действие — найти визуальный дефект. Следовательно, используется <strong>компьютерное зрение</strong>.</p></div>
+        <h3>Где применяется компьютерное зрение</h3>
+        <div class="table-wrap"><table><thead><tr><th>Область</th><th>Пример применения</th></tr></thead><tbody>
+        <tr><td>Медицина</td><td>анализ рентгеновских снимков, МРТ и КТ</td></tr>
+        <tr><td>Промышленность</td><td>обнаружение дефектов продукции</td></tr>
+        <tr><td>Транспорт</td><td>распознавание автомобилей, дорожных знаков и пешеходов</td></tr>
+        <tr><td>Торговля</td><td>автоматическое распознавание товаров</td></tr>
+        <tr><td>Безопасность</td><td>анализ изображений с камер</td></tr>
+        <tr><td>Сельское хозяйство</td><td>анализ состояния растений по фотографиям</td></tr>
+        <tr><td>Геоинформационные системы</td><td>обработка спутниковых изображений</td></tr>
+        </tbody></table></div>
+        <p>Одна и та же технология может использоваться в разных отраслях. Поэтому нельзя определять технологию только по сфере деятельности. Необходимо прежде всего установить, <strong>какие данные анализирует система</strong> и <strong>какую операцию она выполняет</strong>.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="cv-scene">
+          <div class="photo-sim">
+            <div class="road"></div>
+            <div class="obj person" title="пешеход">🚶</div>
+            <div class="obj car" title="автомобиль">🚗</div>
+            <div class="bbox b1"><span>пешеход</span></div>
+            <div class="bbox b2"><span>автомобиль</span></div>
+          </div>
+          <div class="legend">Камера → обнаружение объектов → метки и координаты</div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s3" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">3</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Обработка естественного языка</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Люди передают значительную часть информации с помощью языка. Однако для компьютера текст изначально представляет собой последовательность символов. Чтобы система могла определить значение слов, предложений и сообщений, применяются технологии обработки естественного языка.</p>
+        <p><strong>Обработка естественного языка (Natural Language Processing, NLP)</strong> — направление искусственного интеллекта, предназначенное для анализа, интерпретации и обработки человеческого языка.</p>
+        <p>В рамках NLP компьютер работает преимущественно с <strong>текстовой информацией</strong>.</p>
+        <h3>NLP позволяет</h3>
+        <ul class="chips">
+          <li>определять тему текста</li><li>классифицировать сообщения</li><li>находить ключевые сведения</li>
+          <li>анализировать эмоциональную окраску текста</li><li>определять намерение пользователя</li>
+          <li>отвечать на вопросы</li><li>выполнять автоматический перевод</li><li>анализировать отзывы и обращения</li>
+        </ul>
+        <div class="example"><b>Пример</b><p>Клиент пишет банковскому чат-боту: «Я потерял карту. Как её заблокировать?» Система должна определить, что пользователь хочет выполнить блокировку карты. Вход — текст. Задача — понять смысл и намерение пользователя. Здесь используется <strong>обработка естественного языка</strong>.</p></div>
+        <h3>Где применяется NLP</h3>
+        <div class="table-wrap"><table><thead><tr><th>Область</th><th>Пример</th></tr></thead><tbody>
+          <tr><td>Банковская сфера</td><td>анализ сообщений клиентов</td></tr>
+          <tr><td>Электронная коммерция</td><td>анализ отзывов покупателей</td></tr>
+          <tr><td>Образование</td><td>анализ письменных ответов</td></tr>
+          <tr><td>Службы поддержки</td><td>классификация обращений</td></tr>
+          <tr><td>Поисковые системы</td><td>интерпретация поисковых запросов</td></tr>
+          <tr><td>Перевод</td><td>автоматическая обработка текста на разных языках</td></tr>
+          <tr><td>Социальные сети</td><td>анализ текстовых публикаций</td></tr>
+        </tbody></table></div>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="chatviz">
+          <div class="bubble user">Я потерял карту. Как её заблокировать?</div>
+          <div class="nlpbox"><b>NLP</b><span>намерение: <em>блокировка карты</em></span><span>объект: <em>банковская карта</em></span></div>
+          <div class="bubble bot">Понимаю запрос: нужно заблокировать карту.</div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s4" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">4</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Генеративные модели</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Некоторые системы ИИ не только анализируют имеющиеся данные, но и создают новые.</p>
+        <p><strong>Генеративные модели (Generative AI)</strong> — модели искусственного интеллекта, способные создавать новый контент на основе изученных закономерностей и полученного запроса.</p>
+        <p>Такие модели могут генерировать:</p>
+        <ul class="chips"><li>текст</li><li>изображения</li><li>программный код</li><li>аудио</li><li>музыку</li><li>видео</li><li>комбинированный мультимедийный контент</li></ul>
+        <p>Например, пользователь вводит запрос: «Создай описание экологического проекта для школьной конференции». Если система формирует новый текст, используется генеративная модель.</p>
+        <h3>Анализ и генерация — не одно и то же</h3>
+        <p>Важно различать системы, которые <strong>анализируют существующие данные</strong>, и системы, которые <strong>создают новые данные</strong>.</p>
+        <div class="table-wrap"><table><thead><tr><th>Задача</th><th>Тип действия</th><th>Технология</th></tr></thead><tbody>
+          <tr><td>Определить, изображена ли на фотографии кошка</td><td>анализ существующего изображения</td><td>Computer Vision</td></tr>
+          <tr><td>Создать изображение кошки по текстовому описанию</td><td>создание нового изображения</td><td>Generative AI</td></tr>
+          <tr><td>Определить тему статьи</td><td>анализ существующего текста</td><td>NLP</td></tr>
+          <tr><td>Создать статью по заданной теме</td><td>создание нового текста</td><td>Generative AI</td></tr>
+        </tbody></table></div>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="splitviz">
+          <div class="half"><div class="bigicon">🔍</div><b>АНАЛИЗ</b><span>Что уже есть в данных?</span><small>CV / NLP</small></div>
+          <div class="vs">≠</div>
+          <div class="half"><div class="bigicon">✨</div><b>ГЕНЕРАЦИЯ</b><span>Создать новый контент</span><small>Generative AI</small></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s5" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">5</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Распознавание речи</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Человек может взаимодействовать с компьютером не только с помощью клавиатуры, но и голосом. Для преобразования устной речи в текст применяется технология распознавания речи.</p>
+        <p><strong>Распознавание речи (Speech-to-Text, STT)</strong> — технология ИИ, преобразующая звуковую речь человека в текстовое представление.</p>
+        <div class="callout"><b>Схема работы</b><div class="flow-inline"><span>речь</span><i>→</i><span>распознавание</span><i>→</i><span>текст</span></div></div>
+        <p>Например, человек произносит: «Запиши встречу на десять часов». Система распознавания речи преобразует звук в текст: «Запиши встречу на 10:00».</p>
+        <p>На этом функция Speech-to-Text заканчивается. Чтобы понять, какое действие хочет выполнить пользователь, текст может быть передан системе NLP.</p>
+        <h3>Применение Speech-to-Text</h3>
+        <ul class="chips"><li>голосовой ввод текста</li><li>автоматическая расшифровка интервью</li><li>создание субтитров</li><li>преобразование лекций в текст</li><li>управление устройствами голосом</li><li>обработка телефонных разговоров</li></ul>
+        <div class="example"><b>Пример из образования</b><p>Во время онлайн-лекции система преобразует речь преподавателя в автоматически отображаемые субтитры. Аудио → текст. Следовательно, применяется <strong>распознавание речи</strong>.</p></div>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="audio-viz">
+          <div class="mic">🎙️</div>
+          <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="transcript">«Запиши встречу на 10:00»</div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s6" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">6</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Синтез речи</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Обратную задачу решает технология синтеза речи.</p>
+        <p><strong>Синтез речи (Text-to-Speech, TTS)</strong> — технология искусственного интеллекта, преобразующая письменный текст в искусственно сформированную устную речь.</p>
+        <div class="callout"><b>Схема</b><div class="flow-inline"><span>текст</span><i>→</i><span>синтез</span><i>→</i><span>речь</span></div></div>
+        <p>Например, навигационная система получает текст «Через 200 метров поверните направо» и произносит его пользователю. Это пример синтеза речи.</p>
+        <h3>Где применяется Text-to-Speech</h3>
+        <ul class="chips"><li>в голосовых помощниках</li><li>в навигационных системах</li><li>в электронных книгах</li><li>в системах доступности</li><li>при автоматическом озвучивании сообщений</li><li>в образовательных приложениях</li></ul>
+        <p>Особое значение синтез речи имеет для повышения доступности цифровых технологий, например при создании сервисов, которые озвучивают текстовую информацию.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="tts-viz">
+          <div class="paper">Через 200 метров<br><b>поверните направо</b></div>
+          <div class="arr big">→</div>
+          <div class="speaker">🔊<div class="soundrings">)))</div></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s7" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">7</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Как различать Speech-to-Text и Text-to-Speech</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Эти технологии легко перепутать, поэтому необходимо обращать внимание на <strong>направление преобразования информации</strong>.</p>
+        <div class="table-wrap"><table><thead><tr><th>Технология</th><th>Вход</th><th>Выход</th></tr></thead><tbody>
+          <tr><td>Speech-to-Text</td><td>речь</td><td>текст</td></tr>
+          <tr><td>Text-to-Speech</td><td>текст</td><td>речь</td></tr>
+        </tbody></table></div>
+        <div class="remember"><b>Запомните</b><p><strong>STT:</strong> человек говорит — компьютер получает текст.</p><p><strong>TTS:</strong> компьютер получает текст — человек слышит речь.</p></div>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="compare-arrows">
+          <div class="route"><span class="ico">🎙️</span><b>STT</b><span class="longarr">⟶</span><span class="ico">📝</span><small>речь → текст</small></div>
+          <div class="route reverse"><span class="ico">📝</span><b>TTS</b><span class="longarr">⟶</span><span class="ico">🔊</span><small>текст → речь</small></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s8" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">8</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Сравнение основных технологий искусственного интеллекта</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <div class="table-wrap"><table class="wide"><thead><tr><th>Технология</th><th>Основные входные данные</th><th>Основная задача</th><th>Результат</th></tr></thead><tbody>
+          <tr><td>Computer Vision</td><td>изображение, видео</td><td>анализ визуальной информации</td><td>распознанные объекты, признаки, категории</td></tr>
+          <tr><td>NLP</td><td>текст</td><td>понимание и анализ языка</td><td>смысл, категория, извлечённая информация</td></tr>
+          <tr><td>Generative AI</td><td>запрос и исходные данные</td><td>создание нового контента</td><td>текст, изображение, аудио, код и др.</td></tr>
+          <tr><td>Speech-to-Text</td><td>речь</td><td>распознавание речи</td><td>текст</td></tr>
+          <tr><td>Text-to-Speech</td><td>текст</td><td>синтез речи</td><td>аудио</td></tr>
+        </tbody></table></div>
+        <p>Эта таблица позволяет классифицировать большинство типичных задач ИИ.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="matrixviz">
+          <div class="mrow"><span>🖼️</span><b>изображение/видео</b><i>→</i><strong>CV</strong></div>
+          <div class="mrow"><span>📝</span><b>текст</b><i>→</i><strong>NLP</strong></div>
+          <div class="mrow"><span>✨</span><b>запрос + данные</b><i>→</i><strong>GenAI</strong></div>
+          <div class="mrow"><span>🎙️</span><b>речь</b><i>→</i><strong>STT</strong></div>
+          <div class="mrow"><span>🔊</span><b>текст для озвучивания</b><i>→</i><strong>TTS</strong></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s9" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">9</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Одна цифровая система может использовать несколько технологий</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Реальные цифровые продукты часто являются <strong>комплексными системами</strong>. Поэтому неправильно считать, что каждому приложению обязательно соответствует только одна технология ИИ.</p>
+        <p>Чтобы понять работу такого продукта, его необходимо <strong>декомпозировать</strong>, то есть разделить на отдельные функциональные этапы.</p>
+        <h3>Пример: умная колонка</h3>
+        <p>Пользователь говорит: «Какая сегодня температура воздуха?» Работа системы может состоять из нескольких этапов.</p>
+        <p><strong>Этап 1. Распознавание речи:</strong> устройство получает голос пользователя. Звук → текст. Используется Speech-to-Text.</p>
+        <p><strong>Этап 2. Обработка текста:</strong> система определяет, что пользователь запрашивает информацию о погоде. Используется NLP.</p>
+        <p><strong>Этап 3. Формирование ответа:</strong> система получает необходимую информацию и формирует ответ. Если текст ответа создаётся генеративной моделью, может применяться Generative AI.</p>
+        <p><strong>Этап 4. Озвучивание ответа:</strong> готовый текст превращается в речь. Используется Text-to-Speech.</p>
+        <div class="callout"><b>Цепочка технологий</b><div class="flow-inline"><span>Speech-to-Text</span><i>→</i><span>NLP</span><i>→</i><span>Generative AI</span><i>→</i><span>Text-to-Speech</span></div></div>
+        <p>Это пример декомпозиции цифрового продукта на отдельные технологии искусственного интеллекта.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="smart-speaker">
+          <div class="human">🧑<span>«Какая сегодня температура?»</span></div>
+          <div class="chain"><span>🎙️ STT</span><i>→</i><span>💬 NLP</span><i>→</i><span>✨ GenAI</span><i>→</i><span>🔊 TTS</span></div>
+          <div class="device">◉<span>«Сегодня +18 °C»</span></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s10" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">10</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Другие примеры комплексных систем</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <h3>Виртуальный консультант</h3>
+        <ol>
+          <li>Speech-to-Text преобразует голос в текст.</li>
+          <li>NLP определяет содержание вопроса.</li>
+          <li>Generative AI формирует ответ.</li>
+          <li>Text-to-Speech озвучивает ответ.</li>
+        </ol>
+        <h3>Интеллектуальная система автомобиля</h3>
+        <p>Камеры передают изображения дороги. Компьютерное зрение может:</p>
+        <ul><li>обнаруживать пешеходов;</li><li>определять положение других автомобилей;</li><li>распознавать дорожные знаки;</li><li>анализировать дорожную разметку.</li></ul>
+        <p>Если водитель отдаёт системе голосовую команду, дополнительно могут использоваться Speech-to-Text и NLP. Следовательно, один цифровой продукт может включать несколько независимых технологий ИИ.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="dualviz">
+          <div class="system-card"><div class="bigicon">🧑‍💼</div><b>Виртуальный консультант</b><div class="mini-chain">🎙️ → 💬 → ✨ → 🔊</div></div>
+          <div class="system-card"><div class="bigicon">🚘</div><b>Интеллектуальный автомобиль</b><div class="mini-chain">📷 → 👁️ → 🚦 / 🚶 / 🚗</div></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s11" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">11</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Технологии ИИ в различных сферах</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p><strong>Медицина.</strong> Компьютерное зрение может анализировать медицинские изображения. Speech-to-Text позволяет автоматически создавать текстовые записи диктовки врача. NLP может использоваться для анализа медицинских документов.</p>
+        <p><strong>Образование.</strong> Speech-to-Text помогает создавать субтитры к лекциям. Text-to-Speech позволяет озвучивать учебные материалы. Генеративные модели могут создавать примеры, пояснения и черновики учебных материалов. NLP используется для анализа текстовых ответов и поиска информации.</p>
+        <p><strong>Финансы.</strong> NLP помогает анализировать обращения клиентов. Голосовые системы используют распознавание и синтез речи. Компьютерное зрение может применяться при обработке изображений документов.</p>
+        <p><strong>Промышленность.</strong> Компьютерное зрение позволяет автоматически проверять качество продукции. Генеративные технологии могут помогать разрабатывать варианты конструкций и цифровых материалов.</p>
+        <p><strong>Транспорт.</strong> Компьютерное зрение используется для анализа дорожной обстановки. Синтез речи — для голосовых подсказок навигационной системы. Распознавание речи — для голосового управления.</p>
+        <p><strong>Торговля.</strong> NLP позволяет анализировать отзывы покупателей. Компьютерное зрение помогает распознавать товары. Генеративные модели могут создавать описания товаров и варианты рекламных материалов.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="sector-wheel">
+          <div class="sector">🏥<b>Медицина</b><span>CV · STT · NLP</span></div>
+          <div class="sector">🎓<b>Образование</b><span>STT · TTS · GenAI · NLP</span></div>
+          <div class="sector">🏦<b>Финансы</b><span>NLP · STT · TTS · CV</span></div>
+          <div class="sector">🏭<b>Промышленность</b><span>CV · GenAI</span></div>
+          <div class="sector">🚗<b>Транспорт</b><span>CV · STT · TTS</span></div>
+          <div class="sector">🛒<b>Торговля</b><span>NLP · CV · GenAI</span></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s12" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">12</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Как выбрать технологию ИИ для практической задачи</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>При выборе технологии нельзя ориентироваться только на название приложения или отрасли. Необходимо провести анализ задачи.</p>
+        <p><strong>Шаг 1. Определите входные данные.</strong> С чем работает система: изображение, видео, текст, речь или несколько типов данных.</p>
+        <p><strong>Шаг 2. Определите действие.</strong> Что необходимо сделать: проанализировать изображение, понять текст, создать новый контент, превратить речь в текст или текст в речь.</p>
+        <p><strong>Шаг 3. Определите результат.</strong> Что должна получить система на выходе.</p>
+        <p><strong>Шаг 4. Выберите технологию.</strong> Сопоставьте задачу с возможностями соответствующей технологии.</p>
+        <p><strong>Шаг 5. Проверьте, достаточно ли одной технологии.</strong> Если цифровой продукт выполняет несколько различных операций, возможно, потребуется сочетание технологий.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="steps">
+          <div><span>1</span><b>Входные данные</b><small>Что получает система?</small></div>
+          <div><span>2</span><b>Действие</b><small>Что нужно сделать?</small></div>
+          <div><span>3</span><b>Результат</b><small>Что должно получиться?</small></div>
+          <div><span>4</span><b>Технология</b><small>Что подходит?</small></div>
+          <div><span>5</span><b>Проверка</b><small>Нужна одна или несколько?</small></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s13" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">13</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Применим алгоритм</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <div class="example"><b>Задача 1</b><p>Необходимо автоматически создавать текстовую расшифровку школьной конференции.</p>
+        <p><strong>Вход:</strong> устная речь участников.<br><strong>Необходимая операция:</strong> преобразовать речь в текст.<br><strong>Выход:</strong> текстовая расшифровка.<br><strong>Технология:</strong> Speech-to-Text.</p></div>
+        <div class="example"><b>Задача 2</b><p>Необходимо автоматически подготовить краткое содержание полученной расшифровки.</p>
+        <p>Теперь система должна работать уже с текстом и определить его основную информацию. Для этого требуется технология обработки естественного языка, а в зависимости от реализации может использоваться и генеративная модель.</p></div>
+        <p>Следовательно, правильный выбор зависит не от самого объекта «конференция», а от <strong>конкретной операции над данными</strong>.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="conference-viz">
+          <div class="stage">🎤<b>Школьная конференция</b></div>
+          <div class="fork">
+            <div><span>речь</span><i>→</i><b>STT</b><i>→</i><span>расшифровка</span></div>
+            <div><span>расшифровка</span><i>→</i><b>NLP / GenAI</b><i>→</i><span>краткое содержание</span></div>
+          </div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s14" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">14</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Ключевой принцип классификации</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Для определения технологии ИИ задайте три вопроса:</p>
+        <ol><li>Какие данные поступают в систему?</li><li>Что система должна сделать с этими данными?</li><li>Какой результат необходимо получить?</li></ol>
+        <h3>Опорная схема классификации</h3>
+        <div class="callout">
+          <p>изображение / видео → анализ → <strong>Computer Vision</strong></p>
+          <p>текст → понимание и анализ → <strong>NLP</strong></p>
+          <p>запрос / данные → создание нового контента → <strong>Generative AI</strong></p>
+          <p>речь → текст → <strong>Speech-to-Text</strong></p>
+          <p>текст → речь → <strong>Text-to-Speech</strong></p>
+        </div>
+        <p>В реальных приложениях эти технологии могут объединяться в единую цепочку.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="decision-tree">
+          <div class="root">Какие данные?</div>
+          <div class="branches">
+            <div>🖼️ изображение/видео<br><b>анализ → CV</b></div>
+            <div>📝 текст<br><b>понимание → NLP</b><br><b>создание → GenAI</b></div>
+            <div>🎙️ речь<br><b>в текст → STT</b></div>
+            <div>🔊 текст для озвучивания<br><b>в речь → TTS</b></div>
+          </div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s15" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">15</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Цифровая грамотность при использовании ИИ</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p>Умение пользоваться сервисом ИИ — только часть цифровой грамотности. Важно понимать, <strong>какую функцию выполняет система</strong>, <strong>какие данные она получает</strong> и <strong>какой результат создаёт</strong>.</p>
+        <p>Например, голосовой помощник получает аудиозапись речи пользователя. Камера с функцией распознавания объектов получает изображения. Чат-бот получает текстовые сообщения.</p>
+        <p>Поэтому при работе с системами ИИ необходимо осознавать:</p>
+        <ul>
+          <li>какие данные передаются цифровому сервису;</li>
+          <li>для какой операции они используются;</li>
+          <li>какой технологией ИИ они обрабатываются;</li>
+          <li>является ли полученный результат анализом исходных данных или новым сгенерированным контентом;</li>
+          <li>насколько результат соответствует поставленной задаче.</li>
+        </ul>
+        <p>Важно также помнить, что результат работы искусственного интеллекта не следует автоматически считать безошибочным. Пользователь должен уметь <strong>критически оценивать полученную информацию</strong> и проверять её, если от неё зависит принятие важного решения.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="literacy-viz">
+          <div>📤<b>Данные</b><span>Что передаём?</span></div>
+          <div>⚙️<b>Обработка</b><span>Для чего?</span></div>
+          <div>🧠<b>Технология</b><span>Какая?</span></div>
+          <div>📥<b>Результат</b><span>Что получаем?</span></div>
+          <div>✅<b>Проверка</b><span>Можно ли доверять?</span></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+    <section id="s16" class="lesson-section reveal">
+      <div class="section-head">
+        <div class="section-number">16</div>
+        <div><div class="eyebrow">Интерактивный учебник</div><h2>Главное</h2></div>
+      </div>
+      <div class="two-col">
+        <article class="content-card">
+        <p><strong>Компьютерное зрение</strong> — работает прежде всего с изображениями и видео и позволяет анализировать визуальную информацию.</p>
+        <p><strong>Обработка естественного языка</strong> — позволяет компьютерам анализировать и интерпретировать текст на человеческом языке.</p>
+        <p><strong>Генеративные модели</strong> — предназначены для создания нового контента.</p>
+        <p><strong>Speech-to-Text</strong> — преобразует речь в текст.</p>
+        <p><strong>Text-to-Speech</strong> — преобразует текст в речь.</p>
+        <p>Одна технология может применяться в разных отраслях, а один сложный цифровой продукт может использовать сразу несколько технологий искусственного интеллекта.</p>
+        <div class="callout"><b>Ключевая формула анализа</b><div class="flow-inline"><span>входные данные</span><i>→</i><span>задача</span><i>→</i><span>технология</span><i>→</i><span>результат</span></div></div>
+        <p>Именно такой подход позволяет не только распознавать известные примеры технологий ИИ, но и обоснованно выбирать подходящую технологию для решения новой практической задачи.</p>
+        </article>
+        <aside class="visual-card"><div class="visual-label">Визуализация</div>
+        <div class="summary-cards">
+          <div>👁️<b>CV</b><span>вижу и анализирую</span></div>
+          <div>💬<b>NLP</b><span>понимаю текст</span></div>
+          <div>✨<b>GenAI</b><span>создаю новое</span></div>
+          <div>🎙️<b>STT</b><span>слышу → текст</span></div>
+          <div>🔊<b>TTS</b><span>текст → голос</span></div>
+        </div>
+        </aside>
+      </div>
+    </section>
+    
+
+    <section class="quiz-section reveal" id="selfcheck">
+      <div class="section-head">
+        <div class="section-number">✓</div>
+        <div><div class="eyebrow">Самопроверка</div><h2>Определи технологию ИИ</h2></div>
+      </div>
+      <p>Выберите технологию, которая лучше всего соответствует описанной операции.</p>
+      <div class="quiz-grid">
+      <div class="qcard">
+        <div class="qnum">Вопрос 1</div>
+        <p>Анализ рентгеновского снимка</p>
+        <div class="answers"><button class="answer" data-correct="1">Computer Vision</button><button class="answer" data-correct="0">NLP</button><button class="answer" data-correct="0">Text-to-Speech</button></div>
+        <div class="feedback" aria-live="polite"></div>
+      </div>
+    
+      <div class="qcard">
+        <div class="qnum">Вопрос 2</div>
+        <p>Автоматические субтитры к лекции</p>
+        <div class="answers"><button class="answer" data-correct="1">Speech-to-Text</button><button class="answer" data-correct="0">Generative AI</button><button class="answer" data-correct="0">Computer Vision</button></div>
+        <div class="feedback" aria-live="polite"></div>
+      </div>
+    
+      <div class="qcard">
+        <div class="qnum">Вопрос 3</div>
+        <p>Создание изображения по текстовому описанию</p>
+        <div class="answers"><button class="answer" data-correct="0">NLP</button><button class="answer" data-correct="1">Generative AI</button><button class="answer" data-correct="0">Speech-to-Text</button></div>
+        <div class="feedback" aria-live="polite"></div>
+      </div>
+    
+      <div class="qcard">
+        <div class="qnum">Вопрос 4</div>
+        <p>Определение намерения клиента в текстовом сообщении</p>
+        <div class="answers"><button class="answer" data-correct="1">NLP</button><button class="answer" data-correct="0">Text-to-Speech</button><button class="answer" data-correct="0">Computer Vision</button></div>
+        <div class="feedback" aria-live="polite"></div>
+      </div>
+    
+      <div class="qcard">
+        <div class="qnum">Вопрос 5</div>
+        <p>Озвучивание текста навигатором</p>
+        <div class="answers"><button class="answer" data-correct="0">Speech-to-Text</button><button class="answer" data-correct="1">Text-to-Speech</button><button class="answer" data-correct="0">NLP</button></div>
+        <div class="feedback" aria-live="polite"></div>
+      </div>
+    </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="copyright">© Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026</div>
+</footer>
+
+<script>
+const progress = document.querySelector('.progress');
+const sections = [...document.querySelectorAll('.lesson-section')];
+const navLinks = [...document.querySelectorAll('.sidebar a')];
+
+function onScroll(){
+  const docH = document.documentElement.scrollHeight - innerHeight;
+  progress.style.width = (docH > 0 ? (scrollY/docH*100) : 0) + '%';
+  let current = sections[0]?.id;
+  sections.forEach(s => { if(s.getBoundingClientRect().top < 130) current = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+current));
+}
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+document.querySelectorAll('.qcard').forEach(card=>{
+  card.querySelectorAll('.answer').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(card.dataset.done) return;
+      card.dataset.done='1';
+      const ok = btn.dataset.correct === '1';
+      btn.classList.add(ok ? 'correct':'wrong');
+      if(!ok){
+        card.querySelector('.answer[data-correct="1"]').classList.add('correct');
+      }
+      card.querySelector('.feedback').textContent = ok ? 'Верно.' : 'Нужно ещё раз сопоставить входные данные и выполняемую операцию.';
+    });
+  });
+});
+</script>
+</body>
+</html>
