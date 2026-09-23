@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Модели машинного обучения — интерактивный учебник</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --panel:#111827;
+  --panel2:#172033;
+  --text:#e5eefc;
+  --muted:#a9b6cc;
+  --accent:#60a5fa;
+  --accent2:#22c55e;
+  --accent3:#f59e0b;
+  --accent4:#c084fc;
+  --danger:#fb7185;
+  --line:#2b3a55;
+  --white:#ffffff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:linear-gradient(180deg,#0b1020 0%,#101827 100%);
+  color:var(--text);
+  line-height:1.65;
+}
+header{
+  min-height:68vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:48px 20px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+header:before,header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(5px);
+  opacity:.18;
+}
+header:before{width:420px;height:420px;background:#2563eb;left:-120px;top:-90px}
+header:after{width:360px;height:360px;background:#7c3aed;right:-90px;bottom:-110px}
+.hero{max-width:1100px;width:100%;position:relative;z-index:2}
+.badge{
+  display:inline-block;padding:8px 14px;border:1px solid #3b82f6;border-radius:999px;
+  background:rgba(59,130,246,.12);color:#bfdbfe;font-size:14px;font-weight:700;
+}
+h1{font-size:clamp(40px,7vw,78px);line-height:1.02;margin:18px 0 20px}
+.subtitle{max-width:840px;font-size:20px;color:#cbd5e1}
+.hero-grid{
+  margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px
+}
+.hero-card{
+  background:rgba(17,24,39,.78);border:1px solid var(--line);border-radius:20px;padding:22px;
+  backdrop-filter:blur(10px);
+}
+.hero-card b{display:block;font-size:18px;margin-bottom:6px}
+.hero-card span{color:var(--muted);font-size:14px}
+nav{
+  position:sticky;top:0;z-index:20;
+  background:rgba(9,14,26,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap
+}
+nav .inner{max-width:1200px;margin:auto;padding:10px 16px}
+nav a{
+  display:inline-block;color:#cbd5e1;text-decoration:none;padding:9px 12px;border-radius:10px;font-size:14px
+}
+nav a:hover{background:#1e293b;color:white}
+main{max-width:1200px;margin:auto;padding:36px 18px 70px}
+section{
+  margin:28px 0 34px;background:linear-gradient(145deg,rgba(17,24,39,.98),rgba(20,29,48,.96));
+  border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.18)
+}
+.section-head{display:flex;gap:14px;align-items:center;margin-bottom:18px}
+.num{
+  min-width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:grid;place-items:center;font-weight:800
+}
+h2{margin:0;font-size:30px}
+h3{font-size:22px;margin:22px 0 10px}
+p{margin:10px 0}
+ul{padding-left:24px}
+mark{
+  background:rgba(96,165,250,.16);color:#dbeafe;padding:1px 6px;border-radius:6px
+}
+.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+.visual{
+  border:1px solid #334155;background:#0b1220;border-radius:20px;padding:20px;min-height:180px;
+  display:flex;flex-direction:column;justify-content:center
+}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.node{
+  padding:14px 16px;border:1px solid #3b82f6;background:rgba(37,99,235,.12);
+  border-radius:14px;font-weight:700;text-align:center;min-width:120px
+}
+.arrow{font-size:26px;color:#93c5fd}
+.kpi{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px
+}
+.kpi div{
+  border:1px solid #334155;border-radius:16px;padding:16px;background:#111827;text-align:center
+}
+.kpi strong{font-size:26px;display:block}
+table{
+  width:100%;border-collapse:collapse;margin:16px 0;border-radius:14px;overflow:hidden
+}
+th,td{border:1px solid #334155;padding:12px;vertical-align:top}
+th{background:#1e293b}
+td{background:#111827}
+.term{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px
+}
+.term .card{
+  padding:16px;border:1px solid #334155;border-radius:16px;background:#111827
+}
+.icon{font-size:30px;display:block;margin-bottom:6px}
+.callout{
+  padding:16px 18px;border-left:4px solid var(--accent);background:rgba(59,130,246,.09);border-radius:12px;margin:16px 0
+}
+.supervised{border-color:#3b82f6}.unsupervised{border-color:#22c55e}.reinforcement{border-color:#f59e0b}
+.compare{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px
+}
+.compare .box{
+  border:1px solid #334155;border-radius:18px;padding:18px;background:#0b1220
+}
+.compare h3{margin-top:0}
+.chip{
+  display:inline-block;padding:5px 9px;border-radius:999px;font-size:13px;font-weight:700;margin:3px 4px 3px 0
+}
+.cblue{background:rgba(59,130,246,.16);color:#bfdbfe}
+.cgreen{background:rgba(34,197,94,.16);color:#bbf7d0}
+.corange{background:rgba(245,158,11,.16);color:#fde68a}
+.cpurple{background:rgba(168,85,247,.16);color:#e9d5ff}
+details{
+  border:1px solid #334155;border-radius:14px;background:#0b1220;margin:10px 0;padding:12px 14px
+}
+summary{cursor:pointer;font-weight:700}
+.decision{
+  display:grid;gap:12px
+}
+.q{
+  padding:16px;border-radius:16px;border:1px solid #334155;background:#111827
+}
+.q b{color:#e2e8f0}
+.yes{color:#86efac;font-weight:700}.no{color:#fca5a5;font-weight:700}
+.quiz{
+  display:grid;gap:14px
+}
+.quiz-card{
+  border:1px solid #334155;border-radius:16px;padding:16px;background:#0b1220
+}
+.quiz-card button, .btn{
+  border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;
+  background:#2563eb;color:white;margin:5px 6px 0 0
+}
+.quiz-card button:hover,.btn:hover{filter:brightness(1.08)}
+.feedback{margin-top:10px;font-weight:700}
+.good{color:#86efac}.bad{color:#fda4af}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:999px;padding:8px 12px;cursor:pointer}
+.tabs button.active{background:#2563eb;border-color:#2563eb}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.mini-diagram{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px
+}
+.circle{
+  width:120px;height:120px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:10px;
+  border:2px solid #475569;background:#111827;font-weight:700
+}
+footer{
+  border-top:1px solid var(--line);background:#080d18;padding:28px 20px;color:#cbd5e1
+}
+footer .inner{max-width:1200px;margin:auto}
+.small{font-size:14px;color:var(--muted)}
+@media (max-width:900px){
+  .grid2,.compare{grid-template-columns:1fr}
+  .hero-grid{grid-template-columns:1fr}
+  .term{grid-template-columns:1fr 1fr}
+  .kpi{grid-template-columns:1fr}
+  .mini-diagram{grid-template-columns:1fr}
+  .mini-diagram .arrow{text-align:center;transform:rotate(90deg)}
+}
+@media (max-width:560px){
+  section{padding:20px}
+  .term{grid-template-columns:1fr}
+  h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero">
+    <span class="badge">10 класс · Информатика и искусственный интеллект</span>
+    <h1>Модели машинного обучения</h1>
+    <p class="subtitle">Как определить, используется ли обучение с учителем, без учителя или с подкреплением — по данным, обратной связи и способу обучения модели.</p>
+    <div class="hero-grid">
+      <div class="hero-card"><b>🎯 Цель обучения</b><span>Классифицировать виды машинного обучения: с учителем, без учителя, с подкреплением.</span></div>
+      <div class="hero-card"><b>🧠 Главное умение</b><span>Анализировать практический кейс и обосновывать выбор вида обучения.</span></div>
+      <div class="hero-card"><b>💻 Цифровая грамотность</b><span>Осознанно анализировать данные и выбирать способ их обработки.</span></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="inner">
+    <a href="#s1">1. Что такое ML</a>
+    <a href="#s2">2. Почему виды разные</a>
+    <a href="#s3">3. С учителем</a>
+    <a href="#s4">4. Без учителя</a>
+    <a href="#s5">5. С подкреплением</a>
+    <a href="#s6">6. Сравнение</a>
+    <a href="#s7">7. Алгоритм выбора</a>
+    <a href="#s8">8. Обоснование</a>
+    <a href="#s9">9. Важный нюанс</a>
+    <a href="#s10">10. Главное</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="s1">
+  <div class="section-head"><div class="num">1</div><h2>Что такое машинное обучение</h2></div>
+  <div class="grid2">
+    <div>
+      <p><b>Машинное обучение (Machine Learning, ML)</b> — направление искусственного интеллекта, в котором компьютерная система обучается находить закономерности в данных и использовать их для получения результата для новых данных.</p>
+      <p>В обычной программе разработчик заранее задаёт последовательность действий. При машинном обучении система получает данные и на их основе настраивает параметры модели, выявляя закономерности.</p>
+      <div class="callout"><b>Ключевая идея:</b> не описывать системе все правила вручную, а позволить модели извлечь закономерности из обучающих данных.</div>
+      <h3>Основные понятия</h3>
+      <div class="term">
+        <div class="card"><span class="icon">🗂️</span><b>Данные</b><br><span class="small">Информация для обучения или обработки.</span></div>
+        <div class="card"><span class="icon">🔎</span><b>Признаки</b><br><span class="small">Характеристики объектов.</span></div>
+        <div class="card"><span class="icon">🧠</span><b>Модель</b><br><span class="small">Настроенная система, выдающая результат.</span></div>
+        <div class="card"><span class="icon">⚙️</span><b>Обучение</b><br><span class="small">Настройка модели на основе данных.</span></div>
+      </div>
+    </div>
+    <div class="visual">
+      <div class="flow">
+        <div class="node">📥 Данные</div><div class="arrow">→</div>
+        <div class="node">⚙️ Обучение</div><div class="arrow">→</div>
+        <div class="node">🧠 Модель</div><div class="arrow">→</div>
+        <div class="node">📤 Результат</div>
+      </div>
+      <div class="kpi">
+        <div><strong>1</strong><span class="small">входные данные</span></div>
+        <div><strong>2</strong><span class="small">поиск закономерностей</span></div>
+        <div><strong>3</strong><span class="small">прогноз для новых данных</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="section-head"><div class="num">2</div><h2>Почему существуют разные виды машинного обучения</h2></div>
+  <div class="grid2">
+    <div>
+      <p>Не во всех задачах данные представлены одинаково. Поэтому способ обучения зависит от того, <b>какая информация доступна модели во время обучения и каким образом она получает обратную связь</b>.</p>
+      <p>Рассмотрим три ситуации:</p>
+      <ul>
+        <li>для фотографий растений заранее указаны правильные виды;</li>
+        <li>есть данные о покупках, но неизвестно, какие группы покупателей существуют;</li>
+        <li>робот действует в среде и узнаёт качество действия по награде или штрафу.</li>
+      </ul>
+    </div>
+    <div class="visual">
+      <div class="compare">
+        <div class="box supervised"><h3>👨‍🏫 С учителем</h3><span class="chip cblue">есть правильные ответы</span><p class="small">Учимся по размеченным примерам.</p></div>
+        <div class="box unsupervised"><h3>🧩 Без учителя</h3><span class="chip cgreen">нет меток</span><p class="small">Ищем скрытую структуру.</p></div>
+        <div class="box reinforcement"><h3>🎮 С подкреплением</h3><span class="chip corange">награды и штрафы</span><p class="small">Учимся выбирать действия.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Вид машинного обучения</th><th>Что используется для обучения</th><th>Что должна сделать модель</th></tr></thead>
+    <tbody>
+      <tr><td>С учителем</td><td>Данные с известными правильными ответами</td><td>Научиться прогнозировать ответ для новых объектов</td></tr>
+      <tr><td>Без учителя</td><td>Данные без известных правильных ответов</td><td>Самостоятельно обнаружить структуру или закономерности</td></tr>
+      <tr><td>С подкреплением</td><td>Среда, действия и система наград/штрафов</td><td>Научиться выбирать наиболее результативные действия</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s3">
+  <div class="section-head"><div class="num">3</div><h2>Обучение с учителем</h2></div>
+  <div class="grid2">
+    <div>
+      <p><b>Обучение с учителем (supervised learning)</b> — вид машинного обучения, при котором модель обучается на данных, для которых заранее известны правильные ответы.</p>
+      <p>Такие данные называются <mark>размеченными данными</mark>.</p>
+      <div class="callout"><b>Основной признак:</b> для обучающих примеров известен правильный результат.</div>
+      <h3>Классификация</h3>
+      <p><b>Классификация</b> — определение категории, к которой относится новый объект.</p>
+      <p>Примеры: жанр музыки, вид растения, наличие дефекта детали, категория обращения пользователя.</p>
+      <h3>Регрессия</h3>
+      <p><b>Регрессия</b> — прогноз числового значения. Например, стоимости автомобиля, расхода электроэнергии или времени доставки.</p>
+    </div>
+    <div class="visual">
+      <div class="flow">
+        <div class="node">📚 Размеченные данные</div><div class="arrow">→</div>
+        <div class="node">🧠 Обучение</div><div class="arrow">→</div>
+        <div class="node">🔮 Прогноз</div>
+      </div>
+      <table>
+        <thead><tr><th>Признаки</th><th>Известный ответ</th></tr></thead>
+        <tbody>
+          <tr><td>Температура, влажность, давление</td><td>Ясно / дождь / облачно</td></tr>
+          <tr><td>Площадь, этаж, район</td><td>Стоимость</td></tr>
+        </tbody>
+      </table>
+      <div class="compare">
+        <div class="box"><span class="chip cblue">Классификация</span><p><b>Ответ — категория</b></p></div>
+        <div class="box"><span class="chip cpurple">Регрессия</span><p><b>Ответ — число</b></p></div>
+        <div class="box"><span class="chip cblue">Общее</span><p><b>Есть известные ответы</b></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="section-head"><div class="num">4</div><h2>Обучение без учителя</h2></div>
+  <div class="grid2">
+    <div>
+      <p><b>Обучение без учителя (unsupervised learning)</b> — вид машинного обучения, при котором модель работает с данными, для которых заранее не указаны правильные ответы.</p>
+      <p>Такие данные называются <mark>неразмеченными</mark>.</p>
+      <p>Модель самостоятельно ищет сходство, группы и другие закономерности.</p>
+      <h3>Кластеризация</h3>
+      <p><b>Кластеризация</b> — объединение объектов в группы на основании их сходства.</p>
+      <div class="callout"><b>Основной признак:</b> готовых классов нет — модель должна найти группы самостоятельно.</div>
+    </div>
+    <div class="visual">
+      <div class="mini-diagram">
+        <div class="circle">👤👤👤<br>Неразмеченные объекты</div>
+        <div class="arrow">→</div>
+        <div class="circle">🔍<br>Сравнение признаков</div>
+        <div class="arrow">→</div>
+        <div class="circle">🟢🔵🟣<br>Кластеры</div>
+      </div>
+      <table>
+        <thead><tr><th>Классификация</th><th>Кластеризация</th></tr></thead>
+        <tbody>
+          <tr><td>Классы известны заранее</td><td>Группы заранее неизвестны</td></tr>
+          <tr><td>Размеченные данные</td><td>Неразмеченные данные</td></tr>
+          <tr><td>Определить известный класс</td><td>Найти группы самостоятельно</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="section-head"><div class="num">5</div><h2>Обучение с подкреплением</h2></div>
+  <div class="grid2">
+    <div>
+      <p><b>Обучение с подкреплением (reinforcement learning)</b> — вид машинного обучения, при котором система обучается, взаимодействуя со средой и получая за свои действия награды или штрафы.</p>
+      <h3>Основные понятия</h3>
+      <ul>
+        <li><b>агент</b> — система, принимающая решения;</li>
+        <li><b>среда</b> — пространство, в котором действует агент;</li>
+        <li><b>действие</b> — решение агента;</li>
+        <li><b>награда</b> — сигнал о качестве действия.</li>
+      </ul>
+      <div class="callout"><b>Главный вопрос:</b> какое действие следует выполнить, чтобы получить наиболее выгодный результат?</div>
+    </div>
+    <div class="visual">
+      <div class="flow">
+        <div class="node">🤖 Агент</div><div class="arrow">→</div>
+        <div class="node">🧭 Действие</div><div class="arrow">→</div>
+        <div class="node">🌍 Среда</div><div class="arrow">→</div>
+        <div class="node">🏆 Награда / штраф</div><div class="arrow">↺</div>
+      </div>
+      <p class="small" style="text-align:center;margin-top:18px">Пример: складской робот улучшает маршрут доставки после множества попыток.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="section-head"><div class="num">6</div><h2>Сравним три вида машинного обучения</h2></div>
+  <div class="visual">
+    <div class="tabs">
+      <button class="active" data-tab="t1">С учителем</button>
+      <button data-tab="t2">Без учителя</button>
+      <button data-tab="t3">С подкреплением</button>
+    </div>
+    <div id="t1" class="tab-content active">
+      <h3>👨‍🏫 С учителем</h3>
+      <p><span class="chip cblue">размеченные данные</span> <span class="chip cblue">известный ответ</span></p>
+      <p><b>Результат:</b> класс или числовое значение.</p>
+    </div>
+    <div id="t2" class="tab-content">
+      <h3>🧩 Без учителя</h3>
+      <p><span class="chip cgreen">неразмеченные данные</span> <span class="chip cgreen">поиск структуры</span></p>
+      <p><b>Результат:</b> группы, скрытые закономерности, структура данных.</p>
+    </div>
+    <div id="t3" class="tab-content">
+      <h3>🎮 С подкреплением</h3>
+      <p><span class="chip corange">агент</span> <span class="chip corange">среда</span> <span class="chip corange">награда</span></p>
+      <p><b>Результат:</b> стратегия действий.</p>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>Признак</th><th>С учителем</th><th>Без учителя</th><th>С подкреплением</th></tr></thead>
+    <tbody>
+      <tr><td>Правильные ответы заранее</td><td>Да</td><td>Нет</td><td>Нет готового ответа для каждого действия</td></tr>
+      <tr><td>Основные данные</td><td>Размеченные</td><td>Неразмеченные</td><td>Состояние среды и обратная связь</td></tr>
+      <tr><td>Основная задача</td><td>Предсказать результат</td><td>Найти скрытую структуру</td><td>Найти эффективную стратегию</td></tr>
+      <tr><td>Типичный результат</td><td>Класс или число</td><td>Группы / структура</td><td>Последовательность действий</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s7">
+  <div class="section-head"><div class="num">7</div><h2>Как определить вид машинного обучения</h2></div>
+  <div class="grid2">
+    <div>
+      <p>Не ориентируйтесь только на отдельные слова: «прогноз», «робот», «группа». Анализируйте <b>условия обучения модели</b>.</p>
+      <div class="decision">
+        <div class="q"><b>1. Есть ли заранее известные правильные ответы?</b><br><span class="yes">Да → обучение с учителем.</span></div>
+        <div class="q"><b>2. Правильных ответов нет, но нужно найти группы или структуру?</b><br><span class="yes">Да → обучение без учителя.</span></div>
+        <div class="q"><b>3. Система действует в среде и получает награды или штрафы?</b><br><span class="yes">Да → обучение с подкреплением.</span></div>
+      </div>
+    </div>
+    <div class="visual">
+      <h3 style="margin-top:0">Интерактивный тренажёр</h3>
+      <div class="quiz">
+        <div class="quiz-card">
+          <b>Кейс 1.</b> Для изображений деталей заранее указано «исправна» или «дефект».
+          <div>
+            <button onclick="check(this,'teacher')">С учителем</button>
+            <button onclick="check(this,'none')">Без учителя</button>
+            <button onclick="check(this,'reinforce')">С подкреплением</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+        <div class="quiz-card">
+          <b>Кейс 2.</b> Сервис самостоятельно объединяет слушателей со схожими музыкальными интересами.
+          <div>
+            <button onclick="check(this,'none')">Без учителя</button>
+            <button onclick="check(this,'teacher')">С учителем</button>
+            <button onclick="check(this,'reinforce')">С подкреплением</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+        <div class="quiz-card">
+          <b>Кейс 3.</b> Игровой персонаж получает баллы за полезные действия и штрафы за ошибки.
+          <div>
+            <button onclick="check(this,'reinforce')">С подкреплением</button>
+            <button onclick="check(this,'teacher')">С учителем</button>
+            <button onclick="check(this,'none')">Без учителя</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="section-head"><div class="num">8</div><h2>Как правильно обосновывать ответ</h2></div>
+  <div class="grid2">
+    <div>
+      <p>Недостаточно только назвать вид обучения. Нужно указать <b>признак условия задачи</b>, по которому сделан выбор.</p>
+      <div class="callout"><b>Формула ответа:</b><br>«Используется __________, потому что __________».</div>
+
+      <details>
+        <summary>Пример 1. Система определяет «исправно / неисправно»</summary>
+        <p><b>Ответ:</b> обучение с учителем, потому что для обучающих примеров заранее известны правильные классы.</p>
+      </details>
+      <details>
+        <summary>Пример 2. Компания хочет найти группы клиентов</summary>
+        <p><b>Ответ:</b> обучение без учителя, потому что классы заранее не заданы, а модель должна самостоятельно обнаружить группы похожих объектов.</p>
+      </details>
+      <details>
+        <summary>Пример 3. Дрон получает награду за безопасную посадку</summary>
+        <p><b>Ответ:</b> обучение с подкреплением, потому что агент взаимодействует со средой и получает награды или штрафы.</p>
+      </details>
+    </div>
+    <div class="visual">
+      <div class="flow">
+        <div class="node">1️⃣ Назови вид</div><div class="arrow">→</div>
+        <div class="node">2️⃣ Найди признак</div><div class="arrow">→</div>
+        <div class="node">3️⃣ Обоснуй</div>
+      </div>
+      <div class="callout" style="margin-top:22px">
+        <b>Критерий хорошего ответа:</b> ученик связывает выбор парадигмы с характером данных и способом получения обратной связи.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="section-head"><div class="num">9</div><h2>Один контекст — разные виды обучения</h2></div>
+  <p>Один и тот же практический контекст может использовать разные виды машинного обучения. Всё зависит от того, <b>как организовано обучение</b>.</p>
+  <div class="compare">
+    <div class="box supervised">
+      <h3>Интернет-магазин: вариант 1</h3>
+      <p>Есть история заказов и известен факт повторной покупки.</p>
+      <span class="chip cblue">С учителем</span>
+    </div>
+    <div class="box unsupervised">
+      <h3>Интернет-магазин: вариант 2</h3>
+      <p>Нужно самостоятельно найти группы покупателей со сходным поведением.</p>
+      <span class="chip cgreen">Без учителя</span>
+    </div>
+    <div class="box reinforcement">
+      <h3>Интернет-магазин: вариант 3</h3>
+      <p>Система пробует разные рекомендации и получает награду за успешные действия.</p>
+      <span class="chip corange">С подкреплением</span>
+    </div>
+  </div>
+  <div class="callout"><b>Вывод:</b> вид машинного обучения определяется не предметной областью, а тем, какие данные и какая обратная связь используются при обучении.</div>
+</section>
+
+<section id="s10">
+  <div class="section-head"><div class="num">10</div><h2>Главное по теме</h2></div>
+  <div class="grid2">
+    <div>
+      <div class="decision">
+        <div class="q"><b>Есть правильные ответы?</b><br><span class="yes">→ С учителем</span></div>
+        <div class="q"><b>Нет ответов, но нужно найти структуру?</b><br><span class="yes">→ Без учителя</span></div>
+        <div class="q"><b>Есть действия, среда, награды и штрафы?</b><br><span class="yes">→ С подкреплением</span></div>
+      </div>
+      <h3>Запомните</h3>
+      <ul>
+        <li><b>С учителем:</b> «Есть правильные ответы — научись их предсказывать».</li>
+        <li><b>Без учителя:</b> «Правильных ответов нет — найди структуру самостоятельно».</li>
+        <li><b>С подкреплением:</b> «Действуй, получай обратную связь и улучшай стратегию».</li>
+      </ul>
+    </div>
+    <div class="visual">
+      <h3 style="margin-top:0">Самопроверка</h3>
+      <p>Выберите утверждение, которое лучше всего описывает вашу готовность:</p>
+      <button class="btn" onclick="selfCheck('a')">Я различаю виды по данным</button>
+      <button class="btn" onclick="selfCheck('b')">Я могу обосновать выбор</button>
+      <button class="btn" onclick="selfCheck('c')">Мне нужно повторить</button>
+      <div id="selfFeedback" class="feedback"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="inner">
+    <p>© Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.tabs button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+function check(btn, correct){
+  const card = btn.closest('.quiz-card');
+  const feedback = card.querySelector('.feedback');
+  const label = btn.textContent.trim();
+  const expected = correct==='teacher' ? 'С учителем' : correct==='none' ? 'Без учителя' : 'С подкреплением';
+  if(label===expected){
+    feedback.textContent='Верно. Ключевой признак выбран правильно.';
+    feedback.className='feedback good';
+  } else {
+    feedback.textContent='Неверно. Снова определите: есть ли метки, скрытая структура или система наград/штрафов.';
+    feedback.className='feedback bad';
+  }
+}
+
+function selfCheck(v){
+  const out=document.getElementById('selfFeedback');
+  if(v==='a'){
+    out.textContent='Хорошо. Следующий шаг — обязательно связывать выбор вида обучения с признаком условия задачи.';
+    out.className='feedback good';
+  }else if(v==='b'){
+    out.textContent='Отлично. Это соответствует ожидаемому результату урока.';
+    out.className='feedback good';
+  }else{
+    out.textContent='Повторите раздел 7 и снова пройдите интерактивный тренажёр.';
+    out.className='feedback';
+  }
+}
+</script>
+
+</body>
+</html>
