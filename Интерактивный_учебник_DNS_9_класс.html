@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Доменная система имён — 9 класс</title>
+<style>
+:root{
+  --bg:#f4f8fc;
+  --card:#ffffff;
+  --ink:#17324d;
+  --muted:#60758a;
+  --blue:#1f5f99;
+  --blue2:#dcecff;
+  --green:#e6f5e8;
+  --yellow:#fff4cf;
+  --orange:#ffe7d6;
+  --purple:#eee6ff;
+  --line:#c7d6e5;
+  --shadow:0 10px 28px rgba(31,95,153,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#eef6ff 0%,#f8fbfd 18%,#f4f8fc 100%);
+  color:var(--ink);
+  line-height:1.6;
+}
+header{
+  background:linear-gradient(135deg,#164c7c,#2776b8);
+  color:#fff;
+  padding:46px 22px 34px;
+  text-align:center;
+}
+header h1{margin:0;font-size:clamp(30px,5vw,54px);line-height:1.08}
+header p{margin:12px 0 0;font-size:18px;opacity:.95}
+.goal{
+  max-width:1100px;margin:-18px auto 26px;padding:0 18px;
+}
+.goal .box{
+  background:#fff;border-left:7px solid #2a76b8;border-radius:16px;
+  box-shadow:var(--shadow);padding:20px 24px;
+}
+nav{
+  max-width:1100px;margin:0 auto 28px;padding:0 18px;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+nav a{
+  text-decoration:none;color:#195786;background:#e7f1fb;border:1px solid #c9def2;
+  padding:8px 12px;border-radius:999px;font-size:14px;
+}
+main{max-width:1100px;margin:auto;padding:0 18px 50px}
+.section{
+  background:var(--card);border:1px solid #dfe8f1;border-radius:20px;
+  box-shadow:var(--shadow);padding:26px;margin:0 0 24px;
+}
+.section h2{margin:0 0 12px;color:#174f7f;font-size:26px}
+.section h3{color:#1d5d92;margin:18px 0 8px}
+.layout{
+  display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);
+  gap:24px;align-items:start;
+}
+@media(max-width:820px){.layout{grid-template-columns:1fr}}
+.note{
+  border-radius:14px;padding:14px 16px;margin:14px 0;border:1px solid var(--line)
+}
+.note.def{background:var(--yellow)}
+.note.green{background:var(--green)}
+.note.blue{background:var(--blue2)}
+.note.orange{background:var(--orange)}
+.muted{color:var(--muted)}
+.visual{
+  background:linear-gradient(180deg,#f8fbff,#eef5fb);
+  border:1px solid #cfdeec;border-radius:18px;padding:18px;min-height:180px;
+}
+.visual-title{font-weight:700;color:#205f93;margin-bottom:12px}
+.pill{
+  display:inline-block;padding:7px 10px;border-radius:999px;background:#e6f0fb;border:1px solid #c5d8eb;
+  margin:4px;font-family:Consolas,monospace;font-weight:700;
+}
+.big-arrow{font-size:26px;color:#5680a4;vertical-align:middle}
+.domain-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.domain-node{
+  padding:14px 16px;border-radius:14px;background:#fff;border:2px solid #c8daea;
+  text-align:center;min-width:100px;cursor:pointer;transition:.2s;
+}
+.domain-node:hover,.domain-node.active{transform:translateY(-2px);border-color:#2d79b8;box-shadow:0 7px 18px rgba(45,121,184,.14)}
+.domain-node small{display:block;color:#668097;margin-top:5px}
+#domainExplain{
+  margin-top:14px;padding:12px 14px;background:#fff;border-radius:12px;border:1px dashed #9dbcd7;min-height:52px
+}
+.tld-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tld-card{background:#fff;border:1px solid #d4e0ec;border-radius:12px;padding:10px 12px}
+.tld-card b{font-family:Consolas,monospace;color:#18598c}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.flow .step{
+  flex:1 1 150px;min-height:86px;background:#fff;border:1px solid #c8d9e8;
+  border-radius:14px;padding:12px;text-align:center;display:flex;align-items:center;justify-content:center;
+}
+.flow .arrow{font-size:26px;color:#4e83ad}
+.tree{display:flex;flex-direction:column;gap:8px;align-items:center}
+.tree .level{
+  width:min(92%,520px);text-align:center;border-radius:12px;padding:10px;border:1px solid #cbdbea;background:#fff;
+}
+.tree .level:nth-child(1){width:36%;background:#dcecff}
+.tree .level:nth-child(2){width:48%}
+.tree .level:nth-child(3){width:60%}
+.tree .level:nth-child(4){width:74%}
+.tree .level:nth-child(5){width:88%}
+.mini-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+.mini-table th,.mini-table td{border:1px solid #d3e0eb;padding:10px;vertical-align:top}
+.mini-table th{background:#1f5f99;color:white}
+.terminal{
+  background:#13212d;color:#d7f7db;border-radius:14px;padding:16px;font-family:Consolas,monospace;
+  box-shadow:inset 0 0 0 1px #2f4759;
+}
+.terminal input{
+  width:100%;margin-top:8px;background:#0f1a23;color:#d7f7db;border:1px solid #476478;border-radius:8px;
+  padding:10px;font-family:Consolas,monospace
+}
+button{
+  border:none;border-radius:10px;padding:10px 14px;background:#1f6ca8;color:white;font-weight:700;cursor:pointer;
+}
+button:hover{background:#155989}
+.sim-result{
+  margin-top:10px;background:#fff;border:1px solid #cfe0ee;border-radius:12px;padding:12px;display:none
+}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.compare .col{border-radius:14px;padding:14px;border:1px solid #d4e2ee;background:#fff}
+.compare h4{margin:0 0 8px;color:#1f5f99}
+.checklist{padding-left:20px}
+.selfcheck details{
+  background:#f8fbff;border:1px solid #d6e3ef;border-radius:12px;margin:9px 0;padding:12px 14px
+}
+.selfcheck summary{cursor:pointer;font-weight:700}
+footer{
+  background:#173f61;color:#eaf4fb;padding:28px 22px;text-align:center
+}
+footer p{max-width:1000px;margin:auto}
+.kbd{
+  font-family:Consolas,monospace;background:#172633;color:#e7f1f9;border-radius:6px;padding:2px 7px
+}
+.progress-wrap{
+  position:fixed;top:0;left:0;right:0;height:5px;background:rgba(255,255,255,.25);z-index:9999
+}
+#progress{height:100%;width:0;background:#ffd166}
+.badge{
+  display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;background:#e9f3ff;color:#1c5c90;
+}
+ul{margin-top:6px}
+</style>
+</head>
+<body>
+<div class="progress-wrap"><div id="progress"></div></div>
+
+<header>
+  <div class="badge">Информатика и ИИ · 9 класс</div>
+  <h1>Доменная система имён</h1>
+  <p>Как DNS связывает понятные человеку имена сайтов с IP-адресами</p>
+</header>
+
+<div class="goal">
+  <div class="box">
+    <b>Цель обучения 9.1.2.3:</b> объяснять назначение и структуру DNS.
+  </div>
+</div>
+
+<nav>
+  <a href="#s1">Зачем нужна DNS?</a>
+  <a href="#s2">Доменное имя</a>
+  <a href="#s3">Домены верхнего уровня</a>
+  <a href="#s4">Преобразование в IP</a>
+  <a href="#s5">Древовидная структура</a>
+  <a href="#s6">Анализ домена</a>
+  <a href="#s7">Имя и IP</a>
+  <a href="#s8">Практика ping</a>
+  <a href="#s9">Почему DNS важна?</a>
+  <a href="#s10">Главное</a>
+  <a href="#check">Проверь себя</a>
+</nav>
+
+<main>
+
+<section id="s1" class="section">
+  <h2>1. Зачем нужна DNS?</h2>
+  <div class="layout">
+    <div>
+      <p>Каждое устройство в сети Интернет использует <b>IP-адрес</b>. Компьютерам удобно работать с числовыми адресами, но человеку проще запоминать понятные символьные имена сайтов. Поэтому в Интернете используется DNS — система, которая связывает доменные имена с IP-адресами.</p>
+      <div class="note def"><b>Определение.</b> DNS (Domain Name System) — доменная система имён, обеспечивающая сопоставление доменных имён и IP-адресов.</div>
+      <p><b>DNS позволяет:</b></p>
+      <ul>
+        <li>определять IP-адрес по доменному имени;</li>
+        <li>сопоставлять IP-адрес с соответствующим ему именем;</li>
+        <li>находить сетевые ресурсы по понятным человеку именам.</li>
+      </ul>
+      <div class="note blue"><b>Аналогия.</b> DNS часто называют «телефонной книгой Интернета»: пользователь знает имя ресурса, а система помогает определить его числовой адрес.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Визуализация: «имя ↔ адрес»</div>
+      <div style="text-align:center;font-size:18px;margin-top:25px">
+        <span class="pill">www.example.kz</span>
+        <span class="big-arrow">⇄</span>
+        <span class="pill">IP-адрес</span>
+      </div>
+      <svg viewBox="0 0 520 180" width="100%" aria-label="DNS как телефонная книга Интернета">
+        <rect x="35" y="55" rx="14" ry="14" width="150" height="72" fill="#ffffff" stroke="#9fbfd8" stroke-width="2"/>
+        <text x="110" y="84" text-anchor="middle" font-size="16" fill="#17324d">Пользователь</text>
+        <text x="110" y="106" text-anchor="middle" font-size="13" fill="#60758a">помнит имя</text>
+        <rect x="335" y="55" rx="14" ry="14" width="150" height="72" fill="#ffffff" stroke="#9fbfd8" stroke-width="2"/>
+        <text x="410" y="84" text-anchor="middle" font-size="16" fill="#17324d">Компьютер</text>
+        <text x="410" y="106" text-anchor="middle" font-size="13" fill="#60758a">использует IP</text>
+        <circle cx="260" cy="91" r="48" fill="#dcecff" stroke="#2d79b8" stroke-width="2"/>
+        <text x="260" y="86" text-anchor="middle" font-size="22" font-weight="700" fill="#1f5f99">DNS</text>
+        <text x="260" y="108" text-anchor="middle" font-size="12" fill="#60758a">сопоставляет</text>
+        <line x1="185" y1="91" x2="212" y2="91" stroke="#5680a4" stroke-width="3"/>
+        <polygon points="212,91 202,85 202,97" fill="#5680a4"/>
+        <line x1="308" y1="91" x2="335" y2="91" stroke="#5680a4" stroke-width="3"/>
+        <polygon points="335,91 325,85 325,97" fill="#5680a4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="s2" class="section">
+  <h2>2. Что такое доменное имя?</h2>
+  <div class="layout">
+    <div>
+      <div class="note green"><b>Доменное имя</b> — символьный адрес интернет-ресурса, состоящий из частей, разделённых точками.</div>
+      <p><b>Пример:</b> <span class="kbd">www.qqq.microsoft.ru</span></p>
+      <p>Доменное имя имеет <b>иерархическую структуру</b>. При анализе уровней домена удобно двигаться <b>справа налево</b>: от более общего уровня к более конкретному.</p>
+      <p><b>Структура примера:</b> . → ru → microsoft → qqq → www</p>
+      <p>Корневой домен находится на вершине иерархии. Далее располагаются домены верхнего уровня, затем домены второго и последующих уровней, а слева может находиться имя конкретного узла или сервера.</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Нажмите на часть доменного имени</div>
+      <div class="domain-row">
+        <div class="domain-node" data-text="www — узел или конкретный ресурс"><b>www</b><small>узел</small></div>
+        <div class="domain-node" data-text="qqq — домен 3-го уровня"><b>qqq</b><small>3-й уровень</small></div>
+        <div class="domain-node" data-text="microsoft — домен 2-го уровня"><b>microsoft</b><small>2-й уровень</small></div>
+        <div class="domain-node" data-text="ru — домен верхнего (1-го) уровня"><b>ru</b><small>1-й уровень</small></div>
+        <div class="domain-node" data-text=". — корневой домен, вершина иерархии"><b>.</b><small>корень</small></div>
+      </div>
+      <div id="domainExplain">Иерархию удобно читать справа налево: от общего уровня к конкретному.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s3" class="section">
+  <h2>3. Домены верхнего уровня</h2>
+  <div class="layout">
+    <div>
+      <p>Домены верхнего уровня располагаются непосредственно под корневым доменом. Они могут указывать на государство или относиться к доменным зонам общего назначения.</p>
+      <table class="mini-table">
+        <tr><th>Национальные домены</th><th>Домены общего назначения</th></tr>
+        <tr><td>.kz — Казахстан</td><td>.com — коммерческие ресурсы</td></tr>
+        <tr><td>.ru — Россия</td><td>.edu — образовательные организации</td></tr>
+        <tr><td>.ua — Украина</td><td>.gov — государственные учреждения</td></tr>
+        <tr><td>.fr — Франция</td><td>.net — сетевые организации</td></tr>
+        <tr><td>.ca — Канада</td><td>.org — различные организации</td></tr>
+        <tr><td></td><td>.info — информационные ресурсы</td></tr>
+      </table>
+      <div class="note blue"><b>Важно:</b> смысл доменной зоны помогает понять место имени в структуре DNS, но основной принцип анализа остаётся неизменным — уровни домена читаются справа налево.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Визуализация доменных зон</div>
+      <div class="tld-grid">
+        <div class="tld-card"><b>.kz</b><br><span class="muted">Казахстан</span></div>
+        <div class="tld-card"><b>.com</b><br><span class="muted">коммерческие ресурсы</span></div>
+        <div class="tld-card"><b>.ru</b><br><span class="muted">Россия</span></div>
+        <div class="tld-card"><b>.edu</b><br><span class="muted">образовательные организации</span></div>
+        <div class="tld-card"><b>.ua</b><br><span class="muted">Украина</span></div>
+        <div class="tld-card"><b>.gov</b><br><span class="muted">государственные учреждения</span></div>
+        <div class="tld-card"><b>.fr</b><br><span class="muted">Франция</span></div>
+        <div class="tld-card"><b>.net</b><br><span class="muted">сетевые организации</span></div>
+        <div class="tld-card"><b>.ca</b><br><span class="muted">Канада</span></div>
+        <div class="tld-card"><b>.org</b><br><span class="muted">различные организации</span></div>
+        <div class="tld-card"><b>.info</b><br><span class="muted">информационные ресурсы</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s4" class="section">
+  <h2>4. Как DNS преобразует имя в IP-адрес?</h2>
+  <p>Когда пользователь вводит адрес сайта, компьютеру необходимо узнать IP-адрес соответствующего сервера. DNS обеспечивает это преобразование.</p>
+  <ol>
+    <li><b>Пользователь вводит доменное имя.</b> В адресной строке браузера указывается понятное имя сайта.</li>
+    <li><b>Формируется DNS-запрос.</b> Компьютер запрашивает информацию о том, какой IP-адрес соответствует указанному имени.</li>
+    <li><b>DNS определяет соответствие.</b> Система находит нужную запись и возвращает IP-адрес.</li>
+    <li><b>Компьютер обращается к серверу.</b> Полученный IP-адрес используется для дальнейшего сетевого взаимодействия.</li>
+  </ol>
+  <div class="visual">
+    <div class="visual-title">Ключевая последовательность</div>
+    <div class="flow">
+      <div class="step"><b>Доменное имя</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>DNS-запрос</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>Определение IP-адреса</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>Обращение к серверу</b></div>
+    </div>
+    <div style="margin-top:16px;text-align:center">
+      <button id="runFlow">Показать процесс</button>
+      <div id="flowText" class="sim-result"></div>
+    </div>
+  </div>
+</section>
+
+<section id="s5" class="section">
+  <h2>5. Почему DNS имеет древовидную структуру?</h2>
+  <div class="layout">
+    <div>
+      <p>Интернет содержит огромное количество ресурсов. Иерархическая организация позволяет упорядочить доменные имена и последовательно уточнять адрес ресурса.</p>
+      <p><b>Получается цепочка:</b> . → kz → edu → smk → www</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Дерево уровней DNS</div>
+      <div class="tree">
+        <div class="level"><b>.</b><br><span class="muted">Корневой домен</span></div>
+        <div>↓</div>
+        <div class="level"><b>kz</b><br><span class="muted">Домен верхнего уровня</span></div>
+        <div>↓</div>
+        <div class="level"><b>edu</b><br><span class="muted">Домен второго уровня</span></div>
+        <div>↓</div>
+        <div class="level"><b>smk</b><br><span class="muted">Домен третьего уровня</span></div>
+        <div>↓</div>
+        <div class="level"><b>www</b><br><span class="muted">Конкретный узел</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s6" class="section">
+  <h2>6. Как анализировать доменное имя?</h2>
+  <div class="layout">
+    <div>
+      <p>Рассмотрим условный адрес: <span class="kbd">www.school.edu.kz</span></p>
+      <p><b>Двигаемся справа налево:</b> kz → edu → school → www</p>
+      <ul>
+        <li><b>kz</b> — домен верхнего уровня;</li>
+        <li><b>edu</b> — следующий уровень доменной иерархии;</li>
+        <li><b>school</b> — более конкретный домен;</li>
+        <li><b>www</b> — конкретный узел или ресурс.</li>
+      </ul>
+      <div class="note orange"><b>Главный принцип:</b> при декомпозиции доменного имени нужно определить каждую часть и её положение в иерархии.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Интерактивный разбор доменного имени</div>
+      <input id="domainInput" value="www.school.edu.kz" style="width:100%;padding:11px;border-radius:10px;border:1px solid #b9ccdc;font-family:Consolas,monospace">
+      <button style="margin-top:10px" onclick="analyzeDomain()">Разобрать</button>
+      <div id="analysisOut" style="margin-top:12px"></div>
+    </div>
+  </div>
+</section>
+
+<section id="s7" class="section">
+  <h2>7. Доменное имя и IP-адрес</h2>
+  <div class="layout">
+    <div>
+      <table class="mini-table">
+        <tr><th>Доменное имя</th><th>IP-адрес</th></tr>
+        <tr><td>Понятно и удобно человеку</td><td>Используется компьютерами для сетевой адресации</td></tr>
+        <tr><td>Состоит из символьных частей</td><td>Представлен числовым адресом</td></tr>
+        <tr><td>Имеет иерархическую структуру</td><td>Определяет адрес узла в сети</td></tr>
+        <tr><td>Преобразуется DNS в IP-адрес</td><td>Используется для обращения к нужному узлу</td></tr>
+      </table>
+      <p><b>Важно различать эти понятия.</b> DNS связывает удобное человеку доменное имя с IP-адресом, который необходим компьютеру для сетевого взаимодействия.</p>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Сравнение</div>
+      <div class="compare">
+        <div class="col">
+          <h4>Доменное имя</h4>
+          <p>для человека</p>
+          <div class="pill">www.site.kz</div>
+        </div>
+        <div class="col">
+          <h4>IP-адрес</h4>
+          <p>для сетевого взаимодействия</p>
+          <div class="pill">числовой адрес</div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:28px;margin-top:12px">↔ DNS ↔</div>
+    </div>
+  </div>
+</section>
+
+<section id="s8" class="section">
+  <h2>8. Практическое наблюдение DNS-преобразования</h2>
+  <div class="layout">
+    <div>
+      <p>Увидеть результат преобразования доменного имени в IP-адрес можно с помощью сетевых команд. В учебной практике для этого используют, например, команду <span class="kbd">ping</span>.</p>
+      <div class="note green"><b>Пример задания.</b> Откройте командную строку, выполните команду <span class="kbd">ping</span> для выбранного сайта и определите, какой IP-адрес был получен. Сопоставьте доменное имя и IP-адрес.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Имитация командной строки</div>
+      <div class="terminal">
+        C:\Users\Student&gt; ping
+        <input id="pingInput" value="example.kz" aria-label="домен для ping">
+        <div style="margin-top:10px"><button onclick="fakePing()">Выполнить</button></div>
+        <div id="pingOut" style="margin-top:12px;white-space:pre-line"></div>
+      </div>
+      <p class="muted" style="font-size:13px;margin-bottom:0">Это учебная имитация: реальный IP-адрес следует определять в командной строке вашего компьютера.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s9" class="section">
+  <h2>9. Почему DNS важна?</h2>
+  <div class="layout">
+    <div>
+      <p>DNS делает Интернет удобным для человека. Пользователь работает с понятными именами сайтов, а система автоматически определяет числовые адреса, необходимые для передачи данных.</p>
+      <p><b>Без DNS</b> при обращении к ресурсам пришлось бы использовать числовые IP-адреса напрямую.</p>
+      <div class="note def"><b>Запомните.</b> DNS связывает два представления адреса одного и того же сетевого ресурса: доменное имя ↔ IP-адрес.</div>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Смысл DNS в одной схеме</div>
+      <svg viewBox="0 0 520 250" width="100%">
+        <rect x="35" y="38" width="180" height="64" rx="14" fill="#fff" stroke="#9fbfd8" stroke-width="2"/>
+        <text x="125" y="67" text-anchor="middle" font-size="16" fill="#17324d">Понятное имя</text>
+        <text x="125" y="87" text-anchor="middle" font-size="13" fill="#60758a">для пользователя</text>
+        <rect x="305" y="38" width="180" height="64" rx="14" fill="#fff" stroke="#9fbfd8" stroke-width="2"/>
+        <text x="395" y="67" text-anchor="middle" font-size="16" fill="#17324d">IP-адрес</text>
+        <text x="395" y="87" text-anchor="middle" font-size="13" fill="#60758a">для сети</text>
+        <path d="M215 70 C250 20, 270 20, 305 70" fill="none" stroke="#2d79b8" stroke-width="4"/>
+        <path d="M305 145 C270 195, 250 195, 215 145" fill="none" stroke="#2d79b8" stroke-width="4"/>
+        <circle cx="260" cy="123" r="46" fill="#dcecff" stroke="#2d79b8" stroke-width="2"/>
+        <text x="260" y="118" text-anchor="middle" font-size="22" font-weight="700" fill="#1f5f99">DNS</text>
+        <text x="260" y="140" text-anchor="middle" font-size="12" fill="#60758a">связывает</text>
+        <text x="260" y="224" text-anchor="middle" font-size="14" fill="#60758a">Имя ресурса ↔ числовой адрес</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="s10" class="section">
+  <h2>10. Главное по теме</h2>
+  <div class="layout">
+    <div>
+      <ul class="checklist">
+        <li>DNS — доменная система имён, сопоставляющая доменные имена и IP-адреса.</li>
+        <li>Доменное имя состоит из частей, разделённых точками.</li>
+        <li>Структура DNS иерархическая; уровни домена анализируют справа налево.</li>
+        <li>Корневой домен находится на вершине иерархии, ниже располагаются домены верхнего и последующих уровней.</li>
+        <li>При обращении к сайту выполняется цепочка: доменное имя → DNS-запрос → IP-адрес → обращение к серверу.</li>
+        <li>DNS позволяет использовать понятные человеку имена вместо запоминания числовых IP-адресов.</li>
+      </ul>
+    </div>
+    <div class="visual">
+      <div class="visual-title">Карта темы</div>
+      <svg viewBox="0 0 520 360" width="100%">
+        <circle cx="260" cy="180" r="52" fill="#dcecff" stroke="#2d79b8" stroke-width="3"/>
+        <text x="260" y="188" text-anchor="middle" font-size="28" font-weight="700" fill="#1f5f99">DNS</text>
+        <g font-size="14" fill="#17324d">
+          <rect x="30" y="35" width="160" height="58" rx="12" fill="#fff" stroke="#b9cfe2"/>
+          <text x="110" y="61" text-anchor="middle">Доменное имя</text>
+          <text x="110" y="80" text-anchor="middle" fill="#60758a">символьный адрес</text>
+          <rect x="330" y="35" width="160" height="58" rx="12" fill="#fff" stroke="#b9cfe2"/>
+          <text x="410" y="61" text-anchor="middle">IP-адрес</text>
+          <text x="410" y="80" text-anchor="middle" fill="#60758a">числовой адрес</text>
+          <rect x="30" y="265" width="160" height="58" rx="12" fill="#fff" stroke="#b9cfe2"/>
+          <text x="110" y="291" text-anchor="middle">Иерархия</text>
+          <text x="110" y="310" text-anchor="middle" fill="#60758a">справа налево</text>
+          <rect x="330" y="265" width="160" height="58" rx="12" fill="#fff" stroke="#b9cfe2"/>
+          <text x="410" y="291" text-anchor="middle">DNS-запрос</text>
+          <text x="410" y="310" text-anchor="middle" fill="#60758a">поиск соответствия</text>
+        </g>
+        <line x1="212" y1="142" x2="170" y2="93" stroke="#6f97b8" stroke-width="3"/>
+        <line x1="308" y1="142" x2="350" y2="93" stroke="#6f97b8" stroke-width="3"/>
+        <line x1="212" y1="218" x2="170" y2="265" stroke="#6f97b8" stroke-width="3"/>
+        <line x1="308" y1="218" x2="350" y2="265" stroke="#6f97b8" stroke-width="3"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="check" class="section selfcheck">
+  <h2>Проверь себя</h2>
+  <p>Откройте каждый вопрос и сформулируйте ответ своими словами, опираясь на материал учебника.</p>
+
+  <details><summary>1. Что такое DNS и для чего она используется?</summary><p>Вернитесь к блоку «Зачем нужна DNS?» и объясните связь доменного имени с IP-адресом.</p></details>
+  <details><summary>2. Что называется доменным именем?</summary><p>Используйте определение из блока «Что такое доменное имя?».</p></details>
+  <details><summary>3. В каком направлении анализируют уровни доменного имени?</summary><p>Подсказка: от более общего уровня к более конкретному.</p></details>
+  <details><summary>4. Какую роль выполняет домен верхнего уровня?</summary><p>Посмотрите примеры национальных доменов и доменов общего назначения.</p></details>
+  <details><summary>5. Как происходит преобразование доменного имени в IP-адрес?</summary><p>Воспроизведите ключевую последовательность из четырёх этапов.</p></details>
+  <details><summary>6. Чем доменное имя отличается от IP-адреса?</summary><p>Сравните две колонки в блоке «Доменное имя и IP-адрес».</p></details>
+  <details><summary>7. Почему DNS сравнивают с «телефонной книгой» Интернета?</summary><p>Объясните, как система помогает находить числовой адрес по понятному имени.</p></details>
+
+  <div class="visual" style="margin-top:18px">
+    <div class="visual-title">Мини-самопроверка</div>
+    <p><b>Как правильно анализировать адрес www.school.edu.kz?</b></p>
+    <button onclick="quiz(this,'ok')">kz → edu → school → www</button>
+    <button onclick="quiz(this,'bad')">www → school → edu → kz</button>
+    <div id="quizResult" class="sim-result"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© Муршель Татьяна Викторовна, учитель информатики КГУ "Экономический лицей" отдела образования г. Семей управления образования области Абай, 2026</p>
+</footer>
+
+<script>
+const nodes = document.querySelectorAll('.domain-node');
+nodes.forEach(n=>{
+  n.addEventListener('click', ()=>{
+    nodes.forEach(x=>x.classList.remove('active'));
+    n.classList.add('active');
+    document.getElementById('domainExplain').textContent = n.dataset.text;
+  });
+});
+
+const flowMessages = [
+  '1. Пользователь вводит доменное имя.',
+  '2. Компьютер формирует DNS-запрос.',
+  '3. DNS находит соответствующий IP-адрес.',
+  '4. Компьютер использует IP-адрес для обращения к серверу.'
+];
+let flowIndex = 0;
+document.getElementById('runFlow').addEventListener('click', ()=>{
+  const box = document.getElementById('flowText');
+  box.style.display='block';
+  box.textContent = flowMessages[flowIndex];
+  flowIndex = (flowIndex+1)%flowMessages.length;
+});
+
+function analyzeDomain(){
+  const value=document.getElementById('domainInput').value.trim().replace(/\.$/,'');
+  const out=document.getElementById('analysisOut');
+  if(!value){out.innerHTML='<span class="muted">Введите доменное имя.</span>';return;}
+  const parts=value.split('.').filter(Boolean);
+  const reversed=[...parts].reverse();
+  out.innerHTML = '<div class="domain-row">'+
+    reversed.map((p,i)=>'<div class="domain-node"><b>'+p.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))+'</b><small>'+(i===0?'верхний уровень':(i===reversed.length-1?'узел / ресурс':'следующий уровень'))+'</small></div>').join('')+
+    '</div><p class="muted">Разбор показан справа налево: от общего уровня к более конкретному.</p>';
+}
+
+function fakePing(){
+  const name=document.getElementById('pingInput').value.trim() || 'example.kz';
+  const out=document.getElementById('pingOut');
+  out.textContent='Запрос к '+name+' ...\nDNS: доменное имя сопоставляется с IP-адресом\nРезультат: определите реальный IP-адрес на своём компьютере.';
+}
+
+function quiz(btn,state){
+  const r=document.getElementById('quizResult');
+  r.style.display='block';
+  r.textContent = state==='ok'
+    ? 'Верно: уровни домена анализируют справа налево.'
+    : 'Попробуйте ещё раз: начинайте с правой части доменного имени.';
+}
+
+window.addEventListener('scroll', ()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  document.getElementById('progress').style.width=sc+'%';
+});
+</script>
+</body>
+</html>
