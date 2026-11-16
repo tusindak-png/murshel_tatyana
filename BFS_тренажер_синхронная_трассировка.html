@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BFS — пошаговый тренажёр с трассировкой</title>
+<style>
+:root{--blue:#216db5;--dark:#183453;--muted:#637790;--line:#d8e3f0;--bg:#f3f7fc;--green:#138567;--amber:#d79327;--violet:#7857ba}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--dark);font:15px/1.48 system-ui,-apple-system,Segoe UI,Arial,sans-serif}header{background:#fff;border-bottom:1px solid var(--line);padding:20px max(20px,calc((100% - 1450px)/2));}h1{font-size:clamp(23px,3vw,35px);margin:0;color:#1766ab}header p{margin:5px 0 0;color:var(--muted)}main{max-width:1450px;margin:auto;padding:20px;display:grid;gap:15px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px;box-shadow:0 3px 12px #254b7110}h2{margin:0 0 12px;font-size:20px}h3{margin:0 0 8px;font-size:16px}.subtitle{color:var(--muted);font-size:13px}.setup-row{display:flex;gap:12px;align-items:end;flex-wrap:wrap}label{font-weight:600;display:block;margin-bottom:4px}input,select,textarea{border:1px solid #b8cadd;border-radius:8px;padding:9px 11px;font:inherit;color:#183453;background:#fff}input[type=number]{width:95px}button{border:0;border-radius:9px;background:var(--blue);color:white;font:600 14px system-ui;cursor:pointer;padding:10px 15px;min-height:40px}button:hover:not(:disabled){filter:brightness(.93)}button:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#e9f1fb;color:#155993}.outline{background:#fff;border:1px solid #abc5e1;color:#155993}.danger{background:#fff0ed;color:#a63821}.buttonrow{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.adj{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin:12px 0}.adj-item{display:flex;gap:10px;align-items:center}.adj-item label{width:30px;margin:0;flex:none}.adj-item input{width:100%;min-width:0}.note{font-size:13px;color:var(--muted);margin:8px 0}.error{color:#a52b27;font-weight:600;min-height:20px}.ok{color:#087451;font-weight:600;min-height:20px}.workspace{display:grid;grid-template-columns:minmax(330px,.9fr) minmax(500px,1.25fr);gap:15px}.trace-workspace{display:block}.left-stack{display:flex;flex-direction:column;gap:15px;min-width:0}.graph-area{min-height:350px;display:grid;place-items:center;background:linear-gradient(#fcfdff,#f5faff);border:1px solid var(--line);border-radius:12px}svg{width:100%;height:auto;max-height:440px}.edge{stroke:#8ca9cd;stroke-width:2.6}.edge.active{stroke:#c18128;stroke-width:4}.node circle{fill:#5d90c8;stroke:#346399;stroke-width:2.8}.node text{font-size:19px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:central}.node.inqueue circle{fill:#d7952a;stroke:#a96e16}.node.done circle{fill:#1c9477;stroke:#10674f}.node.current circle{fill:#6750b7;stroke:#3c2a7f;stroke-width:4}.legend{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 0;font-size:12px}.dot{display:inline-block;width:11px;height:11px;border-radius:100%;margin-right:5px}.code{background:#101b2e;color:#edf4ff;border-radius:10px;overflow:auto;padding:11px 0;font:13.2px/1.62 Consolas,Monaco,monospace}.code-line{display:flex;padding:1px 11px;white-space:pre;min-width:610px;border-left:4px solid transparent}.code-line.active{background:#294467;border-left-color:#ffca65}.lineno{width:28px;flex:none;color:#829bb6;user-select:none}.kw{color:#77b7ff}.fn{color:#ffd484}.cm{color:#83a792}.code .literal{color:#c2b3ff}.state{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.state-cell{background:#f4f8fe;border:1px solid #e3eaf5;padding:10px;border-radius:9px;min-height:75px}.state-cell strong{display:block;font-size:13px;color:#546e8a;margin-bottom:4px}.state-cell .value{font-family:Consolas,monospace;overflow-wrap:anywhere;font-size:15px}.wide{grid-column:1/-1}.pill{display:inline-block;padding:4px 10px;margin:3px;border-radius:7px;background:#dfeafa;color:#174e85;font-weight:700}.status{border-left:4px solid var(--blue);padding:10px 12px;background:#f1f7ff;border-radius:7px;min-height:66px}.progress{font-size:13px;color:var(--muted);font-weight:600}.trace-wrap{overflow:auto;max-height:400px;border:1px solid var(--line);border-radius:9px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:9px;border-bottom:1px solid #dfe8f2;text-align:left;vertical-align:top;white-space:nowrap}thead th{position:sticky;top:0;background:#e9f2fd;z-index:1}tr.highlight{background:#fff5df}tr.init{background:#eef7fc}.caption{font-size:12px;color:var(--muted)}.invisible{display:none!important}.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:end}.toolbar select{min-width:90px}.steps-control{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0}.foot{color:var(--muted);font-size:12px;text-align:center;padding:5px 0 15px}@media(max-width:960px){.workspace{grid-template-columns:1fr}.code-line{min-width:560px}}@media print{button,.toolbar,.steps-control{display:none!important}body{background:#fff}.panel{box-shadow:none;break-inside:avoid}main{padding:0}.workspace{grid-template-columns:1fr 1fr}.code-line{font-size:10px;min-width:unset}.graph-area{min-height:230px}}
+</style>
+</head>
+<body>
+<header><h1>Поиск в ширину (BFS) — пошаговая визуализация</h1><p>Создание графа → запуск алгоритма → ручное выполнение каждой строки → таблица трассировки</p></header>
+<main>
+<section class="panel">
+<h2>1. Задайте граф</h2>
+<div class="setup-row"><div><label for="count">Количество вершин (2–12)</label><input id="count" type="number" min="2" max="12" value="6"></div><button id="makeRows">Создать поля</button><button class="secondary" id="example">Загрузить пример A–F</button></div>
+<p class="note">Вершины обозначаются буквами A, B, C, … . Для каждой вершины укажите соседей через запятую, например: <b>C, E, F</b>. Граф считается <b>неориентированным</b>: связь A–B будет отражена и у B. Порядок обхода соседей — по алфавиту.</p>
+<div id="adj" class="adj"></div>
+<div class="buttonrow"><button id="build">Построить граф</button><span id="graphMessage" class="error" role="status"></span></div>
+</section>
+<section class="panel">
+<h2>2. Выберите стартовую вершину</h2>
+<div class="toolbar"><div><label for="start">Начальная вершина</label><select id="start"></select></div><button id="run" disabled>Подготовить трассировку</button><button class="secondary" id="reset" disabled>Вернуться к началу</button><span class="caption">До нажатия «Далее» программа не выполняет ни одного шага.</span></div>
+</section>
+<div class="workspace">
+<div class="left-stack"><section class="panel"><h2>3. Введённый граф</h2><div class="graph-area"><svg id="graphSvg" viewBox="0 0 480 400" role="img" aria-label="Граф, построенный по списку смежности"><text x="240" y="200" fill="#637790" text-anchor="middle">Сначала постройте граф</text></svg></div><div class="legend"><span><i class="dot" style="background:#5d90c8"></i>Ещё не обнаружена</span><span><i class="dot" style="background:#d7952a"></i>В очереди</span><span><i class="dot" style="background:#1c9477"></i>Обработана</span><span><i class="dot" style="background:#6750b7"></i>Текущая</span></div><p class="note" id="edgesInfo"></p></section><section class="panel"><h2>5. Состояние переменных</h2><div class="state"><div class="state-cell"><strong>queue — очередь FIFO (слева начало)</strong><div class="value" id="queueView">—</div></div><div class="state-cell"><strong>visited — обнаруженные вершины</strong><div class="value" id="visitedView">—</div></div><div class="state-cell"><strong>vertex — извлечённая вершина</strong><div class="value" id="vertexView">—</div></div><div class="state-cell"><strong>neighbor — текущий сосед</strong><div class="value" id="neighborView">—</div></div><div class="state-cell wide"><strong>Вывод на экран — порядок обхода BFS</strong><div class="value" id="outputView">—</div></div></div></section></div>
+<section class="panel"><h2>4. Код программы и выполнение по строкам</h2><p class="subtitle">Подсвеченная строка — последняя выполненная команда или проверенное условие. Шаги включают проверки циклов <code>while</code> и <code>for</code>.</p><div id="code" class="code"></div>
+<div class="steps-control"><div class="buttonrow"><button class="outline" id="prev" disabled>← Назад</button><button id="next" disabled>Далее →</button><button class="secondary" id="finish" disabled>К завершению</button></div><span id="progress" class="progress">Ожидание</span></div>
+<div class="status" id="explanation">Постройте граф и подготовьте трассировку.</div>
+</section>
+</div>
+<div class="workspace trace-workspace">
+<section class="panel"><h2>6. Таблица трассировки BFS</h2><p class="subtitle">Таблица пополняется по мере обработки вершин. Строка фиксируется после полного просмотра всех соседей извлечённой вершины.</p><div class="trace-wrap"><table><thead><tr><th>Шаг</th><th>Извлечённая вершина</th><th>Добавленные вершины</th><th>Очередь после обработки</th><th>visited</th></tr></thead><tbody id="traceBody"><tr><td colspan="5" style="color:#657b92">Подготовьте трассировку</td></tr></tbody></table></div><div class="buttonrow" style="margin-top:12px"><button class="outline" id="copyTrace" disabled>Скопировать таблицу</button><button class="outline" id="printPage">Печать</button></div></section>
+</div>
+<div class="foot">Тренажёр работает полностью локально в браузере. Пошаговая модель воспроизводит логику Python-кода с deque, set, while и for, включая операции над соседями.</div>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const letters='ABCDEFGHIJKL';
+let graph=null,vertices=[],edges=[],history=[],pos=0;
+const baseLines=[
+'from collections import deque',
+'',
+'def bfs(graph, start):',
+'    visited = set()',
+'    queue = deque([start])',
+'    visited.add(start)',
+'',
+'    while queue:',
+'        vertex = queue.popleft()',
+"        print(vertex, end=' ')",
+'',
+'        for neighbor in graph[vertex]:',
+'            if neighbor not in visited:',
+'                visited.add(neighbor)',
+'                queue.append(neighbor)',
+'',
+"start = input('Введите начальную вершину: ').upper()",
+'if start in graph:',
+"    print('Порядок обхода BFS:')",
+'    bfs(graph, start)',
+'else:',
+"    print('Такой вершины нет в графе')"
+];
+let codeLines=[], mainLineOffset=0;
+function updateProgramCode(){
+  // Вставляем сгенерированный пользователем словарь graph в основную программу,
+  // непосредственно перед вводом стартовой вершины.
+  const declaration = graph ? [
+    '# Основная программа',
+    '# Граф в виде списка смежности',
+    'graph = {',
+    ...vertices.map((v,i)=>`    '${v}': [${graph[v].map(u=>`'${u}'`).join(', ')}]${i<vertices.length-1?',':''}`),
+    '}',
+    ''
+  ] : [
+    '# Основная программа',
+    '# Сначала заполните список смежности и постройте граф',
+    '# graph = {...}',
+    ''
+  ];
+  codeLines=[...baseLines.slice(0,16),...declaration,...baseLines.slice(16)];
+  mainLineOffset=declaration.length;
+  $('code').innerHTML=codeLines.map((l,i)=>`<div class="code-line" data-line="${i+1}"><span class="lineno">${i+1}</span><span>${escapeHtml(l)||' '}</span></div>`).join('');
+}
+updateProgramCode();
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function makeRows(preserve=false){let n=Number($('count').value);if(!Number.isInteger(n)||n<2||n>12){$('graphMessage').textContent='Введите целое количество от 2 до 12.';return;}let prev={};if(preserve)document.querySelectorAll('.adj-item input').forEach(x=>prev[x.dataset.v]=x.value);$('graphMessage').textContent='';$('adj').innerHTML=letters.slice(0,n).split('').map(v=>`<div class="adj-item"><label for="v${v}">${v}:</label><input id="v${v}" data-v="${v}" placeholder="Например: B, D" value="${escapeHtml(prev[v]||'')}"></div>`).join('');invalidate();}
+function invalidate(){graph=null;vertices=[];edges=[];updateProgramCode();drawGraph(null);$('edgesInfo').textContent='';$('traceBody').innerHTML='<tr><td colspan="5" style="color:#657b92">Постройте граф для начала трассировки</td></tr>';resetStates();history=[];pos=0;$('run').disabled=true;$('reset').disabled=true;$('next').disabled=true;$('prev').disabled=true;$('finish').disabled=true;$('copyTrace').disabled=true;$('start').innerHTML='';$('progress').textContent='Ожидание';$('explanation').textContent='Постройте граф и подготовьте трассировку.';}
+function example(){ $('count').value=6;makeRows();const data={A:'C, E',B:'C, E, F',C:'A, B, D, E, F',D:'C, F',E:'A, B, C, F',F:'B, C, D, E'};Object.keys(data).forEach(v=>$('v'+v).value=data[v]);build();}
+function build(){try{let n=Number($('count').value);if(n<2||n>12||!Number.isInteger(n))throw Error('Количество вершин должно быть от 2 до 12.');vertices=letters.slice(0,n).split('');let g={};for(let v of vertices){let raw=$('v'+v).value.trim().toUpperCase();const tokens=raw?raw.split(/[,;\s]+/).filter(Boolean):[];g[v]=[];for(let x of tokens){if(!vertices.includes(x))throw Error('У вершины '+v+' указан неизвестный сосед «'+x+'».');if(v===x)throw Error('Петля '+v+'–'+v+' не предусмотрена в этом тренажёре.');if(g[v].includes(x))throw Error('Повтор вершины '+x+' в строке '+v+'.');g[v].push(x);}}let asym=[];for(let v of vertices)for(let u of g[v])if(!g[u].includes(v))asym.push(`${u}–${v}`);if(asym.length){for(let v of vertices)for(let u of [...g[v]])if(!g[u].includes(v))g[u].push(v);}
+Object.keys(g).forEach(v=>g[v].sort());graph=g;edges=[];for(let a of vertices)for(let b of graph[a])if(a<b)edges.push([a,b]);$('start').innerHTML=vertices.map(v=>`<option value="${v}">${v}</option>`).join('');$('run').disabled=false;$('graphMessage').className='ok';$('graphMessage').textContent='Граф построен: '+n+' вершин, '+edges.length+' рёбер.'+(asym.length?' Обратные связи добавлены автоматически.':'');$('edgesInfo').textContent='Рёбра: '+(edges.map(e=>e.join('–')).join(', ')||'нет')+'.';history=[];pos=0;$('next').disabled=true;$('prev').disabled=true;$('finish').disabled=true;$('reset').disabled=true;$('copyTrace').disabled=true;$('traceBody').innerHTML='<tr><td colspan="5">Выберите начальную вершину и нажмите «Подготовить трассировку».</td></tr>';resetStates();updateProgramCode();drawGraph(null);}catch(e){$('graphMessage').className='error';$('graphMessage').textContent=e.message;}}
+function resetStates(){for(let id of ['queueView','visitedView','vertexView','neighborView','outputView'])$(id).textContent='—';document.querySelectorAll('.code-line').forEach(e=>e.classList.remove('active'));}
+function clone(x){return JSON.parse(JSON.stringify(x));}
+function simulate(){// Создаём кадр после каждой значимой строки и после каждой проверки условия.
+let states=[];let s={queue:[],visited:[],vertex:null,neighbor:null,output:[],rows:[],added:[],processed:0,activeEdge:null,seen:[],done:[],line:null,desc:'Программа ещё не запущена.'};
+const frame=(line,desc)=>{s.line=line;s.desc=desc;states.push(clone(s));};
+frame(null,'Стартовая вершина выбрана: '+$('start').value+'. Нажмите «Далее» для выполнения первой строки.');
+frame(1,'Подключаем deque из модуля collections.');
+frame(17,'Переходим к основной программе.');
+frame(18,'Комментарий: граф задаётся словарём списков смежности.');
+frame(19,'Начинаем создание словаря graph из введённых пользователем списков смежности.');
+for(let i=0;i<vertices.length;i++)frame(20+i,'Записываем соседей вершины '+vertices[i]+': '+(graph[vertices[i]].join(', ')||'нет')+'.');
+frame(20+vertices.length,'Закрываем словарь graph. Описание '+vertices.length+' вершин завершено.');
+frame(17+mainLineOffset,'Считываем начальную вершину '+$('start').value+' и переводим её в верхний регистр.');
+frame(18+mainLineOffset,'Проверяем, что вершина '+$('start').value+' есть в словаре graph — да.');
+frame(19+mainLineOffset,'Выводим заголовок «Порядок обхода BFS:».');
+frame(20+mainLineOffset,'Вызываем bfs(graph, '+$('start').value+').');
+frame(3,'После вызова bfs(graph, start) переходим к определению функции и начинаем выполнять её тело.');
+s.visited=[];frame(4,'visited = set(): создаём пустое множество.');
+s.queue=[$('start').value];frame(5,'queue = deque([start]): начальная вершина помещена в очередь.');
+s.visited=[$('start').value];frame(6,'visited.add(start): отмечаем стартовую вершину как обнаруженную.');
+s.rows.push({step:0,vertex:'—',added:$('start').value,queue:[...s.queue],visited:[...s.visited]});frame(6,'Начальное состояние записано в таблицу трассировки.');
+while(s.queue.length){frame(8,'Проверка while queue: очередь не пуста, продолжаем обход.');s.vertex=s.queue.shift();s.neighbor=null;s.added=[];frame(9,'queue.popleft(): извлекаем вершину '+s.vertex+' из начала очереди.');s.output.push(s.vertex);s.done.push(s.vertex);frame(10,'print(vertex): выводим '+s.vertex+'.');const ns=graph[s.vertex];for(let k=0;k<ns.length;k++){s.neighbor=ns[k];s.activeEdge=[s.vertex,s.neighbor];frame(12,'Цикл for: рассматриваем соседа '+s.neighbor+' вершины '+s.vertex+' ('+(k+1)+' из '+ns.length+').');if(s.visited.includes(s.neighbor)){frame(13,s.neighbor+' уже есть в visited, поэтому НЕ добавляем её повторно.');}else{frame(13,s.neighbor+' отсутствует в visited — условие истинно.');s.visited.push(s.neighbor);frame(14,'visited.add('+s.neighbor+'): отмечаем вершину как обнаруженную.');s.queue.push(s.neighbor);s.added.push(s.neighbor);frame(15,'queue.append('+s.neighbor+'): добавляем вершину в конец очереди.');}}
+s.neighbor=null;s.activeEdge=null;frame(12,'Все соседи вершины '+s.vertex+' просмотрены.');s.processed++;s.rows.push({step:s.processed,vertex:s.vertex,added:s.added.length?s.added.join(', '):'—',queue:[...s.queue],visited:[...s.visited]});frame(12,'Фиксируем итог обработки вершины '+s.vertex+' в таблице трассировки.');}
+frame(8,'Проверка while queue: очередь пуста, цикл завершён.');s.vertex=null;s.neighbor=null;frame(null,'Функция BFS завершена. Порядок обхода: '+s.output.join(' → ')+'.');return states;}
+function prepare(){if(!graph)return;history=simulate();pos=0;$('next').disabled=false;$('finish').disabled=false;$('reset').disabled=false;$('copyTrace').disabled=false;render();}
+function drawGraph(s){const svg=$('graphSvg');if(!graph){svg.innerHTML='<text x="240" y="200" fill="#637790" text-anchor="middle">Сначала постройте граф</text>';return;}const n=vertices.length;let points={};const cx=240,cy=200,r=n<=6?142:160;vertices.forEach((v,i)=>{let a= -Math.PI/2+2*Math.PI*i/n;points[v]={x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};});svg.innerHTML='';const NS='http://www.w3.org/2000/svg';const add=(tag,attrs,parent=svg)=>{let el=document.createElementNS(NS,tag);Object.keys(attrs).forEach(k=>el.setAttribute(k,attrs[k]));parent.appendChild(el);return el;};for(let [a,b] of edges){let hi=s?.activeEdge&&s.activeEdge.includes(a)&&s.activeEdge.includes(b);add('line',{x1:points[a].x,y1:points[a].y,x2:points[b].x,y2:points[b].y,class:'edge'+(hi?' active':'')});}for(let v of vertices){let cls='node';if(s){if(s.done.includes(v))cls+=' done';else if(s.queue.includes(v))cls+=' inqueue';if(s.vertex===v)cls+=' current';}const g=add('g',{class:cls});add('circle',{cx:points[v].x,cy:points[v].y,r:24},g);const t=add('text',{x:points[v].x,y:points[v].y+1},g);t.textContent=v;}}
+function render(){let s=history[pos];drawGraph(s);resetStates();if(!s)return;$('queueView').textContent='['+s.queue.join(', ')+']';$('visitedView').textContent='{'+s.visited.join(', ')+'}';$('vertexView').textContent=s.vertex||'—';$('neighborView').textContent=s.neighbor||'—';$('outputView').textContent=s.output.length?s.output.join(' → '):'—';$('explanation').textContent=s.desc;$('progress').textContent='Шаг '+pos+' из '+(history.length-1);if(s.line){let line=document.querySelector('.code-line[data-line="'+s.line+'"]');line?.classList.add('active');line?.scrollIntoView({block:'nearest',behavior:'instant'});}let rows=s.rows;$('traceBody').innerHTML=rows.map((r,i)=>`<tr class="${i===rows.length-1?'highlight':''} ${i===0?'init':''}"><td>${r.step}</td><td>${escapeHtml(r.vertex)}</td><td>${escapeHtml(r.added)}</td><td>[${r.queue.join(', ')}]</td><td>{${r.visited.join(', ')}}</td></tr>`).join('');$('prev').disabled=pos===0;$('next').disabled=pos>=history.length-1;$('finish').disabled=pos>=history.length-1;}
+$('adj').addEventListener('input',()=>{if(graph)invalidate();});$('makeRows').onclick=()=>makeRows(true);$('example').onclick=example;$('build').onclick=build;$('run').onclick=prepare;$('next').onclick=()=>{if(pos<history.length-1){pos++;render();}};$('prev').onclick=()=>{if(pos>0){pos--;render();}};$('reset').onclick=()=>{pos=0;render();};$('finish').onclick=()=>{pos=history.length-1;render();};$('printPage').onclick=()=>window.print();$('copyTrace').onclick=async()=>{if(!history.length)return;let rows=history[pos].rows.map(r=>[r.step,r.vertex,r.added,'['+r.queue.join(', ')+']','{'+r.visited.join(', ')+'}'].join('\t'));let data=['Шаг\tИзвлечённая вершина\tДобавленные вершины\tОчередь после обработки\tvisited',...rows].join('\n');try{await navigator.clipboard.writeText(data);$('copyTrace').textContent='Скопировано';setTimeout(()=>$('copyTrace').textContent='Скопировать таблицу',1300);}catch{window.prompt('Скопируйте таблицу:',data);}};
+makeRows();
+</script>
+</body></html>
